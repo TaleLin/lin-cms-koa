@@ -4,7 +4,7 @@
   <a href="http://doc.cms.7yue.pro/">
   <img src="http://doc.cms.7yue.pro/left-logo.png" width="250"/></a>
   <br>
-  Lin-CMS-Koa （内部测试版，目前不推荐用于生产环境）
+  Lin-CMS-Koa （测试版）
 </h1>
 
 <h4 align="center">一个简单易用的CMS后端项目 | <a href="http://doc.cms.7yue.pro/" target="_blank">Lin-CMS-Koa</a></h4>
