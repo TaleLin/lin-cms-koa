@@ -1,6 +1,12 @@
 "use strict";
 
-const { Redprint, NotFound, Success, Forbidden } = require("lin-cms");
+const {
+  Redprint,
+  NotFound,
+  Success,
+  Forbidden,
+  groupRequired
+} = require("lin-cms");
 const { getSafeParamId } = require("../../libs/util");
 const {
   BookSearchValidator,
@@ -163,6 +169,7 @@ bookApi.redDelete(
     module: "图书",
     mount: true
   },
+  groupRequired,
   async ctx => {
     const id = getSafeParamId(ctx);
     await bookDto.deleteBook(id);

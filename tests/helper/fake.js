@@ -1,5 +1,6 @@
 require("./initial");
 const { db } = require("lin-cms/lin/db");
+// eslint-disable-next-line no-unused-vars
 const { User, Group, Auth } = require("lin-cms/lin");
 // eslint-disable-next-line no-unused-vars
 const { Book } = require("../../app/models/book");
@@ -21,22 +22,36 @@ const run = async () => {
   //     image: "https://img3.doubanio.com/lpic/s1106934.jpg"
   //   }
   // ]);
-  const group = new Group();
+  // const group = new Group();
 
-  group.name = "普通分组";
-  group.info = "就是一个分组而已";
-  await group.save();
+  // group.name = "普通分组";
+  // group.info = "就是一个分组而已";
+  // await group.save();
 
-  const user = new User();
-  user.nickname = "pedro";
-  user.password = "123456";
+  // const user = new User();
+  // user.nickname = "pedro";
+  // user.password = "123456";
+  // await user.save();
+
+  // await Auth.create({
+  //   auth: "删除图书",
+  //   module: "图书",
+  //   group_id: group.id
+  // });
+
+  const group = await Group.findOne({
+    where: {
+      name: "普通分组"
+    }
+  });
+  const user = await User.findOne({
+    where: {
+      nickname: "pedro"
+    }
+  });
+  user.group_id = group.id;
   await user.save();
 
-  await Auth.create({
-    auth: "删除图书",
-    module: "图书",
-    group_id: group.id
-  });
   db.close();
 };
 
