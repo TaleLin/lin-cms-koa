@@ -2,7 +2,7 @@
 "use strict";
 
 const {
-  Redprint,
+  LinRouter,
   getTokens,
   loginRequired,
   Success,
@@ -114,7 +114,7 @@ class UserDao {
   }
 }
 
-const user = new Redprint({
+const user = new LinRouter({
   prefix: "/cms/user"
 });
 
@@ -124,7 +124,7 @@ exports.UserDao = UserDao;
 
 const userDao = new UserDao();
 
-user.redPost(
+user.linPost(
   "userRegister",
   "/register",
   {
@@ -143,7 +143,7 @@ user.redPost(
   }
 );
 
-user.redPost(
+user.linPost(
   "userLogin",
   "/login",
   {
@@ -165,7 +165,7 @@ user.redPost(
   }
 );
 
-user.redPut(
+user.linPut(
   "userUpdate",
   "/",
   {
@@ -185,7 +185,7 @@ user.redPut(
   }
 );
 
-user.redPut(
+user.linPut(
   "userUpdatePassword",
   "/change_password",
   {
@@ -218,7 +218,7 @@ user.redPut(
   }
 );
 
-user.redGet(
+user.linGet(
   "userGetToken",
   "/refresh",
   {
@@ -236,7 +236,7 @@ user.redGet(
   }
 );
 
-user.redGet(
+user.linGet(
   "userGetAuths",
   "/auths",
   {

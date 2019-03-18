@@ -1,7 +1,7 @@
 "use strict";
 
 const {
-  Redprint,
+  LinRouter,
   NotFound,
   Success,
   Forbidden,
@@ -16,7 +16,7 @@ const { BookNotFound } = require("../../libs/errCode");
 const { Book } = require("../../models/book");
 const Sequelize = require("sequelize");
 // book 的红图实例
-const bookApi = new Redprint({
+const bookApi = new LinRouter({
   prefix: "/v1/book"
 });
 
@@ -161,7 +161,7 @@ bookApi.put("/:id", async ctx => {
   );
 });
 
-bookApi.redDelete(
+bookApi.linDelete(
   "deleteBook",
   "/:id",
   {

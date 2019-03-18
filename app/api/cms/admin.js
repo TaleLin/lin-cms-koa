@@ -2,7 +2,7 @@
 "use strict";
 
 const {
-  Redprint,
+  LinRouter,
   paginate,
   routeMetaInfo,
   adminRequired,
@@ -30,7 +30,7 @@ const { getSafeParamId } = require("../../libs/util");
 const { db } = require("lin-cms/lin/db");
 const dayjs = require("dayjs");
 
-const admin = new Redprint({
+const admin = new LinRouter({
   prefix: "/cms/admin"
 });
 
@@ -383,7 +383,7 @@ exports.AdminDao = AdminDao;
 
 const adminDao = new AdminDao();
 
-admin.redGet(
+admin.linGet(
   "getAuthority",
   "/authority",
   {
@@ -406,7 +406,7 @@ admin.redGet(
   }
 );
 
-admin.redGet(
+admin.linGet(
   "getAdminUsers",
   "/users",
   {
@@ -432,7 +432,7 @@ admin.redGet(
   }
 );
 
-admin.redPut(
+admin.linPut(
   "changeUserPassword",
   "/password/:id",
   {
@@ -458,7 +458,7 @@ admin.redPut(
   }
 );
 
-admin.redDelete(
+admin.linDelete(
   "deleteUser",
   "/:id",
   {
@@ -483,7 +483,7 @@ admin.redDelete(
   }
 );
 
-admin.redPut(
+admin.linPut(
   "updateUser",
   "/:id",
   {
@@ -509,7 +509,7 @@ admin.redPut(
   }
 );
 
-admin.redGet(
+admin.linGet(
   "getAdminGroups",
   "/groups",
   {
@@ -533,7 +533,7 @@ admin.redGet(
   }
 );
 
-admin.redGet(
+admin.linGet(
   "getAllGroup",
   "/group/all",
   {
@@ -553,7 +553,7 @@ admin.redGet(
   }
 );
 
-admin.redGet(
+admin.linGet(
   "getGroup",
   "/group/:id",
   {
@@ -574,7 +574,7 @@ admin.redGet(
   }
 );
 
-admin.redPost(
+admin.linPost(
   "createGroup",
   "/group",
   {
@@ -602,7 +602,7 @@ admin.redPost(
   }
 );
 
-admin.redPut(
+admin.linPut(
   "updateGroup",
   "/group/:id",
   {
@@ -623,7 +623,7 @@ admin.redPut(
   }
 );
 
-admin.redDelete(
+admin.linDelete(
   "deleteGroup",
   "/group/:id",
   {
@@ -643,7 +643,7 @@ admin.redDelete(
   }
 );
 
-admin.redPost(
+admin.linPost(
   "dispatchAuth",
   "/dispatch",
   {
@@ -663,7 +663,7 @@ admin.redPost(
   }
 );
 
-admin.redPost(
+admin.linPost(
   "dispatchAuths",
   "/dispatch/patch",
   {
@@ -683,7 +683,7 @@ admin.redPost(
   }
 );
 
-admin.redPost(
+admin.linPost(
   "removeAuths",
   "/remove",
   {

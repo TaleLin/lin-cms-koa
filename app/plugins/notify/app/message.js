@@ -1,7 +1,7 @@
 "use strict";
 
 const {
-  Redprint,
+  LinRouter,
   loginRequired,
   NotFound,
   paginate,
@@ -15,7 +15,7 @@ const { Message } = require("./model");
 const { MessageIsReaded } = require("./enums");
 const Sequelize = require("sequelize");
 
-const messageApi = new Redprint({
+const messageApi = new LinRouter({
   prefix: "/message"
 });
 exports.messageApi = messageApi;
@@ -89,7 +89,7 @@ class MessageDao {
 
 const messageDao = new MessageDao();
 
-messageApi.redGet(
+messageApi.linGet(
   "getMessages",
   "/",
   {
@@ -113,7 +113,7 @@ messageApi.redGet(
   }
 );
 
-messageApi.redPut(
+messageApi.linPut(
   "readMessage",
   "/one/:id",
   {
@@ -133,7 +133,7 @@ messageApi.redPut(
   }
 );
 
-messageApi.redPut(
+messageApi.linPut(
   "readMessages",
   "/some",
   {
@@ -153,7 +153,7 @@ messageApi.redPut(
   }
 );
 
-messageApi.redDelete(
+messageApi.linDelete(
   "deleteMessage",
   "/:id",
   {

@@ -1,7 +1,7 @@
 "use strict";
 
 const {
-  Redprint,
+  LinRouter,
   groupRequired,
   adminRequired,
   Success,
@@ -14,7 +14,7 @@ const { EventsValidator } = require("./validators");
 const { broker, notify, MESSAGE_EVENTS } = require("./middleware");
 const { Event } = require("./model");
 
-const sseApi = new Redprint({
+const sseApi = new LinRouter({
   prefix: "/sse"
 });
 exports.sseApi = sseApi;
@@ -67,7 +67,7 @@ class EventDao {
 
 const eventDao = new EventDao();
 
-sseApi.redGet(
+sseApi.linGet(
   "stream",
   "/",
   {
@@ -114,7 +114,7 @@ sseApi.get("/test", async ctx => {
   });
 });
 
-sseApi.redGet(
+sseApi.linGet(
   "getEvents",
   "/events",
   {
@@ -139,7 +139,7 @@ sseApi.redGet(
   }
 );
 
-sseApi.redPost(
+sseApi.linPost(
   "createEvents",
   "/events",
   {
@@ -159,7 +159,7 @@ sseApi.redPost(
   }
 );
 
-sseApi.redPut(
+sseApi.linPut(
   "putEvents",
   "/events",
   {

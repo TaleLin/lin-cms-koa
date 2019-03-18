@@ -1,7 +1,7 @@
 "use strict";
 
 const {
-  Redprint,
+  LinRouter,
   groupRequired,
   NotFound,
   ParametersException,
@@ -13,7 +13,7 @@ const { get, set } = require("lodash");
 const { db } = require("lin-cms/lin/db");
 const Sequelize = require("sequelize");
 
-const log = new Redprint({
+const log = new LinRouter({
   prefix: "/cms/log"
 });
 
@@ -83,7 +83,7 @@ exports.LogDao = LogDao;
 
 const logDao = new LogDao();
 
-log.redGet(
+log.linGet(
   "getLogs",
   "/",
   {
@@ -108,7 +108,7 @@ log.redGet(
   }
 );
 
-log.redGet(
+log.linGet(
   "getUserLogs",
   "/search",
   {
@@ -139,7 +139,7 @@ log.redGet(
   }
 );
 
-log.redGet(
+log.linGet(
   "getUsers",
   "/users",
   {

@@ -1,8 +1,8 @@
 "use strict";
 
-const { loginRequired, Redprint, logger, groupRequired } = require("lin-cms");
+const { loginRequired, LinRouter, logger, groupRequired } = require("lin-cms");
 
-const test = new Redprint({
+const test = new LinRouter({
   prefix: "/cms/test"
 });
 
@@ -17,7 +17,7 @@ test.get("/", async ctx => {
     Lin <br/><span style="font-size:30px">心上无垢，林间有风。</span></p></div> `;
 });
 
-test.redGet(
+test.linGet(
   "getTestMsg",
   "/json",
   {
@@ -34,7 +34,7 @@ test.redGet(
   }
 );
 
-test.redGet(
+test.linGet(
   "getTestInfo",
   "/info",
   {
