@@ -51,7 +51,7 @@ QQ 群号：699501172
 
 ### 微信公众号
 
-微信搜索：七月有风
+微信搜索：林间有风
 
 <img class="QR-img" src="http://imglf6.nosdn0.126.net/img/YUdIR2E3ME5weEdlNThuRmI4TFh3UWhiNmladWVoaTlXUXpicEFPa1F6czFNYkdmcWRIbGRRPT0.jpg?imageView&thumbnail=500x0&quality=96&stripmeta=0&type=jpg">
 
