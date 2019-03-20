@@ -39,6 +39,6 @@
     "@koa/cors": "^2.2.3",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
-    "lin-cms": "^0.0.1-alpha3"
+    "lin-cms": "^0.0.1-alpha4"
   }
 }
