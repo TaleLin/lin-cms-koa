@@ -1,7 +1,7 @@
 "use strict";
 const { ClassValidator, Rule } = require("lin-cms");
 
-const { extendedValidator } = require("lin-cms/lin/extendedValidator");
+const { extendedValidator } = require("lin-cms/lin/extended-validator");
 
 class EventsValidator extends ClassValidator {
   constructor () {

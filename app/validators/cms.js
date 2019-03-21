@@ -1,7 +1,7 @@
 "use strict";
 
 const { ClassValidator, Rule, checkDateFormat } = require("lin-cms");
-const { extendedValidator } = require("lin-cms/lin/extendedValidator");
+const { extendedValidator } = require("lin-cms/lin/extended-validator");
 
 exports.RegisterValidator = class extends ClassValidator {
   constructor () {

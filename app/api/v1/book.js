@@ -12,7 +12,7 @@ const {
   BookSearchValidator,
   CreateOrUpdateBookValidator
 } = require("../../validators/cms");
-const { BookNotFound } = require("../../libs/errCode");
+const { BookNotFound } = require("../../libs/err-code");
 const { Book } = require("../../models/book");
 const Sequelize = require("sequelize");
 // book 的红图实例
