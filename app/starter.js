@@ -2,7 +2,7 @@
 
 const { config } = require("lin-cms/lin/config");
 
-// 1. 必须最开始加载配置，因为其他很多扩展以来于配置
+// 1. 必须最开始加载配置，因为其他很多扩展依赖于配置
 function applyConfig () {
   config.getConfigFromFile("app/config/setting.js");
   config.getConfigFromFile("app/config/secure.js");

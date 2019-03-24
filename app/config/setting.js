@@ -6,6 +6,8 @@ exports.pageDefault = 0;
 
 exports.apiDir = "app/api";
 
+exports.accessExp = 60 * 60; // 1h 单位秒
+
 exports.pluginPath = {
   // plugin name
   // oss: {
