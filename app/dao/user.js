@@ -52,7 +52,9 @@ class UserDao {
   async getAuths (ctx) {
     let user = ctx.currentUser;
     let auths = await ctx.manager.authModel.findAll({
-      group_id: user.group_id
+      where: {
+        group_id: user.group_id
+      }
     });
     const aus = this.splitAuths(auths);
     set(user, "auths", aus);

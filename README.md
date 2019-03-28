@@ -1,5 +1,3 @@
-<!-- # Lin-CMS-Flask -->
-
 <h1 align="center">
   <a href="http://doc.cms.7yue.pro/">
   <img src="http://doc.cms.7yue.pro/left-logo.png" width="250"/></a>

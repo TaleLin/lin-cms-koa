@@ -7,8 +7,7 @@ const {
   loginRequired,
   Success,
   refreshTokenRequired,
-  Failed,
-  jwt
+  Failed
 } = require("lin-cms");
 
 const {
@@ -133,9 +132,10 @@ user.linGet(
   refreshTokenRequired,
   async ctx => {
     let user = ctx.currentUser;
-    const accessToken = jwt.createAccessToken(user.id);
+    const { accessToken, refreshToken } = getTokens(user);
     ctx.json({
-      access_token: accessToken
+      access_token: accessToken,
+      refresh_token: refreshToken
     });
   }
 );
