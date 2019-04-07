@@ -1,9 +1,9 @@
 "use strict";
 
-const { ClassValidator, Rule, checkDateFormat } = require("lin-cms");
-const { extendedValidator } = require("lin-cms/lin/extended-validator");
+const { LinValidator, Rule, checkDateFormat } = require("lin-mizar");
+const { extendedValidator } = require("lin-mizar/lin/extended-validator");
 
-exports.RegisterValidator = class extends ClassValidator {
+exports.RegisterValidator = class extends LinValidator {
   constructor () {
     super();
     this.nickname = [
@@ -38,7 +38,7 @@ exports.RegisterValidator = class extends ClassValidator {
   }
 };
 
-class LoginValidator extends ClassValidator {
+class LoginValidator extends LinValidator {
   constructor () {
     super();
     this.nickname = new Rule("isNotEmpty", "昵称不可为空");
@@ -51,7 +51,7 @@ exports.LoginValidator = LoginValidator;
 /**
  * 用户更新自己的邮箱
  */
-class UpdateInfoValidator extends ClassValidator {
+class UpdateInfoValidator extends LinValidator {
   constructor () {
     super();
     this.email = new Rule("isEmail", "电子邮箱不符合规范，请输入正确的邮箱");
@@ -59,7 +59,7 @@ class UpdateInfoValidator extends ClassValidator {
 }
 exports.UpdateInfoValidator = UpdateInfoValidator;
 
-class ResetPasswordValidator extends ClassValidator {
+class ResetPasswordValidator extends LinValidator {
   constructor () {
     super();
     this.new_password = new Rule(
@@ -83,7 +83,7 @@ class ResetPasswordValidator extends ClassValidator {
 
 exports.ResetPasswordValidator = ResetPasswordValidator;
 
-class ChangePasswordValidator extends ClassValidator {
+class ChangePasswordValidator extends LinValidator {
   constructor () {
     super();
     this.new_password = new Rule(
@@ -107,7 +107,7 @@ class ChangePasswordValidator extends ClassValidator {
 
 exports.ChangePasswordValidator = ChangePasswordValidator;
 
-class LogFindValidator extends ClassValidator {
+class LogFindValidator extends LinValidator {
   constructor () {
     super();
     this.name = new Rule("isOptional");
@@ -124,7 +124,7 @@ class LogFindValidator extends ClassValidator {
 
 exports.LogFindValidator = LogFindValidator;
 
-class UpdateUserInfoValidator extends ClassValidator {
+class UpdateUserInfoValidator extends LinValidator {
   constructor () {
     super();
     this.group_id = new Rule("isInt", "分组id必须是正整数", {
@@ -136,7 +136,7 @@ class UpdateUserInfoValidator extends ClassValidator {
 
 exports.UpdateUserInfoValidator = UpdateUserInfoValidator;
 
-class NewGroupValidator extends ClassValidator {
+class NewGroupValidator extends LinValidator {
   constructor () {
     super();
     this.name = new Rule("isNotEmpty", "请输入分组名称");
@@ -162,7 +162,7 @@ class NewGroupValidator extends ClassValidator {
 
 exports.NewGroupValidator = NewGroupValidator;
 
-class UpdateGroupValidator extends ClassValidator {
+class UpdateGroupValidator extends LinValidator {
   constructor () {
     super();
     this.name = new Rule("isNotEmpty", "请输入分组名称");
@@ -172,7 +172,7 @@ class UpdateGroupValidator extends ClassValidator {
 
 exports.UpdateGroupValidator = UpdateGroupValidator;
 
-class DispatchAuthValidator extends ClassValidator {
+class DispatchAuthValidator extends LinValidator {
   constructor () {
     super();
     this.group_id = new Rule("isInt", "分组id必须正整数");
@@ -182,7 +182,7 @@ class DispatchAuthValidator extends ClassValidator {
 
 exports.DispatchAuthValidator = DispatchAuthValidator;
 
-class DispatchAuthsValidator extends ClassValidator {
+class DispatchAuthsValidator extends LinValidator {
   constructor () {
     super();
     this.group_id = new Rule("isInt", "分组id必须正整数");
@@ -204,7 +204,7 @@ class DispatchAuthsValidator extends ClassValidator {
 
 exports.DispatchAuthsValidator = DispatchAuthsValidator;
 
-class RemoveAuthsValidator extends ClassValidator {
+class RemoveAuthsValidator extends LinValidator {
   constructor () {
     super();
     this.group_id = new Rule("isInt", "分组id必须正整数");
@@ -225,7 +225,7 @@ class RemoveAuthsValidator extends ClassValidator {
 
 exports.RemoveAuthsValidator = RemoveAuthsValidator;
 
-class BookSearchValidator extends ClassValidator {
+class BookSearchValidator extends LinValidator {
   constructor () {
     super();
     this.q = new Rule("isNotEmpty", "必须传入搜索关键字");
@@ -233,7 +233,7 @@ class BookSearchValidator extends ClassValidator {
 }
 exports.BookSearchValidator = BookSearchValidator;
 
-class CreateOrUpdateBookValidator extends ClassValidator {
+class CreateOrUpdateBookValidator extends LinValidator {
   constructor () {
     super();
     this.title = new Rule("isNotEmpty", "必须传入图书名");

@@ -7,10 +7,10 @@ const {
   Forbidden,
   findMetaByAuth,
   unsets
-} = require("lin-cms");
+} = require("lin-mizar");
 
 const { has, set, get } = require("lodash");
-const { db } = require("lin-cms/lin/db");
+const { db } = require("lin-mizar/lin/db");
 const dayjs = require("dayjs");
 
 class AdminDao {

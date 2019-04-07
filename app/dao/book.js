@@ -1,6 +1,6 @@
 "use strict";
 
-const { LinRouter, NotFound, Forbidden } = require("lin-cms");
+const { LinRouter, NotFound, Forbidden } = require("lin-mizar");
 const { Book } = require("../models/book");
 const Sequelize = require("sequelize");
 // book 的红图实例

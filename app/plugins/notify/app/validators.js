@@ -1,9 +1,9 @@
 "use strict";
-const { ClassValidator, Rule } = require("lin-cms");
+const { LinValidator, Rule } = require("lin-mizar");
 
-const { extendedValidator } = require("lin-cms/lin/extended-validator");
+const { extendedValidator } = require("lin-mizar/lin/extended-validator");
 
-class EventsValidator extends ClassValidator {
+class EventsValidator extends LinValidator {
   constructor () {
     super();
     this.group_id = new Rule("isInt", "分组id必须为正整数");
@@ -13,7 +13,7 @@ class EventsValidator extends ClassValidator {
 
 exports.EventsValidator = EventsValidator;
 
-class IdsValidator extends ClassValidator {
+class IdsValidator extends LinValidator {
   constructor () {
     super();
     this.ids = new Rule(this.checkIds, "每个id值必须为正整数");

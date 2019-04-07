@@ -1,6 +1,6 @@
 "use strict";
 
-const { HttpException } = require("lin-cms");
+const { HttpException } = require("lin-mizar");
 const assert = require("assert");
 const { isInteger } = require("lodash");
 

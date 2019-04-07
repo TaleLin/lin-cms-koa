@@ -1,6 +1,6 @@
 "use strict";
 const dayjs = require("dayjs");
-const { db } = require("lin-cms/lin/db");
+const { db } = require("lin-mizar/lin/db");
 const Sequelize = require("sequelize");
 
 let Event = db.define(

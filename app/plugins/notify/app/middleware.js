@@ -1,9 +1,9 @@
 "use strict";
 
 const dayjs = require("dayjs");
-const { parseTemplate } = require("lin-cms");
-const { config } = require("lin-cms/lin/config");
-const { MessageBroker } = require("lin-cms/lin/sse");
+const { parseTemplate } = require("lin-mizar");
+const { config } = require("lin-mizar/lin/config");
+const { MessageBroker } = require("lin-mizar/lin/sse");
 const { Message } = require("./model");
 const { MessageIsPushed } = require("./enums");
 

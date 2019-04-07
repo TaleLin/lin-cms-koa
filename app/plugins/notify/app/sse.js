@@ -7,8 +7,8 @@ const {
   Success,
   NotFound,
   Forbidden
-} = require("lin-cms");
-const { SSE } = require("lin-cms/lin/sse");
+} = require("lin-mizar");
+const { SSE } = require("lin-mizar/lin/sse");
 const dayjs = require("dayjs");
 const { EventsValidator } = require("./validators");
 const { broker, notify, MESSAGE_EVENTS } = require("./middleware");

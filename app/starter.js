@@ -1,6 +1,6 @@
 "use strict";
 
-const { config } = require("lin-cms/lin/config");
+const { config } = require("lin-mizar/lin/config");
 
 // 1. 必须最开始加载配置，因为其他很多扩展依赖于配置
 function applyConfig () {

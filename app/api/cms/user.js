@@ -8,7 +8,7 @@ const {
   Success,
   refreshTokenRequired,
   Failed
-} = require("lin-cms");
+} = require("lin-mizar");
 
 const {
   RegisterValidator,

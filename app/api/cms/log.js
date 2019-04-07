@@ -4,9 +4,8 @@ const {
   LinRouter,
   groupRequired,
   NotFound,
-  ParametersException,
   paginate
-} = require("lin-cms");
+} = require("lin-mizar");
 const { LogFindValidator } = require("../../validators/cms");
 const { get } = require("lodash");
 const { LogDao } = require("../../dao/log");
@@ -55,12 +54,7 @@ log.linGet(
   groupRequired,
   async ctx => {
     const v = await new LogFindValidator().validate(ctx);
-    const keyword = get(ctx.request.query, "keyword");
-    if (!keyword || keyword === "") {
-      throw new ParametersException({
-        msg: "搜索关键字不可为空"
-      });
-    }
+    const keyword = get(ctx.request.query, "keyword", "");
     const { start, count } = paginate(ctx);
     const { logs, total } = await logDao.searchLogs(v, start, count, keyword);
     if (total < 1) {

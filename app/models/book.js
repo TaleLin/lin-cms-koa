@@ -1,9 +1,9 @@
 "use strict";
 
-const { InfoCrudMixin } = require("lin-cms/lin/interface");
+const { InfoCrudMixin } = require("lin-mizar/lin/interface");
 const { merge } = require("lodash");
 const Sequelize = require("sequelize");
-const { db } = require("lin-cms/lin/db");
+const { db } = require("lin-mizar/lin/db");
 
 let Book = db.define(
   "book",

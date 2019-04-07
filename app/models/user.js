@@ -1,5 +1,7 @@
-const { modelExtend } = require("lin-cms/lin/factory");
-const { User } = require("lin-cms");
+"use strict";
+
+const { modelExtend } = require("lin-mizar/lin/factory");
+const { User } = require("lin-mizar");
 const Sequelize = require("sequelize");
 
 const User2 = modelExtend(User, {

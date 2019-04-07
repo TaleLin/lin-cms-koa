@@ -10,17 +10,17 @@ exports.accessExp = 60 * 60; // 1h 单位秒
 
 exports.pluginPath = {
   // plugin name
-  // oss: {
-  //   // determine a plugin work or not
-  //   enable: true,
-  //   // path of the plugin that relatived the workdir
-  //   path: 'js/app/plugins/oss',
-  //   // other config
-  //   limit: 100000
-  // },
-  notify: {
+  poem: {
+    // determine a plugin work or not
     enable: true,
-    path: "app/plugins/notify",
-    retry: 2000
+    // path of the plugin that relatived the workdir
+    path: "app/plugins/poem",
+    // other config
+    limit: 2
   }
+  // notify: {
+  //   enable: true,
+  //   path: "app/plugins/notify",
+  //   retry: 2000
+  // }
 };

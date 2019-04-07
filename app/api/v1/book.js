@@ -1,6 +1,6 @@
 "use strict";
 
-const { LinRouter, NotFound, Success, groupRequired } = require("lin-cms");
+const { LinRouter, NotFound, Success, groupRequired } = require("lin-mizar");
 const { getSafeParamId } = require("../../libs/util");
 const {
   BookSearchValidator,

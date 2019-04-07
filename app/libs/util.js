@@ -1,7 +1,7 @@
 "use strict";
 
 const { toSafeInteger, get, isInteger } = require("lodash");
-const { ParametersException } = require("lin-cms");
+const { ParametersException } = require("lin-mizar");
 
 function getSafeParamId (ctx) {
   const id = toSafeInteger(get(ctx.params, "id"));

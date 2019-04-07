@@ -1,8 +1,8 @@
 "use strict";
 
-const { Log } = require("lin-cms");
+const { Log } = require("lin-mizar");
 const { set } = require("lodash");
-const { db } = require("lin-cms/lin/db");
+const { db } = require("lin-mizar/lin/db");
 const Sequelize = require("sequelize");
 
 class LogDao {

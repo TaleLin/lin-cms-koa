@@ -1,9 +1,9 @@
 /* eslint-disable new-cap */
 "use strict";
 
-const { RepeatException, ParametersException } = require("lin-cms");
-
+const { RepeatException, ParametersException } = require("lin-mizar");
 const { set, has } = require("lodash");
+
 class UserDao {
   async createUser (ctx, v) {
     let user = await ctx.manager.userModel.findOne({

@@ -1,6 +1,6 @@
 {
   "name": "lin-cms-koa",
-  "version": "0.0.1-alpha1",
+  "version": "0.0.1-alpha.1",
   "description": "simple and practical CMS implememted by koa",
   "main": "app/starter.js",
   "scripts": {
@@ -39,6 +39,6 @@
     "@koa/cors": "^2.2.3",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
-    "lin-cms": "^0.0.1-alpha6"
+    "lin-mizar": "^0.0.1-alpha.1"
   }
 }

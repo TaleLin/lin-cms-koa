@@ -7,7 +7,7 @@ const {
   paginate,
   Success,
   Forbidden
-} = require("lin-cms");
+} = require("lin-mizar");
 const { getSafeParamId } = require("../../../libs/util");
 const { IdsValidator } = require("./validators");
 const { get } = require("lodash");

@@ -3,7 +3,7 @@
 const Koa = require("koa");
 const KoaBodyParser = require("koa-bodyparser");
 const cors = require("@koa/cors");
-const { config } = require("lin-cms/lin/config");
+const { config } = require("lin-mizar/lin/config");
 // const { User2 } = require('./models/user');
 
 function applyCors (app) {
@@ -32,7 +32,7 @@ async function createApp () {
   applyBodyParse(app);
   applyCors(app);
   config.initApp(app);
-  const { log, error, Lin } = require("lin-cms");
+  const { log, error, Lin } = require("lin-mizar");
   app.use(log);
   app.on("error", error);
   const lin = new Lin();

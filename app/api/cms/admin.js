@@ -9,7 +9,7 @@ const {
   ParametersException,
   NotFound,
   Failed
-} = require("lin-cms");
+} = require("lin-mizar");
 
 const { has, set, get, toSafeInteger, isInteger } = require("lodash");
 const {
