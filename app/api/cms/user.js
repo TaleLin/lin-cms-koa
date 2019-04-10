@@ -57,8 +57,8 @@ user.linPost(
   async ctx => {
     const v = await new LoginValidator().validate(ctx);
     let user = await ctx.manager.userModel.verify(
-      v.get("nickname"),
-      v.get("password")
+      v.get("body.nickname"),
+      v.get("body.password")
     );
     const { accessToken, refreshToken } = getTokens(user);
     ctx.json({
@@ -101,8 +101,8 @@ user.linPut(
     const v = await new ChangePasswordValidator().validate(ctx);
     let user = ctx.currentUser;
     const ok = user.changePassword(
-      v.get("old_password"),
-      v.get("new_password")
+      v.get("body.old_password"),
+      v.get("body.new_password")
     );
     if (ok) {
       user.save();

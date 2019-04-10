@@ -44,7 +44,7 @@ class BookDao {
   async createBook (v) {
     const book = await Book.findOne({
       where: {
-        title: v.get("title"),
+        title: v.get("body.title"),
         delete_time: null
       }
     });
@@ -54,10 +54,10 @@ class BookDao {
       });
     }
     const bk = new Book();
-    bk.title = v.get("title");
-    bk.author = v.get("author");
-    bk.summary = v.get("summary");
-    bk.image = v.get("image");
+    bk.title = v.get("body.title");
+    bk.author = v.get("body.author");
+    bk.summary = v.get("body.summary");
+    bk.image = v.get("body.image");
     bk.save();
   }
 
@@ -68,10 +68,10 @@ class BookDao {
         msg: "没有找到相关书籍"
       });
     }
-    book.title = v.get("title");
-    book.author = v.get("author");
-    book.summary = v.get("summary");
-    book.image = v.get("image");
+    book.title = v.get("body.title");
+    book.author = v.get("body.author");
+    book.summary = v.get("body.summary");
+    book.image = v.get("body.image");
     book.save();
   }
 

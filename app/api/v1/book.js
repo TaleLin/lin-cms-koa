@@ -45,7 +45,7 @@ bookApi.get("/", async ctx => {
 
 bookApi.get("/search/one", async ctx => {
   const v = await new BookSearchValidator().validate(ctx);
-  const book = await bookDto.getBookByKeyword(v.get("q"));
+  const book = await bookDto.getBookByKeyword(v.get("query.q"));
   if (!book) {
     throw new BookNotFound();
   }

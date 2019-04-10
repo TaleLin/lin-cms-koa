@@ -1,6 +1,11 @@
 "use strict";
 
-const { loginRequired, LinRouter, logger, groupRequired } = require("lin-mizar");
+const {
+  loginRequired,
+  LinRouter,
+  logger,
+  groupRequired
+} = require("lin-mizar");
 
 const test = new LinRouter({
   prefix: "/cms/test"

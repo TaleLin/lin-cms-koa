@@ -14,7 +14,7 @@ api.get("/all", async ctx => {
 
 api.get("/search", async ctx => {
   const validator = await new PoemSearchValidator().validate(ctx);
-  const poems = await Poem.search(validator.get("q"));
+  const poems = await Poem.search(validator.get("query.q"));
   ctx.json(poems);
 });
 

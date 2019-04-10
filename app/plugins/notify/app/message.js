@@ -66,7 +66,7 @@ class MessageDao {
       },
       {
         where: {
-          [Sequelize.Op.in]: v.get("ids")
+          [Sequelize.Op.in]: v.get("body.ids")
         }
       }
     );

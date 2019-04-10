@@ -1,11 +1,6 @@
 "use strict";
 
-const {
-  LinRouter,
-  groupRequired,
-  NotFound,
-  paginate
-} = require("lin-mizar");
+const { LinRouter, groupRequired, NotFound, paginate } = require("lin-mizar");
 const { LogFindValidator } = require("../../validators/cms");
 const { get } = require("lodash");
 const { LogDao } = require("../../dao/log");

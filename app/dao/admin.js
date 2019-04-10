@@ -69,7 +69,7 @@ class AdminDao {
         msg: "用户不存在"
       });
     }
-    user.resetPassword(v.get("new_password"));
+    user.resetPassword(v.get("body.new_password"));
     user.save();
   }
 
@@ -101,10 +101,10 @@ class AdminDao {
         msg: "用户不存在"
       });
     }
-    if (user.email !== v.get("email")) {
+    if (user.email !== v.get("body.email")) {
       const exit = await ctx.manager.userModel.findOne({
         where: {
-          email: v.get("email"),
+          email: v.get("body.email"),
           delete_time: null
         }
       });
@@ -114,8 +114,8 @@ class AdminDao {
         });
       }
     }
-    user.group_id = v.get("group_id");
-    user.email = v.get("email");
+    user.group_id = v.get("body.group_id");
+    user.email = v.get("body.email");
     user.save();
   }
 
@@ -172,7 +172,7 @@ class AdminDao {
   async createGroup (ctx, v) {
     const exit = await ctx.manager.groupModel.findOne({
       where: {
-        name: v.get("name")
+        name: v.get("body.name")
       }
     });
     if (exit) {
@@ -185,14 +185,14 @@ class AdminDao {
       transaction = await db.transaction();
       const group = await ctx.manager.groupModel.create(
         {
-          name: v.get("name"),
-          info: v.get("info")
+          name: v.get("body.name"),
+          info: v.get("body.info")
         },
         {
           transaction
         }
       );
-      for (const item of v.get("auths")) {
+      for (const item of v.get("body.auths")) {
         const { auth, module } = findMetaByAuth(item);
         await ctx.manager.authModel.create(
           {
@@ -219,8 +219,8 @@ class AdminDao {
         msg: "分组不存在，更新失败"
       });
     }
-    exit.name = v.get("name");
-    exit.info = v.get("info");
+    exit.name = v.get("body.name");
+    exit.info = v.get("body.info");
     exit.save();
   }
 
@@ -260,7 +260,7 @@ class AdminDao {
   }
 
   async dispatchAuth (ctx, v) {
-    const group = await ctx.manager.groupModel.findById(v.get("group_id"));
+    const group = await ctx.manager.groupModel.findById(v.get("body.group_id"));
     if (!group) {
       throw new NotFound({
         msg: "分组不存在"
@@ -268,8 +268,8 @@ class AdminDao {
     }
     const one = await ctx.manager.authModel.findOne({
       where: {
-        group_id: v.get("group_id"),
-        auth: v.get("auth")
+        group_id: v.get("body.group_id"),
+        auth: v.get("body.auth")
       }
     });
     if (one) {
@@ -278,15 +278,15 @@ class AdminDao {
       });
     }
     const au = new ctx.manager.authModel();
-    const { auth, module } = findMetaByAuth(v.get("auth"));
+    const { auth, module } = findMetaByAuth(v.get("body.auth"));
     au.auth = auth;
     au.module = module;
-    au.group_id = v.get("group_id");
+    au.group_id = v.get("body.group_id");
     await au.save();
   }
 
   async dispatchAuths (ctx, v) {
-    const group = await ctx.manager.groupModel.findById(v.get("group_id"));
+    const group = await ctx.manager.groupModel.findById(v.get("body.group_id"));
     if (!group) {
       throw new NotFound({
         msg: "分组不存在"
@@ -295,7 +295,7 @@ class AdminDao {
     v.get("auths").forEach(async item => {
       const one = await ctx.manager.authModel.findOne({
         where: {
-          group_id: v.get("group_id"),
+          group_id: v.get("body.group_id"),
           auth: item
         }
       });
@@ -304,14 +304,14 @@ class AdminDao {
         const { auth, module } = findMetaByAuth(item);
         au.auth = auth;
         au.module = module;
-        au.group_id = v.get("group_id");
+        au.group_id = v.get("body.group_id");
         await au.save();
       }
     });
   }
 
   async removeAuths (ctx, v) {
-    const group = await ctx.manager.groupModel.findById(v.get("group_id"));
+    const group = await ctx.manager.groupModel.findById(v.get("body.group_id"));
     if (!group) {
       throw new NotFound({
         msg: "分组不存在"
@@ -319,9 +319,9 @@ class AdminDao {
     }
     await ctx.manager.authModel.destroy({
       where: {
-        group_id: v.get("group_id"),
+        group_id: v.get("body.group_id"),
         auth: {
-          [db.Op.in]: v.get("auths")
+          [db.Op.in]: v.get("body.auths")
         }
       }
     });

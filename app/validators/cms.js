@@ -30,10 +30,10 @@ exports.RegisterValidator = class extends LinValidator {
   }
 
   passwordCheck (val) {
-    if (!this.data.password || !this.data.confirm_password) {
+    if (!this.data.body.password || !this.data.body.confirm_password) {
       return false;
     }
-    let ok = this.data.password === this.data.confirm_password;
+    let ok = this.data.body.password === this.data.body.confirm_password;
     return ok;
   }
 };
@@ -74,10 +74,10 @@ class ResetPasswordValidator extends LinValidator {
   }
 
   passwordCheck (val) {
-    if (!this.data.new_password || !this.data.confirm_password) {
+    if (!this.data.body.new_password || !this.data.body.confirm_password) {
       return false;
     }
-    return this.data.new_password === this.data.confirm_password;
+    return this.data.body.new_password === this.data.body.confirm_password;
   }
 }
 
@@ -98,10 +98,10 @@ class ChangePasswordValidator extends LinValidator {
   }
 
   passwordCheck (val) {
-    if (!this.data.new_password || !this.data.confirm_password) {
+    if (!this.data.body.new_password || !this.data.body.confirm_password) {
       return false;
     }
-    return this.data.new_password === this.data.confirm_password;
+    return this.data.body.new_password === this.data.body.confirm_password;
   }
 }
 

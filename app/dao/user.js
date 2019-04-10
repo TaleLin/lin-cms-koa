@@ -8,7 +8,7 @@ class UserDao {
   async createUser (ctx, v) {
     let user = await ctx.manager.userModel.findOne({
       where: {
-        nickname: v.get("nickname")
+        nickname: v.get("body.nickname")
       }
     });
     if (user) {
@@ -16,10 +16,10 @@ class UserDao {
         msg: "用户名重复，请重新输入"
       });
     }
-    if (v.get("email") && v.get("email").trim() !== "") {
+    if (v.get("body.email") && v.get("body.email").trim() !== "") {
       user = await ctx.manager.userModel.findOne({
         where: {
-          email: v.get("email")
+          email: v.get("body.email")
         }
       });
       if (user) {
@@ -33,10 +33,10 @@ class UserDao {
 
   async updateUser (ctx, v) {
     let user = ctx.currentUser;
-    if (user.email !== v.get("email")) {
+    if (user.email !== v.get("body.email")) {
       const exit = await ctx.manager.userModel.findOne({
         where: {
-          email: v.get("email")
+          email: v.get("body.email")
         }
       });
       if (exit) {
@@ -45,7 +45,7 @@ class UserDao {
         });
       }
     }
-    user.email = v.get("email");
+    user.email = v.get("body.email");
     user.save();
   }
 
@@ -88,11 +88,11 @@ class UserDao {
 
   registerUser (ctx, v) {
     const user = new ctx.manager.userModel();
-    user.nickname = v.get("nickname");
-    user.password = v.get("password");
-    user.group_id = v.get("group_id");
-    if (v.get("email") && v.get("email").trim() !== "") {
-      user.email = v.get("email");
+    user.nickname = v.get("body.nickname");
+    user.password = v.get("body.password");
+    user.group_id = v.get("body.group_id");
+    if (v.get("body.email") && v.get("body.email").trim() !== "") {
+      user.email = v.get("body.email");
     }
     user.save();
   }
