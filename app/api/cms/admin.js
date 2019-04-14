@@ -2,26 +2,31 @@
 
 const {
   LinRouter,
-  paginate,
   routeMetaInfo,
   adminRequired,
   Success,
-  ParametersException,
   NotFound,
   Failed
 } = require("lin-mizar");
 
-const { has, set, get, toSafeInteger, isInteger } = require("lodash");
+const { has, set } = require("lodash");
+
 const {
+  DispatchAuthsValidator,
+  RemoveAuthsValidator,
+  UpdateGroupValidator,
   ResetPasswordValidator,
+  AdminUsersValidator,
   UpdateUserInfoValidator,
   NewGroupValidator,
-  UpdateGroupValidator,
-  DispatchAuthValidator,
-  DispatchAuthsValidator,
-  RemoveAuthsValidator
-} = require("../../validators/cms");
-const { getSafeParamId } = require("../../libs/util");
+  DispatchAuthValidator
+} = require("../../validators/admin");
+
+const {
+  PositiveIdValidator,
+  PaginateValidator
+} = require("../../validators/common");
+
 const { AdminDao } = require("../../dao/admin");
 
 const admin = new LinRouter({
@@ -65,13 +70,12 @@ admin.linGet(
   },
   adminRequired,
   async ctx => {
-    const groupId = get(ctx.request.query, "group_id");
-    const { start, count } = paginate(ctx);
+    const v = await new AdminUsersValidator().validate(ctx);
     const { users, total } = await adminDao.getUsers(
       ctx,
-      groupId,
-      start,
-      count
+      v.get("query.group_id"),
+      v.get("query.start"),
+      v.get("query.count")
     );
     ctx.json({
       collection: users,
@@ -92,13 +96,7 @@ admin.linPut(
   adminRequired,
   async ctx => {
     const v = await new ResetPasswordValidator().validate(ctx);
-    const id = toSafeInteger(get(ctx.params, "id"));
-    if (!isInteger(id)) {
-      throw new ParametersException({
-        msg: "路由参数错误"
-      });
-    }
-    await adminDao.changeUserPassword(ctx, v, id);
+    await adminDao.changeUserPassword(ctx, v);
     ctx.json(
       new Success({
         msg: "密码修改成功"
@@ -117,12 +115,8 @@ admin.linDelete(
   },
   adminRequired,
   async ctx => {
-    const id = toSafeInteger(get(ctx.params, "id"));
-    if (!isInteger(id)) {
-      throw new ParametersException({
-        msg: "路由参数错误"
-      });
-    }
+    const v = await new PositiveIdValidator().validate(ctx);
+    const id = v.get("path.id");
     await adminDao.deleteUser(ctx, id);
     ctx.json(
       new Success({
@@ -143,13 +137,7 @@ admin.linPut(
   adminRequired,
   async ctx => {
     const v = await new UpdateUserInfoValidator().validate(ctx);
-    const id = toSafeInteger(get(ctx.params, "id"));
-    if (!isInteger(id)) {
-      throw new ParametersException({
-        msg: "路由参数错误"
-      });
-    }
-    await adminDao.updateUserInfo(ctx, v, id);
+    await adminDao.updateUserInfo(ctx, v);
     ctx.json(
       new Success({
         msg: "操作成功"
@@ -168,8 +156,12 @@ admin.linGet(
   },
   adminRequired,
   async ctx => {
-    const { start, count } = paginate(ctx);
-    const { groups, total } = await adminDao.getGroups(ctx, start, count);
+    const v = await new PaginateValidator().validate(ctx);
+    const { groups, total } = await adminDao.getGroups(
+      ctx,
+      v.get("query.start"),
+      v.get("query.count")
+    );
     if (total < 1) {
       throw new NotFound({
         msg: "未找到任何权限组"
@@ -212,13 +204,8 @@ admin.linGet(
   },
   adminRequired,
   async ctx => {
-    const id = toSafeInteger(get(ctx.params, "id"));
-    if (!isInteger(id)) {
-      throw new ParametersException({
-        msg: "路由参数错误"
-      });
-    }
-    const group = await adminDao.getGroup(ctx, id);
+    const v = await new PositiveIdValidator().validate(ctx);
+    const group = await adminDao.getGroup(ctx, v.get("path.id"));
     ctx.json(group);
   }
 );
@@ -262,8 +249,7 @@ admin.linPut(
   adminRequired,
   async ctx => {
     const v = await new UpdateGroupValidator().validate(ctx);
-    const id = getSafeParamId(ctx);
-    await adminDao.updateGroup(ctx, v, id);
+    await adminDao.updateGroup(ctx, v);
     ctx.json(
       new Success({
         msg: "更新分组成功"
@@ -282,7 +268,8 @@ admin.linDelete(
   },
   adminRequired,
   async ctx => {
-    const id = getSafeParamId(ctx);
+    const v = await new PositiveIdValidator().validate(ctx);
+    const id = v.get("path.id");
     await adminDao.deleteGroup(ctx, id);
     ctx.json(
       new Success({

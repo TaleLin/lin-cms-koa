@@ -1,7 +1,7 @@
 require("../helper/initial");
 const request = require("supertest");
 const { createApp } = require("../../app/app");
-const { db } = require("lin-cms/lin/db");
+const { db } = require("lin-mizar/lin/db");
 const { getToken } = require("../helper/token");
 
 describe("admin.test.js", () => {

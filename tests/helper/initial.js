@@ -1,4 +1,4 @@
-const { config } = require("lin-cms/lin/config");
+const { config } = require("lin-mizar/lin/config");
 
 // 初始化数据库配置
 (() => {

@@ -6,7 +6,9 @@ const { db } = require("lin-mizar/lin/db");
 const Sequelize = require("sequelize");
 
 class LogDao {
-  async getLogs (v, start, count1) {
+  async getLogs (v) {
+    const start = v.get("query.start");
+    const count1 = v.get("query.count");
     let condition = {};
     v.get("body.name") && set(condition, "user_name", v.get("body.name"));
     v.get("body.start") &&
@@ -26,7 +28,9 @@ class LogDao {
     };
   }
 
-  async searchLogs (v, start, count1, keyword) {
+  async searchLogs (v, keyword) {
+    const start = v.get("query.start");
+    const count1 = v.get("query.count");
     let condition = {};
     v.get("body.name") && set(condition, "user_name", v.get("body.name"));
     v.get("body.start") &&

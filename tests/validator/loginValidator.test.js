@@ -1,6 +1,6 @@
 const { LoginValidator } = require("../../app/validators/cms");
 const context = require("../helper/context");
-const { ParametersException } = require("lin-cms");
+const { ParametersException } = require("lin-mizar");
 
 describe("loginValidator.test.js", () => {
   test("登陆校验", async () => {

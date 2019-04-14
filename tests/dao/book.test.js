@@ -1,7 +1,7 @@
 require("../helper/initial");
 const { BookDao } = require("../../app/api/v1/book");
 // const { CreateOrUpdateBookValidator } = require("../../app/validators/cms");
-const { db } = require("lin-cms/lin/db");
+const { db } = require("lin-mizar/lin/db");
 
 describe("book.test.js", () => {
   /**

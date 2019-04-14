@@ -1,5 +1,5 @@
 require("./initial");
-const { db } = require("lin-cms/lin/db");
+const { db } = require("lin-mizar/lin/db");
 const { Poem } = require("../../app/plugins/poem/app/model");
 
 const run = async () => {

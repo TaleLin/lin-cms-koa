@@ -1,7 +1,7 @@
 require("./initial");
-const { db } = require("lin-cms/lin/db");
+const { db } = require("lin-mizar/lin/db");
 // eslint-disable-next-line no-unused-vars
-const { User, Group, Auth } = require("lin-cms/lin");
+const { User, Group, Auth } = require("lin-mizar/lin");
 // eslint-disable-next-line no-unused-vars
 const { Book } = require("../../app/models/book");
 

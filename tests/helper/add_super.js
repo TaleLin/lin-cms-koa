@@ -1,6 +1,6 @@
 require("./initial");
-const { db } = require("lin-cms/lin/db");
-const { User, UserAdmin } = require("lin-cms/lin");
+const { db } = require("lin-mizar/lin/db");
+const { User, UserAdmin } = require("lin-mizar/lin");
 
 const run = async () => {
   await User.create({

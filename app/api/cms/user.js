@@ -15,7 +15,7 @@ const {
   LoginValidator,
   UpdateInfoValidator,
   ChangePasswordValidator
-} = require("../../validators/cms");
+} = require("../../validators/user");
 
 const { UserDao } = require("../../dao/user");
 

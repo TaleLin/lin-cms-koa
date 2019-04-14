@@ -1,7 +1,7 @@
 require("../helper/initial");
 const { V } = require("../helper/v");
 const { LogDao } = require("../../app/api/cms/log");
-const { db } = require("lin-cms/lin/db");
+const { db } = require("lin-mizar/lin/db");
 
 describe("book.test.js", () => {
   /**

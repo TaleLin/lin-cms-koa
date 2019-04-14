@@ -1,7 +1,8 @@
 "use strict";
 
-const { LinRouter, groupRequired, NotFound, paginate } = require("lin-mizar");
-const { LogFindValidator } = require("../../validators/cms");
+const { LinRouter, groupRequired, NotFound } = require("lin-mizar");
+const { LogFindValidator } = require("../../validators/log");
+const { PaginateValidator } = require("../../validators/common");
 const { get } = require("lodash");
 const { LogDao } = require("../../dao/log");
 
@@ -24,8 +25,7 @@ log.linGet(
   groupRequired,
   async ctx => {
     const v = await new LogFindValidator().validate(ctx);
-    const { start, count } = paginate(ctx);
-    const { rows, total } = await logDao.getLogs(v, start, count);
+    const { rows, total } = await logDao.getLogs(v);
     if (total < 1) {
       throw new NotFound({
         msg: "没有找到相关日志"
@@ -50,8 +50,7 @@ log.linGet(
   async ctx => {
     const v = await new LogFindValidator().validate(ctx);
     const keyword = get(ctx.request.query, "keyword", "");
-    const { start, count } = paginate(ctx);
-    const { logs, total } = await logDao.searchLogs(v, start, count, keyword);
+    const { logs, total } = await logDao.searchLogs(v, keyword);
     if (total < 1) {
       throw new NotFound({
         msg: "没有找到相关日志"
@@ -74,8 +73,8 @@ log.linGet(
   },
   groupRequired,
   async ctx => {
-    const { start, count } = paginate(ctx);
-    const arr = await logDao.getUserNames(start, count);
+    const v = await new PaginateValidator().validate(ctx);
+    const arr = await logDao.getUserNames(v.get("query.start"), v.get("query.count"));
     ctx.json(arr);
   }
 );

@@ -1,7 +1,7 @@
 "use strict";
 
 exports.db = {
-  database: "lin-cms2",
+  database: "lin-cms4",
   host: "localhost",
   port: 3306,
   username: "root",

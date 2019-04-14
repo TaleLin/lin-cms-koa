@@ -57,7 +57,8 @@ class AdminDao {
     };
   }
 
-  async changeUserPassword (ctx, v, id) {
+  async changeUserPassword (ctx, v) {
+    const id = v.get("path.id");
     const user = await ctx.manager.userModel.findOne({
       where: {
         id: id,
@@ -89,7 +90,8 @@ class AdminDao {
     user.softDelete();
   }
 
-  async updateUserInfo (ctx, v, id) {
+  async updateUserInfo (ctx, v) {
+    const id = v.get("path.id");
     const user = await ctx.manager.userModel.findOne({
       where: {
         id: id,
@@ -212,7 +214,8 @@ class AdminDao {
     return true;
   }
 
-  async updateGroup (ctx, v, id) {
+  async updateGroup (ctx, v) {
+    const id = v.get("path.id");
     const exit = await ctx.manager.groupModel.findById(id);
     if (!exit) {
       throw new NotFound({

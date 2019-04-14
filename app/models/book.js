@@ -2,41 +2,41 @@
 
 const { InfoCrudMixin } = require("lin-mizar/lin/interface");
 const { merge } = require("lodash");
-const Sequelize = require("sequelize");
+const { Sequelize, Model } = require("sequelize");
 const { db } = require("lin-mizar/lin/db");
 
-let Book = db.define(
-  "book",
-  merge(
-    {
-      id: {
-        type: Sequelize.INTEGER,
-        primaryKey: true,
-        autoIncrement: true
-      },
-      title: {
-        type: Sequelize.STRING(50),
-        allowNull: false
-      },
-      author: {
-        type: Sequelize.STRING(30),
-        allowNull: true,
-        defaultValue: "未名"
-      },
-      summary: {
-        type: Sequelize.STRING(1000),
-        allowNull: true
-      },
-      image: {
-        type: Sequelize.STRING(100),
-        allowNull: true
-      }
+class Book extends Model {}
+
+Book.init(
+  {
+    id: {
+      type: Sequelize.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
     },
-    InfoCrudMixin.attributes
-  ),
+    title: {
+      type: Sequelize.STRING(50),
+      allowNull: false
+    },
+    author: {
+      type: Sequelize.STRING(30),
+      allowNull: true,
+      defaultValue: "未名"
+    },
+    summary: {
+      type: Sequelize.STRING(1000),
+      allowNull: true
+    },
+    image: {
+      type: Sequelize.STRING(100),
+      allowNull: true
+    }
+  },
   merge(
     {
-      tableName: "book"
+      tableName: "book",
+      modelName: "book",
+      sequelize: db
     },
     InfoCrudMixin.options
   )
@@ -52,12 +52,6 @@ Book.prototype.toJSON = function () {
     create_time: this.createTime
   };
   return origin;
-};
-
-Book.prototype.softDelete = function () {
-  this.delete_time = new Date();
-  // 更新数据库
-  this.save();
 };
 
 exports.Book = Book;

@@ -5,7 +5,12 @@ const { getSafeParamId } = require("../../libs/util");
 const {
   BookSearchValidator,
   CreateOrUpdateBookValidator
-} = require("../../validators/cms");
+} = require("../../validators/book");
+
+const {
+  PositiveIdValidator
+} = require("../../validators/common");
+
 const { BookNotFound } = require("../../libs/err-code");
 const { Book } = require("../../models/book");
 const { BookDao } = require("../../dao/book");
@@ -23,7 +28,8 @@ exports.bookApi = bookApi;
 const bookDto = new BookDao();
 
 bookApi.get("/:id", async ctx => {
-  const id = getSafeParamId(ctx);
+  const v = await new PositiveIdValidator().validate();
+  const id = v.get("path.id");
   const book = await bookDto.getBook(id);
   if (!book) {
     throw new NotFound({
@@ -83,7 +89,8 @@ bookApi.linDelete(
   },
   groupRequired,
   async ctx => {
-    const id = getSafeParamId(ctx);
+    const v = await new PositiveIdValidator().validate();
+    const id = v.get("path.id");
     await bookDto.deleteBook(id);
     ctx.json(
       new Success({
