@@ -156,7 +156,7 @@ class AdminDao {
   }
 
   async getGroup (ctx, id) {
-    const group = await ctx.manager.groupModel.findById(id);
+    const group = await ctx.manager.groupModel.findByPk(id);
     const auths = await db.query(
       "SELECT lin_auth.auth,lin_auth.module FROM lin_auth WHERE lin_auth.group_id=:id",
       {
@@ -216,7 +216,7 @@ class AdminDao {
 
   async updateGroup (ctx, v) {
     const id = v.get("path.id");
-    const exit = await ctx.manager.groupModel.findById(id);
+    const exit = await ctx.manager.groupModel.findByPk(id);
     if (!exit) {
       throw new NotFound({
         msg: "分组不存在，更新失败"
@@ -228,7 +228,7 @@ class AdminDao {
   }
 
   async deleteGroup (ctx, id) {
-    const exit = await ctx.manager.groupModel.findById(id);
+    const exit = await ctx.manager.groupModel.findByPk(id);
     if (!exit) {
       throw new NotFound({
         msg: "分组不存在，删除失败"
@@ -263,7 +263,7 @@ class AdminDao {
   }
 
   async dispatchAuth (ctx, v) {
-    const group = await ctx.manager.groupModel.findById(v.get("body.group_id"));
+    const group = await ctx.manager.groupModel.findByPk(v.get("body.group_id"));
     if (!group) {
       throw new NotFound({
         msg: "分组不存在"
@@ -289,7 +289,7 @@ class AdminDao {
   }
 
   async dispatchAuths (ctx, v) {
-    const group = await ctx.manager.groupModel.findById(v.get("body.group_id"));
+    const group = await ctx.manager.groupModel.findByPk(v.get("body.group_id"));
     if (!group) {
       throw new NotFound({
         msg: "分组不存在"
@@ -314,7 +314,7 @@ class AdminDao {
   }
 
   async removeAuths (ctx, v) {
-    const group = await ctx.manager.groupModel.findById(v.get("body.group_id"));
+    const group = await ctx.manager.groupModel.findByPk(v.get("body.group_id"));
     if (!group) {
       throw new NotFound({
         msg: "分组不存在"

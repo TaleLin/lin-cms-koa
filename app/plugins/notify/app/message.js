@@ -44,7 +44,7 @@ class MessageDao {
   }
 
   async readMessage (id) {
-    const msg = await Message.findById(id);
+    const msg = await Message.findByPk(id);
     if (!msg) {
       throw new NotFound({
         msg: "未找到消息"
@@ -73,7 +73,7 @@ class MessageDao {
   }
 
   async deleteMessage (id) {
-    const msg = await Message.findById(id);
+    const msg = await Message.findByPk(id);
     if (!msg) {
       throw new NotFound({
         msg: "未找到消息"

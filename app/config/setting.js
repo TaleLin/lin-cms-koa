@@ -8,16 +8,17 @@ exports.apiDir = "app/api";
 
 exports.accessExp = 60 * 60; // 1h 单位秒
 
+// 暂不启用
 exports.pluginPath = {
   // plugin name
-  poem: {
-    // determine a plugin work or not
-    enable: true,
-    // path of the plugin that relatived the workdir
-    path: "app/plugins/poem",
-    // other config
-    limit: 2
-  }
+  // poem: {
+  //   // determine a plugin work or not
+  //   enable: true,
+  //   // path of the plugin that relatived the workdir
+  //   path: "app/plugins/poem",
+  //   // other config
+  //   limit: 2
+  // }
   // notify: {
   //   enable: true,
   //   path: "app/plugins/notify",

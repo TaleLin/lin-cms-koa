@@ -62,7 +62,7 @@ class BookDao {
   }
 
   async updateBook (v, id) {
-    const book = await Book.findById(id);
+    const book = await Book.findByPk(id);
     if (!book) {
       throw new NotFound({
         msg: "没有找到相关书籍"
