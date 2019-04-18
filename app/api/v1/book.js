@@ -28,7 +28,7 @@ exports.bookApi = bookApi;
 const bookDto = new BookDao();
 
 bookApi.get("/:id", async ctx => {
-  const v = await new PositiveIdValidator().validate();
+  const v = await new PositiveIdValidator().validate(ctx);
   const id = v.get("path.id");
   const book = await bookDto.getBook(id);
   if (!book) {
@@ -89,7 +89,7 @@ bookApi.linDelete(
   },
   groupRequired,
   async ctx => {
-    const v = await new PositiveIdValidator().validate();
+    const v = await new PositiveIdValidator().validate(ctx);
     const id = v.get("path.id");
     await bookDto.deleteBook(id);
     ctx.json(

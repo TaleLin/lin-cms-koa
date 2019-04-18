@@ -87,7 +87,7 @@ class BookDao {
         msg: "没有找到相关书籍"
       });
     }
-    book.softDelete();
+    book.destroy();
   }
 }
 

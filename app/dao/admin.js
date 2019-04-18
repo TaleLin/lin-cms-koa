@@ -11,6 +11,7 @@ const {
 
 const { has, set, get } = require("lodash");
 const { db } = require("lin-mizar/lin/db");
+const { Op } = require("sequelize");
 const dayjs = require("dayjs");
 
 class AdminDao {
@@ -19,7 +20,7 @@ class AdminDao {
       "SELECT lin_user.*,lin_group.`name` as group_name FROM lin_user LEFT JOIN lin_group ON lin_user.group_id = lin_group.id WHERE";
     groupId && (sql += " lin_user.group_id = :id AND");
     let users = await db.query(
-      sql + " lin_user.admin = :admin LIMIT :count OFFSET :start ",
+      sql + " lin_user.admin = :admin AND lin_user.delete_time IS NULL LIMIT :count OFFSET :start ",
       {
         replacements: groupId
           ? {
@@ -37,7 +38,7 @@ class AdminDao {
       }
     );
     let total = await db.query(
-      "SELECT COUNT(*) as count FROM lin_user WHERE lin_user.admin=:admin",
+      "SELECT COUNT(*) as count FROM lin_user WHERE lin_user.admin=:admin AND lin_user.delete_time IS NULL",
       {
         replacements: {
           admin: UserAdmin.COMMON
@@ -86,8 +87,7 @@ class AdminDao {
         msg: "用户不存在"
       });
     }
-    // 推荐调用软删除，即下面注释代码
-    user.softDelete();
+    user.destroy();
   }
 
   async updateUserInfo (ctx, v) {
@@ -295,7 +295,7 @@ class AdminDao {
         msg: "分组不存在"
       });
     }
-    v.get("auths").forEach(async item => {
+    v.get("body.auths").forEach(async item => {
       const one = await ctx.manager.authModel.findOne({
         where: {
           group_id: v.get("body.group_id"),
@@ -324,7 +324,7 @@ class AdminDao {
       where: {
         group_id: v.get("body.group_id"),
         auth: {
-          [db.Op.in]: v.get("body.auths")
+          [Op.in]: v.get("body.auths")
         }
       }
     });

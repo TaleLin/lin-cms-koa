@@ -7,7 +7,7 @@ const Sequelize = require("sequelize");
 
 class LogDao {
   async getLogs (v) {
-    const start = v.get("query.start");
+    const start = v.get("query.page");
     const count1 = v.get("query.count");
     let condition = {};
     v.get("body.name") && set(condition, "user_name", v.get("body.name"));
@@ -29,7 +29,7 @@ class LogDao {
   }
 
   async searchLogs (v, keyword) {
-    const start = v.get("query.start");
+    const start = v.get("query.page");
     const count1 = v.get("query.count");
     let condition = {};
     v.get("body.name") && set(condition, "user_name", v.get("body.name"));
@@ -38,7 +38,7 @@ class LogDao {
       set(condition, "time", {
         [Sequelize.Op.between]: [v.get("body.start"), v.get("body.end")]
       });
-    let { rows, count } = await Log.findAndCount({
+    let { rows, count } = await Log.findAndCountAll({
       where: Object.assign({}, condition, {
         message: {
           [Sequelize.Op.like]: `%${keyword}%`

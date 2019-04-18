@@ -74,7 +74,7 @@ admin.linGet(
     const { users, total } = await adminDao.getUsers(
       ctx,
       v.get("query.group_id"),
-      v.get("query.start"),
+      v.get("query.page"),
       v.get("query.count")
     );
     ctx.json({
@@ -159,7 +159,7 @@ admin.linGet(
     const v = await new PaginateValidator().validate(ctx);
     const { groups, total } = await adminDao.getGroups(
       ctx,
-      v.get("query.start"),
+      v.get("query.page"),
       v.get("query.count")
     );
     if (total < 1) {

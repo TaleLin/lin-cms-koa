@@ -74,7 +74,7 @@ log.linGet(
   groupRequired,
   async ctx => {
     const v = await new PaginateValidator().validate(ctx);
-    const arr = await logDao.getUserNames(v.get("query.start"), v.get("query.count"));
+    const arr = await logDao.getUserNames(v.get("query.page"), v.get("query.count"));
     ctx.json(arr);
   }
 );
