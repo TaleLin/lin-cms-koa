@@ -6,7 +6,7 @@ const {
   getTokens,
   loginRequired,
   Success,
-  refreshTokenRequired,
+  refreshTokenRequiredWithUnifyException,
   Failed
 } = require("lin-mizar");
 
@@ -129,7 +129,7 @@ user.linGet(
     module: "用户",
     mount: false
   },
-  refreshTokenRequired,
+  refreshTokenRequiredWithUnifyException,
   async ctx => {
     let user = ctx.currentUser;
     const { accessToken, refreshToken } = getTokens(user);

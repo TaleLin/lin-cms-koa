@@ -10,11 +10,11 @@ class LogDao {
     const start = v.get("query.page");
     const count1 = v.get("query.count");
     let condition = {};
-    v.get("body.name") && set(condition, "user_name", v.get("body.name"));
-    v.get("body.start") &&
-      v.get("body.end") &&
+    v.get("query.name") && set(condition, "user_name", v.get("query.name"));
+    v.get("query.start") &&
+      v.get("query.end") &&
       set(condition, "time", {
-        [Sequelize.Op.between]: [v.get("body.start"), v.get("body.end")]
+        [Sequelize.Op.between]: [v.get("query.start"), v.get("query.end")]
       });
     let { rows, count } = await Log.findAndCountAll({
       where: Object.assign({}, condition),
@@ -32,11 +32,11 @@ class LogDao {
     const start = v.get("query.page");
     const count1 = v.get("query.count");
     let condition = {};
-    v.get("body.name") && set(condition, "user_name", v.get("body.name"));
-    v.get("body.start") &&
-      v.get("body.end") &&
+    v.get("query.name") && set(condition, "user_name", v.get("query.name"));
+    v.get("query.start") &&
+      v.get("query.end") &&
       set(condition, "time", {
-        [Sequelize.Op.between]: [v.get("body.start"), v.get("body.end")]
+        [Sequelize.Op.between]: [v.get("query.start"), v.get("query.end")]
       });
     let { rows, count } = await Log.findAndCountAll({
       where: Object.assign({}, condition, {

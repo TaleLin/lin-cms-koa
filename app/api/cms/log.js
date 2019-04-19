@@ -50,7 +50,7 @@ log.linGet(
   async ctx => {
     const v = await new LogFindValidator().validate(ctx);
     const keyword = get(ctx.request.query, "keyword", "");
-    const { logs, total } = await logDao.searchLogs(v, keyword);
+    const { rows, total } = await logDao.searchLogs(v, keyword);
     if (total < 1) {
       throw new NotFound({
         msg: "没有找到相关日志"
@@ -58,7 +58,7 @@ log.linGet(
     }
     ctx.json({
       total_nums: total,
-      collection: logs
+      collection: rows
     });
   }
 );
