@@ -69,4 +69,4 @@ class LogDao {
   }
 }
 
-exports.LogDao = LogDao;
+module.exports = { LogDao };

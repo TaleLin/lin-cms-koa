@@ -18,4 +18,6 @@ class LogFindValidator extends PaginateValidator {
   }
 }
 
-exports.LogFindValidator = LogFindValidator;
+module.exports = {
+  LogFindValidator
+};

@@ -30,7 +30,7 @@
 Lin-CMS 是林间有风团队经过大量项目实践所提炼出的一套**内容管理系统框
 架**。Lin-CMS 可以有效的帮助开发者提高 CMS 的开发效率。
 
-本项目是 Lin CMS 后端的 Flask 实现，需要前端？请访
+本项目是 Lin CMS 后端的 koa 实现，需要前端？请访
 问[前端仓库](https://github.com/TaleLin/lin-cms-vue)。
 
 ### 文档地址

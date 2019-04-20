@@ -13,4 +13,4 @@ function getSafeParamId (ctx) {
   return id;
 }
 
-exports.getSafeParamId = getSafeParamId;
+module.exports = { getSafeParamId };

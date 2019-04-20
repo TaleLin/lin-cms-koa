@@ -1,14 +1,8 @@
 "use strict";
 
-const { LinRouter, NotFound, Forbidden } = require("lin-mizar");
+const { NotFound, Forbidden } = require("lin-mizar");
 const { Book } = require("../models/book");
 const Sequelize = require("sequelize");
-// book 的红图实例
-const bookApi = new LinRouter({
-  prefix: "/v1/book"
-});
-
-exports.bookApi = bookApi;
 
 class BookDao {
   async getBook (id) {
@@ -91,4 +85,4 @@ class BookDao {
   }
 }
 
-exports.BookDao = BookDao;
+module.exports = { BookDao };

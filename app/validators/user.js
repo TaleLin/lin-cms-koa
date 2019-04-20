@@ -2,7 +2,7 @@
 
 const { LinValidator, Rule } = require("lin-mizar");
 
-exports.RegisterValidator = class extends LinValidator {
+class RegisterValidator extends LinValidator {
   constructor () {
     super();
     this.nickname = [
@@ -35,7 +35,7 @@ exports.RegisterValidator = class extends LinValidator {
     let ok = this.data.body.password === this.data.body.confirm_password;
     return ok;
   }
-};
+}
 
 class LoginValidator extends LinValidator {
   constructor () {
@@ -44,8 +44,6 @@ class LoginValidator extends LinValidator {
     this.password = new Rule("isNotEmpty", "密码不可为空");
   }
 }
-
-exports.LoginValidator = LoginValidator;
 
 /**
  * 用户更新自己的邮箱
@@ -56,7 +54,6 @@ class UpdateInfoValidator extends LinValidator {
     this.email = new Rule("isEmail", "电子邮箱不符合规范，请输入正确的邮箱");
   }
 }
-exports.UpdateInfoValidator = UpdateInfoValidator;
 
 class ChangePasswordValidator extends LinValidator {
   constructor () {
@@ -80,4 +77,9 @@ class ChangePasswordValidator extends LinValidator {
   }
 }
 
-exports.ChangePasswordValidator = ChangePasswordValidator;
+module.exports = {
+  ChangePasswordValidator,
+  UpdateInfoValidator,
+  LoginValidator,
+  RegisterValidator
+};

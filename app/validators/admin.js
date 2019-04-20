@@ -14,8 +14,6 @@ class AdminUsersValidator extends PaginateValidator {
   }
 }
 
-exports.AdminUsersValidator = AdminUsersValidator;
-
 class ResetPasswordValidator extends PositiveIdValidator {
   constructor () {
     super();
@@ -38,8 +36,6 @@ class ResetPasswordValidator extends PositiveIdValidator {
   }
 }
 
-exports.ResetPasswordValidator = ResetPasswordValidator;
-
 class UpdateUserInfoValidator extends PositiveIdValidator {
   constructor () {
     super();
@@ -50,8 +46,6 @@ class UpdateUserInfoValidator extends PositiveIdValidator {
   }
 }
 
-exports.UpdateUserInfoValidator = UpdateUserInfoValidator;
-
 class UpdateGroupValidator extends PositiveIdValidator {
   constructor () {
     super();
@@ -59,8 +53,6 @@ class UpdateGroupValidator extends PositiveIdValidator {
     this.info = new Rule("isOptional");
   }
 }
-
-exports.UpdateGroupValidator = UpdateGroupValidator;
 
 class RemoveAuthsValidator extends LinValidator {
   constructor () {
@@ -81,8 +73,6 @@ class RemoveAuthsValidator extends LinValidator {
   }
 }
 
-exports.RemoveAuthsValidator = RemoveAuthsValidator;
-
 class DispatchAuthsValidator extends LinValidator {
   constructor () {
     super();
@@ -102,8 +92,6 @@ class DispatchAuthsValidator extends LinValidator {
     return true;
   }
 }
-
-exports.DispatchAuthsValidator = DispatchAuthsValidator;
 
 class NewGroupValidator extends LinValidator {
   constructor () {
@@ -129,8 +117,6 @@ class NewGroupValidator extends LinValidator {
   }
 }
 
-exports.NewGroupValidator = NewGroupValidator;
-
 class DispatchAuthValidator extends LinValidator {
   constructor () {
     super();
@@ -139,4 +125,13 @@ class DispatchAuthValidator extends LinValidator {
   }
 }
 
-exports.DispatchAuthValidator = DispatchAuthValidator;
+module.exports = {
+  UpdateGroupValidator,
+  UpdateUserInfoValidator,
+  DispatchAuthValidator,
+  NewGroupValidator,
+  DispatchAuthsValidator,
+  RemoveAuthsValidator,
+  ResetPasswordValidator,
+  AdminUsersValidator
+};

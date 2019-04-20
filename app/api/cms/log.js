@@ -10,8 +10,6 @@ const log = new LinRouter({
   prefix: "/cms/log"
 });
 
-exports.log = log;
-
 const logDao = new LogDao();
 
 log.linGet(
@@ -81,3 +79,5 @@ log.linGet(
     ctx.json(arr);
   }
 );
+
+module.exports = { log };

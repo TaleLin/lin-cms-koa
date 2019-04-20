@@ -33,8 +33,6 @@ const admin = new LinRouter({
   prefix: "/cms/admin"
 });
 
-exports.admin = admin;
-
 const adminDao = new AdminDao();
 
 admin.linGet(
@@ -338,3 +336,5 @@ admin.linPost(
     );
   }
 );
+
+module.exports = { admin };

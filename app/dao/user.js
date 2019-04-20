@@ -98,4 +98,4 @@ class UserDao {
   }
 }
 
-exports.UserDao = UserDao;
+module.exports = { UserDao };

@@ -8,7 +8,6 @@ class BookSearchValidator extends LinValidator {
     this.q = new Rule("isNotEmpty", "必须传入搜索关键字");
   }
 }
-exports.BookSearchValidator = BookSearchValidator;
 
 class CreateOrUpdateBookValidator extends LinValidator {
   constructor () {
@@ -20,4 +19,7 @@ class CreateOrUpdateBookValidator extends LinValidator {
   }
 }
 
-exports.CreateOrUpdateBookValidator = CreateOrUpdateBookValidator;
+module.exports = {
+  CreateOrUpdateBookValidator,
+  BookSearchValidator
+};

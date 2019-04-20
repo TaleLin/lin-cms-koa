@@ -22,4 +22,4 @@ User2.prototype.sayHello = function () {
   console.log("hello world!");
 };
 
-exports.User2 = User2;
+module.exports = { User2 };

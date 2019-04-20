@@ -40,4 +40,4 @@ async function createApp () {
   return app;
 }
 
-exports.createApp = createApp;
+module.exports = { createApp };

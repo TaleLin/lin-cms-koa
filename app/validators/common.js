@@ -10,8 +10,6 @@ class PositiveIdValidator extends LinValidator {
   }
 }
 
-exports.PositiveIdValidator = PositiveIdValidator;
-
 class PaginateValidator extends LinValidator {
   constructor () {
     super();
@@ -26,4 +24,7 @@ class PaginateValidator extends LinValidator {
   }
 }
 
-exports.PaginateValidator = PaginateValidator;
+module.exports = {
+  PaginateValidator,
+  PositiveIdValidator
+};

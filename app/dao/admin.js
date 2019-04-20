@@ -360,4 +360,4 @@ class AdminDao {
   }
 }
 
-exports.AdminDao = AdminDao;
+module.exports = { AdminDao };

@@ -11,8 +11,6 @@ const test = new LinRouter({
   prefix: "/cms/test"
 });
 
-exports.test = test;
-
 test.get("/", async ctx => {
   ctx.type = "html";
   ctx.body = `<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} a{color:#2E5CD5;cursor:
@@ -55,3 +53,5 @@ test.linGet(
     });
   }
 );
+
+module.exports = { test };

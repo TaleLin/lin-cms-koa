@@ -1,6 +1,12 @@
 "use strict";
 
-const { LinRouter, NotFound, Success, groupRequired } = require("lin-mizar");
+const {
+  LinRouter,
+  NotFound,
+  Success,
+  groupRequired,
+  disableLoading
+} = require("lin-mizar");
 const { getSafeParamId } = require("../../libs/util");
 const {
   BookSearchValidator,
@@ -17,10 +23,6 @@ const { BookDao } = require("../../dao/book");
 const bookApi = new LinRouter({
   prefix: "/v1/book"
 });
-
-exports.bookApi = bookApi;
-
-// exports[disableLoading] = true;
 
 // book 的dao 数据库访问层实例
 const bookDto = new BookDao();
@@ -107,3 +109,5 @@ bookApi.get("/", async ctx => {
   }
   ctx.json(books);
 });
+
+module.exports = { bookApi, [disableLoading]: false };

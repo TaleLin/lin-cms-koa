@@ -54,4 +54,4 @@ Book.prototype.toJSON = function () {
   return origin;
 };
 
-exports.Book = Book;
+module.exports = { Book };

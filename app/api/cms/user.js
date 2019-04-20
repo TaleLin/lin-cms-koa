@@ -23,8 +23,6 @@ const user = new LinRouter({
   prefix: "/cms/user"
 });
 
-exports.user = user;
-
 const userDao = new UserDao();
 
 user.linPost(
@@ -154,3 +152,5 @@ user.linGet(
     ctx.json(user);
   }
 );
+
+module.exports = { user };

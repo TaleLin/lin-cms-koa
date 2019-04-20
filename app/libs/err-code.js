@@ -23,4 +23,5 @@ class BookNotFound extends HttpException {
     }
   }
 }
-exports.BookNotFound = BookNotFound;
+
+module.exports = { BookNotFound };
