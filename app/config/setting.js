@@ -8,6 +8,8 @@ exports.apiDir = "app/api";
 
 exports.accessExp = 60 * 60; // 1h 单位秒
 
+// exports.refreshExp 设置refresh_token的过期时间
+
 // 暂不启用
 exports.pluginPath = {
   // plugin name

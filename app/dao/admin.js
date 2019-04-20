@@ -20,7 +20,8 @@ class AdminDao {
       "SELECT lin_user.*,lin_group.`name` as group_name FROM lin_user LEFT JOIN lin_group ON lin_user.group_id = lin_group.id WHERE";
     groupId && (sql += " lin_user.group_id = :id AND");
     let users = await db.query(
-      sql + " lin_user.admin = :admin AND lin_user.delete_time IS NULL LIMIT :count OFFSET :start ",
+      sql +
+        " lin_user.admin = :admin AND lin_user.delete_time IS NULL LIMIT :count OFFSET :start ",
       {
         replacements: groupId
           ? {

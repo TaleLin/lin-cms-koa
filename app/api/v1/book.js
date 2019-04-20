@@ -7,9 +7,7 @@ const {
   CreateOrUpdateBookValidator
 } = require("../../validators/book");
 
-const {
-  PositiveIdValidator
-} = require("../../validators/common");
+const { PositiveIdValidator } = require("../../validators/common");
 
 const { BookNotFound } = require("../../libs/err-code");
 const { Book } = require("../../models/book");

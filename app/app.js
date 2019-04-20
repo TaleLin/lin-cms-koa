@@ -4,7 +4,6 @@ const Koa = require("koa");
 const KoaBodyParser = require("koa-bodyparser");
 const cors = require("@koa/cors");
 const { config } = require("lin-mizar/lin/config");
-// const { User2 } = require('./models/user');
 
 function applyCors (app) {
   // 跨域
