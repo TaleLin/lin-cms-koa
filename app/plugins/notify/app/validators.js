@@ -1,6 +1,6 @@
 "use strict";
-const { LinValidator, Rule } = require("lin-mizar");
 
+const { LinValidator, Rule } = require("lin-mizar");
 const { extendedValidator } = require("lin-mizar/lin/extended-validator");
 
 class EventsValidator extends LinValidator {
@@ -10,8 +10,6 @@ class EventsValidator extends LinValidator {
     this.events = new Rule("isNotEmpty", "请输入events字段");
   }
 }
-
-exports.EventsValidator = EventsValidator;
 
 class IdsValidator extends LinValidator {
   constructor () {
@@ -32,4 +30,4 @@ class IdsValidator extends LinValidator {
   }
 }
 
-exports.IdsValidator = IdsValidator;
+module.exports = { IdsValidator, EventsValidator };

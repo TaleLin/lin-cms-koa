@@ -3,8 +3,9 @@ const dayjs = require("dayjs");
 const { db } = require("lin-mizar/lin/db");
 const Sequelize = require("sequelize");
 
-let Event = db.define(
-  "notify_event",
+class Event extends Sequelize.Model {}
+
+Event.init(
   {
     id: {
       type: Sequelize.INTEGER,
@@ -22,14 +23,16 @@ let Event = db.define(
   },
   {
     tableName: "notify_event",
+    modelName: "event",
     createdAt: false,
-    updatedAt: false
+    updatedAt: false,
+    sequelize: db
   }
 );
-exports.Event = Event;
 
-let Message = db.define(
-  "notify_message",
+class Message extends Sequelize.Model {}
+
+Message.init(
   {
     id: {
       type: Sequelize.INTEGER,
@@ -65,8 +68,10 @@ let Message = db.define(
   },
   {
     tableName: "notify_message",
+    modelName: "message",
     createdAt: "time",
     updatedAt: false,
+    sequelize: db,
     getterMethods: {
       time () {
         return dayjs(this.getDataValue("time")).unix();
@@ -88,4 +93,5 @@ Message.prototype.toJSON = function () {
   };
   return origin;
 };
-exports.Message = Message;
+
+module.exports = { Message, Event };

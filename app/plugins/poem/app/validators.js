@@ -20,5 +20,4 @@ class PoemSearchValidator extends LinValidator {
   }
 }
 
-exports.PoemListValidator = PoemListValidator;
-exports.PoemSearchValidator = PoemSearchValidator;
+module.exports = { PoemListValidator, PoemSearchValidator };

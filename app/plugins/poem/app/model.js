@@ -7,55 +7,55 @@ const { db } = require("lin-mizar/lin/db");
 
 const { config } = require("lin-mizar/lin/config");
 
-let Poem = db.define(
-  "poem",
-  merge(
-    {
-      id: {
-        type: Sequelize.INTEGER,
-        autoIncrement: true,
-        primaryKey: true
-      },
-      title: {
-        type: Sequelize.STRING(50),
-        allowNull: false,
-        comment: "标题"
-      },
-      author: {
-        type: Sequelize.STRING(50),
-        defaultValue: "未名",
-        comment: "作者"
-      },
-      dynasty: {
-        type: Sequelize.STRING(50),
-        defaultValue: "未知",
-        comment: "朝代"
-      },
-      content: {
-        type: Sequelize.TEXT,
-        allowNull: false,
-        comment: "内容，以/来分割每一句，以|来分割宋词的上下片",
-        get () {
-          let raw = this.getDataValue("content");
-          /**
-           * @type Array
-           */
-          const lis = raw.split("|");
-          const res = lis.map(x => x.split("/"));
-          return res;
-        }
-      },
-      image: {
-        type: Sequelize.STRING(255),
-        defaultValue: "",
-        comment: "配图"
+class Poem extends Sequelize.Model {}
+
+Poem.init(
+  {
+    id: {
+      type: Sequelize.INTEGER,
+      autoIncrement: true,
+      primaryKey: true
+    },
+    title: {
+      type: Sequelize.STRING(50),
+      allowNull: false,
+      comment: "标题"
+    },
+    author: {
+      type: Sequelize.STRING(50),
+      defaultValue: "未名",
+      comment: "作者"
+    },
+    dynasty: {
+      type: Sequelize.STRING(50),
+      defaultValue: "未知",
+      comment: "朝代"
+    },
+    content: {
+      type: Sequelize.TEXT,
+      allowNull: false,
+      comment: "内容，以/来分割每一句，以|来分割宋词的上下片",
+      get () {
+        let raw = this.getDataValue("content");
+        /**
+         * @type Array
+         */
+        const lis = raw.split("|");
+        const res = lis.map(x => x.split("/"));
+        return res;
       }
     },
-    InfoCrudMixin.attributes
-  ),
+    image: {
+      type: Sequelize.STRING(255),
+      defaultValue: "",
+      comment: "配图"
+    }
+  },
   merge(
     {
-      tableName: "poem"
+      tableName: "poem",
+      modelName: "poem",
+      sequelize: db
     },
     InfoCrudMixin.options
   )
@@ -74,23 +74,18 @@ Poem.prototype.toJSON = function () {
   return origin;
 };
 
-Poem.prototype.softDelete = function () {
-  this.delete_time = new Date();
-  // 更新数据库
-  this.save();
-};
-
 Poem.getAll = async function (validator) {
   const condition = {
     delete_time: null
   };
-  validator.get("author") && (condition["author"] = validator.get("author"));
+  validator.get("query.author") &&
+    (condition["author"] = validator.get("query.author"));
   const poems = await Poem.findAll({
     where: {
       delete_time: null
     },
-    limit: validator.get("author")
-      ? validator.get("author")
+    limit: validator.get("query.count")
+      ? validator.get("query.count")
       : config.getItem("poem.limit")
   });
   return poems;
@@ -115,4 +110,4 @@ Poem.getAuthors = async function () {
   return res;
 };
 
-exports.Poem = Poem;
+module.exports = { Poem };

@@ -23,4 +23,4 @@ api.get("/authors", async ctx => {
   ctx.json(authors);
 });
 
-exports.api = api;
+module.exports = { api };

@@ -7,10 +7,11 @@ const { MessageBroker } = require("lin-mizar/lin/sse");
 const { Message } = require("./model");
 const { MessageIsPushed } = require("./enums");
 
-exports.broker = new MessageBroker(config.getItem("notify.retry"));
-exports.MESSAGE_EVENTS = new Set();
-exports.notify = (template, event, extra) => {
-  exports.MESSAGE_EVENTS.add(event);
+const broker = new MessageBroker(config.getItem("notify.retry"));
+const MESSAGE_EVENTS = new Set();
+
+const notify = (template, event, extra) => {
+  MESSAGE_EVENTS.add(event);
   return async (ctx, next) => {
     await next();
     pushMessage(template, event, ctx, extra);
@@ -25,7 +26,7 @@ function pushMessage (template, event, ctx, extra) {
     ctx.request
   );
   const now = new Date();
-  exports.broker.addMessage(
+  broker.addMessage(
     event,
     Object.assign(
       {
@@ -44,3 +45,5 @@ function pushMessage (template, event, ctx, extra) {
   msg.user_name = ctx.currentUser.nickname;
   msg.save();
 }
+
+module.exports = { broker, MESSAGE_EVENTS, notify };

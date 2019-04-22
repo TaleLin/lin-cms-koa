@@ -1,3 +1,3 @@
 "use strict";
 
-exports.retry = 3000;
+module.exports = { retry: 3000 };

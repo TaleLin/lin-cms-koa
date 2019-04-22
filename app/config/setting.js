@@ -18,7 +18,7 @@ module.exports = {
     //   path: "app/plugins/poem",
     //   // other config
     //   limit: 2
-    // }
+    // },
     // notify: {
     //   enable: true,
     //   path: "app/plugins/notify",

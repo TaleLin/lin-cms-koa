@@ -1,3 +1,3 @@
 "use strict";
 
-exports.limit = 20;
+module.exports = { limit: 20 };
