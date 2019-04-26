@@ -30,7 +30,21 @@ Event.init(
   }
 );
 
-class Message extends Sequelize.Model {}
+class Message extends Sequelize.Model {
+  toJSON () {
+    let origin = {
+      id: this.id,
+      message: this.message,
+      event: this.event,
+      time: this.time,
+      pushed: this.pushed,
+      readed: this.readed,
+      user_id: this.userId,
+      user_name: this.userName
+    };
+    return origin;
+  }
+}
 
 Message.init(
   {
@@ -79,19 +93,5 @@ Message.init(
     }
   }
 );
-
-Message.prototype.toJSON = function () {
-  let origin = {
-    id: this.id,
-    message: this.message,
-    event: this.event,
-    time: this.time,
-    pushed: this.pushed,
-    readed: this.readed,
-    user_id: this.userId,
-    user_name: this.userName
-  };
-  return origin;
-};
 
 module.exports = { Message, Event };

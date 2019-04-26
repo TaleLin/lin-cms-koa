@@ -7,7 +7,56 @@ const { db } = require("lin-mizar/lin/db");
 
 const { config } = require("lin-mizar/lin/config");
 
-class Poem extends Sequelize.Model {}
+class Poem extends Sequelize.Model {
+  static async search (q) {
+    const poems = await Poem.findAll({
+      where: {
+        title: {
+          [Sequelize.Op.like]: "%" + q + "%"
+        }
+      }
+    });
+    return poems;
+  }
+
+  static async getAll (validator) {
+    const condition = {
+      delete_time: null
+    };
+    validator.get("query.author") &&
+      (condition["author"] = validator.get("query.author"));
+    const poems = await Poem.findAll({
+      where: {
+        delete_time: null
+      },
+      limit: validator.get("query.count")
+        ? validator.get("query.count")
+        : config.getItem("poem.limit")
+    });
+    return poems;
+  }
+
+  static async getAuthors () {
+    const authors = await db.query(
+      "select author from poem group by author having count(author)>0"
+    );
+    let res = authors[0].map(it => it["author"]);
+    return res;
+  }
+
+  toJSON () {
+    let origin = {
+      id: this.id,
+      title: this.title,
+      author: this.author,
+      dynasty: this.dynasty,
+      content: this.content,
+      image: this.image,
+      create_time: this.createTime
+    };
+    return origin;
+  }
+}
 
 Poem.init(
   {
@@ -60,54 +109,5 @@ Poem.init(
     InfoCrudMixin.options
   )
 );
-
-Poem.prototype.toJSON = function () {
-  let origin = {
-    id: this.id,
-    title: this.title,
-    author: this.author,
-    dynasty: this.dynasty,
-    content: this.content,
-    image: this.image,
-    create_time: this.createTime
-  };
-  return origin;
-};
-
-Poem.getAll = async function (validator) {
-  const condition = {
-    delete_time: null
-  };
-  validator.get("query.author") &&
-    (condition["author"] = validator.get("query.author"));
-  const poems = await Poem.findAll({
-    where: {
-      delete_time: null
-    },
-    limit: validator.get("query.count")
-      ? validator.get("query.count")
-      : config.getItem("poem.limit")
-  });
-  return poems;
-};
-
-Poem.search = async function (q) {
-  const poems = await Poem.findAll({
-    where: {
-      title: {
-        [Sequelize.Op.like]: "%" + q + "%"
-      }
-    }
-  });
-  return poems;
-};
-
-Poem.getAuthors = async function () {
-  const authors = await db.query(
-    "select author from poem group by author having count(author)>0"
-  );
-  let res = authors[0].map(it => it["author"]);
-  return res;
-};
 
 module.exports = { Poem };
