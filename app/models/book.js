@@ -5,7 +5,19 @@ const { merge } = require("lodash");
 const { Sequelize, Model } = require("sequelize");
 const { db } = require("lin-mizar/lin/db");
 
-class Book extends Model {}
+class Book extends Model {
+  toJSON () {
+    let origin = {
+      id: this.id,
+      title: this.title,
+      author: this.author,
+      summary: this.summary,
+      image: this.image,
+      create_time: this.createTime
+    };
+    return origin;
+  }
+}
 
 Book.init(
   {
@@ -41,17 +53,5 @@ Book.init(
     InfoCrudMixin.options
   )
 );
-
-Book.prototype.toJSON = function () {
-  let origin = {
-    id: this.id,
-    title: this.title,
-    author: this.author,
-    summary: this.summary,
-    image: this.image,
-    create_time: this.createTime
-  };
-  return origin;
-};
 
 module.exports = { Book };

@@ -97,7 +97,7 @@ class NewGroupValidator extends LinValidator {
   constructor () {
     super();
     this.name = new Rule("isNotEmpty", "请输入分组名称");
-    this.info = new Rule("isOptional", "");
+    this.info = new Rule("isOptional");
     this.auths = new Rule(this.checkAuths, "请输入auths字段");
   }
 

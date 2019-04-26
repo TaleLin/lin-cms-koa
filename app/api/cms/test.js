@@ -24,8 +24,8 @@ test.linGet(
   "getTestMsg",
   "/json",
   {
-    auth: "hello",
-    module: "world",
+    auth: "测试日志记录",
+    module: "信息",
     mount: true
   },
   loginRequired,
