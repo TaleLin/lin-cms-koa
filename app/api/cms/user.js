@@ -6,11 +6,9 @@ const {
   getTokens,
   loginRequired,
   adminRequired,
-  Success,
   refreshTokenRequiredWithUnifyException,
   Failed,
-  logger,
-  checkUserIsActive
+  logger
 } = require("lin-mizar");
 
 const {
@@ -41,11 +39,9 @@ user.linPost(
   async ctx => {
     const v = await new RegisterValidator().validate(ctx);
     await userDao.createUser(ctx, v);
-    ctx.json(
-      new Success({
-        msg: "用户创建成功"
-      })
-    );
+    ctx.success({
+      msg: "用户创建成功"
+    });
   }
 );
 
@@ -58,7 +54,6 @@ user.linPost(
     mount: false
   },
   async ctx => {
-    checkUserIsActive(ctx.currentUser);
     const v = await new LoginValidator().validate(ctx);
     let user = await ctx.manager.userModel.verify(
       v.get("body.nickname"),
@@ -84,11 +79,9 @@ user.linPut(
   async ctx => {
     const v = await new UpdateInfoValidator().validate(ctx);
     await userDao.updateUser(ctx, v);
-    ctx.json(
-      new Success({
-        msg: "操作成功"
-      })
-    );
+    ctx.success({
+      msg: "操作成功"
+    });
   }
 );
 
@@ -110,17 +103,13 @@ user.linPut(
     );
     if (ok) {
       user.save();
-      ctx.json(
-        new Success({
-          msg: "密码修改成功"
-        })
-      );
+      ctx.success({
+        msg: "密码修改成功"
+      });
     } else {
-      ctx.json(
-        new Failed({
-          msg: "修改密码失败"
-        })
-      );
+      throw new Failed({
+        msg: "修改密码失败"
+      });
     }
   }
 );

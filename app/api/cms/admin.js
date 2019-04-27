@@ -4,7 +4,6 @@ const {
   LinRouter,
   routeMetaInfo,
   adminRequired,
-  Success,
   NotFound,
   Failed
 } = require("lin-mizar");
@@ -95,11 +94,9 @@ admin.linPut(
   async ctx => {
     const v = await new ResetPasswordValidator().validate(ctx);
     await adminDao.changeUserPassword(ctx, v);
-    ctx.json(
-      new Success({
-        msg: "密码修改成功"
-      })
-    );
+    ctx.success({
+      msg: "密码修改成功"
+    });
   }
 );
 
@@ -116,11 +113,9 @@ admin.linDelete(
     const v = await new PositiveIdValidator().validate(ctx);
     const id = v.get("path.id");
     await adminDao.deleteUser(ctx, id);
-    ctx.json(
-      new Success({
-        msg: "操作成功"
-      })
-    );
+    ctx.success({
+      msg: "操作成功"
+    });
   }
 );
 
@@ -136,11 +131,9 @@ admin.linPut(
   async ctx => {
     const v = await new UpdateUserInfoValidator().validate(ctx);
     await adminDao.updateUserInfo(ctx, v);
-    ctx.json(
-      new Success({
-        msg: "操作成功"
-      })
-    );
+    ctx.success({
+      msg: "操作成功"
+    });
   }
 );
 
@@ -221,17 +214,13 @@ admin.linPost(
     const v = await new NewGroupValidator().validate(ctx);
     const ok = await adminDao.createGroup(ctx, v);
     if (!ok) {
-      ctx.json(
-        new Failed({
-          msg: "新建分组失败"
-        })
-      );
+      throw new Failed({
+        msg: "新建分组失败"
+      });
     } else {
-      ctx.json(
-        new Success({
-          msg: "新建分组成功"
-        })
-      );
+      ctx.success({
+        msg: "新建分组成功"
+      });
     }
   }
 );
@@ -248,11 +237,9 @@ admin.linPut(
   async ctx => {
     const v = await new UpdateGroupValidator().validate(ctx);
     await adminDao.updateGroup(ctx, v);
-    ctx.json(
-      new Success({
-        msg: "更新分组成功"
-      })
-    );
+    ctx.success({
+      msg: "更新分组成功"
+    });
   }
 );
 
@@ -269,11 +256,9 @@ admin.linDelete(
     const v = await new PositiveIdValidator().validate(ctx);
     const id = v.get("path.id");
     await adminDao.deleteGroup(ctx, id);
-    ctx.json(
-      new Success({
-        msg: "删除分组成功"
-      })
-    );
+    ctx.success({
+      msg: "删除分组成功"
+    });
   }
 );
 
@@ -289,11 +274,9 @@ admin.linPost(
   async ctx => {
     const v = await new DispatchAuthValidator().validate(ctx);
     await adminDao.dispatchAuth(ctx, v);
-    ctx.json(
-      new Success({
-        msg: "添加权限成功"
-      })
-    );
+    ctx.success({
+      msg: "添加权限成功"
+    });
   }
 );
 
@@ -309,11 +292,9 @@ admin.linPost(
   async ctx => {
     const v = await new DispatchAuthsValidator().validate(ctx);
     await adminDao.dispatchAuths(ctx, v);
-    ctx.json(
-      new Success({
-        msg: "添加权限成功"
-      })
-    );
+    ctx.success({
+      msg: "添加权限成功"
+    });
   }
 );
 
@@ -329,11 +310,9 @@ admin.linPost(
   async ctx => {
     const v = await new RemoveAuthsValidator().validate(ctx);
     await adminDao.removeAuths(ctx, v);
-    ctx.json(
-      new Success({
-        msg: "删除权限成功"
-      })
-    );
+    ctx.success({
+      msg: "删除权限成功"
+    });
   }
 );
 
