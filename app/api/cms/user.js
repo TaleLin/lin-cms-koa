@@ -5,9 +5,12 @@ const {
   LinRouter,
   getTokens,
   loginRequired,
+  adminRequired,
   Success,
   refreshTokenRequiredWithUnifyException,
-  Failed
+  Failed,
+  logger,
+  checkUserIsActive
 } = require("lin-mizar");
 
 const {
@@ -33,6 +36,8 @@ user.linPost(
     module: "用户",
     mount: false
   },
+  adminRequired,
+  logger("管理员新建了一个用户"),
   async ctx => {
     const v = await new RegisterValidator().validate(ctx);
     await userDao.createUser(ctx, v);
@@ -53,6 +58,7 @@ user.linPost(
     mount: false
   },
   async ctx => {
+    checkUserIsActive(ctx.currentUser);
     const v = await new LoginValidator().validate(ctx);
     let user = await ctx.manager.userModel.verify(
       v.get("body.nickname"),
