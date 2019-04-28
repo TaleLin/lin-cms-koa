@@ -3,7 +3,6 @@
 const { LinRouter, groupRequired, NotFound } = require("lin-mizar");
 const { LogFindValidator } = require("../../validators/log");
 const { PaginateValidator } = require("../../validators/common");
-const { get } = require("lodash");
 const { LogDao } = require("../../dao/log");
 
 const log = new LinRouter({
@@ -47,7 +46,7 @@ log.linGet(
   groupRequired,
   async ctx => {
     const v = await new LogFindValidator().validate(ctx);
-    const keyword = get(ctx.request.query, "keyword", "");
+    const keyword = v.get("query.keyword", false, "");
     const { rows, total } = await logDao.searchLogs(v, keyword);
     if (total < 1) {
       throw new NotFound({

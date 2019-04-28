@@ -1,7 +1,7 @@
 "use strict";
 
 const { LinValidator, Rule } = require("lin-mizar");
-const { extendedValidator } = require("lin-mizar/lin/extended-validator");
+const validator = require("validator");
 
 class EventsValidator extends LinValidator {
   constructor () {
@@ -14,16 +14,20 @@ class EventsValidator extends LinValidator {
 class IdsValidator extends LinValidator {
   constructor () {
     super();
-    this.ids = new Rule(this.checkIds, "每个id值必须为正整数");
+    this.ids = new Rule("isNotEmpty", "每个id值必须为正整数");
   }
 
-  checkIds (ids) {
+  validateIds (data) {
+    const ids = data.body.ids;
     if (!Array.isArray(ids)) {
-      return false;
+      return [false, "每个id值必须为正整数"];
     }
-    for (const id of ids) {
-      if (!extendedValidator.isInt2(id)) {
-        return false;
+    for (let id of ids) {
+      if (typeof id === "number") {
+        id = String(id);
+      }
+      if (!validator.isInt(id, { min: 1 })) {
+        return [false, "每个id值必须为正整数"];
       }
     }
     return true;

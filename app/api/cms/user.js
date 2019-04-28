@@ -101,16 +101,15 @@ user.linPut(
       v.get("body.old_password"),
       v.get("body.new_password")
     );
-    if (ok) {
-      user.save();
-      ctx.success({
-        msg: "密码修改成功"
-      });
-    } else {
+    if (!ok) {
       throw new Failed({
-        msg: "修改密码失败"
+        msg: "修改密码失败，你可能输入了错误的旧密码"
       });
     }
+    user.save();
+    ctx.success({
+      msg: "密码修改成功"
+    });
   }
 );
 

@@ -217,11 +217,10 @@ admin.linPost(
       throw new Failed({
         msg: "新建分组失败"
       });
-    } else {
-      ctx.success({
-        msg: "新建分组成功"
-      });
     }
+    ctx.success({
+      msg: "新建分组成功"
+    });
   }
 );
 
