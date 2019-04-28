@@ -1,7 +1,6 @@
 "use strict";
 
-const { Rule, LinValidator } = require("lin-mizar");
-const { extendedValidator } = require("lin-mizar/lin/extended-validator");
+const { Rule, LinValidator, isNotEmpty } = require("lin-mizar");
 const { PaginateValidator, PositiveIdValidator } = require("./common");
 
 class AdminUsersValidator extends PaginateValidator {
@@ -22,17 +21,19 @@ class ResetPasswordValidator extends PositiveIdValidator {
       "密码长度必须在6~22位之间，包含字符、数字和 _ ",
       /^[A-Za-z0-9_*&$#@]{6,22}$/
     );
-    this.confirm_password = new Rule(
-      this.passwordCheck.bind(this),
-      "两次输入密码不一致"
-    );
+    this.confirm_password = new Rule("isNotEmpty", "确认密码不可为空");
   }
 
-  passwordCheck (val) {
-    if (!this.data.body.new_password || !this.data.body.confirm_password) {
-      return false;
+  validateConfirmPassword (data) {
+    if (!data.body.new_password || !data.body.confirm_password) {
+      return [false, "两次输入的密码不一致，请重新输入"];
     }
-    return this.data.body.new_password === this.data.body.confirm_password;
+    let ok = data.body.new_password === data.body.confirm_password;
+    if (ok) {
+      return ok;
+    } else {
+      return [false, "两次输入的密码不一致，请重新输入"];
+    }
   }
 }
 
@@ -58,15 +59,17 @@ class RemoveAuthsValidator extends LinValidator {
   constructor () {
     super();
     this.group_id = new Rule("isInt", "分组id必须正整数");
-    this.auths = new Rule(this.checkAuths, "请输入auths字段");
+    this.auths = new Rule("isNotEmpty", "请输入auths字段");
   }
-  checkAuths (auths) {
+
+  validateAuths (data) {
+    const auths = data.body.auths;
     if (!Array.isArray(auths)) {
-      return false;
+      return [false, "auths必须为非空数组"];
     }
-    for (const auth in auths) {
-      if (!extendedValidator.isNotEmpty(auth)) {
-        return false;
+    for (const auth of auths) {
+      if (!isNotEmpty(auth)) {
+        return [false, "auths必须为非空数组"];
       }
     }
     return true;
@@ -77,16 +80,17 @@ class DispatchAuthsValidator extends LinValidator {
   constructor () {
     super();
     this.group_id = new Rule("isInt", "分组id必须正整数");
-    this.auths = new Rule(this.checkAuths, "请输入auths字段");
+    this.auths = new Rule("isNotEmpty", "请输入auths字段");
   }
 
-  checkAuths (auths) {
+  validateAuths (data) {
+    const auths = data.body.auths;
     if (!Array.isArray(auths)) {
-      return false;
+      return [false, "auths必须为非空数组"];
     }
-    for (const auth in auths) {
-      if (!extendedValidator.isNotEmpty(auth)) {
-        return false;
+    for (const auth of auths) {
+      if (!isNotEmpty(auth)) {
+        return [false, "auths必须为非空数组"];
       }
     }
     return true;
@@ -98,19 +102,17 @@ class NewGroupValidator extends LinValidator {
     super();
     this.name = new Rule("isNotEmpty", "请输入分组名称");
     this.info = new Rule("isOptional");
-    this.auths = new Rule(this.checkAuths, "请输入auths字段");
+    this.auths = new Rule("isNotEmpty", "请输入auths字段");
   }
 
-  checkAuths (auths) {
+  validateAuths (data) {
+    const auths = data.body.auths;
     if (!Array.isArray(auths)) {
-      return false;
+      return [false, "auths必须为非空数组"];
     }
-    if (auths.length === 0) {
-      return true;
-    }
-    for (const auth in auths) {
-      if (!extendedValidator.isNotEmpty(auth)) {
-        return false;
+    for (const auth of auths) {
+      if (!isNotEmpty(auth)) {
+        return [false, "auths必须为非空数组"];
       }
     }
     return true;

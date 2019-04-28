@@ -1,12 +1,6 @@
 "use strict";
 
-const {
-  LinRouter,
-  loginRequired,
-  NotFound,
-  paginate,
-  Success
-} = require("lin-mizar");
+const { LinRouter, loginRequired, NotFound, paginate } = require("lin-mizar");
 const { getSafeParamId } = require("../../../libs/util");
 const { IdsValidator } = require("./validators");
 const { MessageDao } = require("./message-dao");
@@ -53,11 +47,9 @@ messageApi.linPut(
   async ctx => {
     const id = getSafeParamId(ctx);
     await messageDao.readMessage(id);
-    ctx.json(
-      new Success({
-        msg: "操作成功"
-      })
-    );
+    ctx.success({
+      msg: "操作成功"
+    });
   }
 );
 
@@ -73,11 +65,9 @@ messageApi.linPut(
   async ctx => {
     const v = await new IdsValidator().validate(ctx);
     await messageDao.readMessages(v);
-    ctx.json(
-      new Success({
-        msg: "操作成功"
-      })
-    );
+    ctx.success({
+      msg: "操作成功"
+    });
   }
 );
 
@@ -93,11 +83,9 @@ messageApi.linDelete(
   async ctx => {
     const id = getSafeParamId(ctx);
     await messageDao.deleteMessage(id);
-    ctx.json(
-      new Success({
-        msg: "操作成功"
-      })
-    );
+    ctx.success({
+      msg: "操作成功"
+    });
   }
 );
 

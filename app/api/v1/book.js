@@ -3,7 +3,6 @@
 const {
   LinRouter,
   NotFound,
-  Success,
   groupRequired,
   disableLoading
 } = require("lin-mizar");
@@ -61,22 +60,18 @@ bookApi.get("/search/one", async ctx => {
 bookApi.post("/", async ctx => {
   const v = await new CreateOrUpdateBookValidator().validate(ctx);
   await bookDto.createBook(v);
-  ctx.json(
-    new Success({
-      msg: "新建图书成功"
-    })
-  );
+  ctx.success({
+    msg: "新建图书成功"
+  });
 });
 
 bookApi.put("/:id", async ctx => {
   const v = await new CreateOrUpdateBookValidator().validate(ctx);
   const id = getSafeParamId(ctx);
   await bookDto.updateBook(v, id);
-  ctx.json(
-    new Success({
-      msg: "更新图书成功"
-    })
-  );
+  ctx.success({
+    msg: "更新图书成功"
+  });
 });
 
 bookApi.linDelete(
@@ -92,11 +87,9 @@ bookApi.linDelete(
     const v = await new PositiveIdValidator().validate(ctx);
     const id = v.get("path.id");
     await bookDto.deleteBook(id);
-    ctx.json(
-      new Success({
-        msg: "删除图书成功"
-      })
-    );
+    ctx.success({
+      msg: "删除图书成功"
+    });
   }
 );
 

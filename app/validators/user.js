@@ -23,17 +23,19 @@ class RegisterValidator extends LinValidator {
         /^[A-Za-z0-9_*&$#@]{6,22}$/
       )
     ];
-    this.confirm_password = [
-      new Rule(this.passwordCheck.bind(this), "两次密码输入不一致")
-    ];
+    this.confirm_password = new Rule("isNotEmpty", "确认密码不可为空");
   }
 
-  passwordCheck (val) {
-    if (!this.data.body.password || !this.data.body.confirm_password) {
-      return false;
+  validateConfirmPassword (data) {
+    if (!data.body.password || !data.body.confirm_password) {
+      return [false, "两次输入的密码不一致，请重新输入"];
     }
-    let ok = this.data.body.password === this.data.body.confirm_password;
-    return ok;
+    let ok = data.body.password === data.body.confirm_password;
+    if (ok) {
+      return ok;
+    } else {
+      return [false, "两次输入的密码不一致，请重新输入"];
+    }
   }
 }
 
@@ -62,18 +64,20 @@ class ChangePasswordValidator extends LinValidator {
       "matches",
       "密码长度必须在6~22位之间，包含字符、数字和 _ "
     );
-    this.confirm_password = new Rule(
-      this.passwordCheck.bind(this),
-      "两次输入密码不一致"
-    );
+    this.confirm_password = new Rule("isNotEmpty", "确认密码不可为空");
     this.old_password = new Rule("isNotEmpty", "请输入旧密码");
   }
 
-  passwordCheck (val) {
-    if (!this.data.body.new_password || !this.data.body.confirm_password) {
-      return false;
+  validateConfirmPassword (data) {
+    if (!data.body.new_password || !data.body.confirm_password) {
+      return [false, "两次输入的密码不一致，请重新输入"];
     }
-    return this.data.body.new_password === this.data.body.confirm_password;
+    let ok = data.body.new_password === data.body.confirm_password;
+    if (ok) {
+      return ok;
+    } else {
+      return [false, "两次输入的密码不一致，请重新输入"];
+    }
   }
 }
 

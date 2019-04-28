@@ -1,11 +1,6 @@
 "use strict";
 
-const {
-  LinRouter,
-  groupRequired,
-  adminRequired,
-  Success
-} = require("lin-mizar");
+const { LinRouter, groupRequired, adminRequired } = require("lin-mizar");
 const { SSE } = require("lin-mizar/lin/sse");
 const dayjs = require("dayjs");
 const { EventsValidator } = require("./validators");
@@ -102,11 +97,9 @@ sseApi.linPost(
   async ctx => {
     const v = await new EventsValidator().validate(ctx);
     await eventDao.createEvents(v);
-    ctx.json(
-      new Success({
-        msg: "创建成功"
-      })
-    );
+    ctx.success({
+      msg: "创建成功"
+    });
   }
 );
 
@@ -122,11 +115,9 @@ sseApi.linPut(
   async ctx => {
     const v = await new EventsValidator().validate(ctx);
     await eventDao.updateEvents(v);
-    ctx.json(
-      new Success({
-        msg: "更新成功"
-      })
-    );
+    ctx.success({
+      msg: "更新成功"
+    });
   }
 );
 

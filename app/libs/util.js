@@ -13,4 +13,18 @@ function getSafeParamId (ctx) {
   return id;
 }
 
-module.exports = { getSafeParamId };
+function isOptional (val) {
+  // undefined , null , ""  , "    ", 皆通过
+  if (val === void 0) {
+    return true;
+  }
+  if (val === null) {
+    return true;
+  }
+  if (typeof val === "string") {
+    return val === "" || val.trim() === "";
+  }
+  return false;
+}
+
+module.exports = { getSafeParamId, isOptional };
