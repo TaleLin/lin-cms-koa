@@ -11,6 +11,10 @@ class LogFindValidator extends PaginateValidator {
   }
 
   validateStart (data) {
+    // 如果前端未传入query参数，则query为undifined，不能直接取start
+    if (!data.query) {
+      return true;
+    }
     const start = data.query.start;
     // 如果 start 为可选
     if (isOptional(start)) {
@@ -25,6 +29,9 @@ class LogFindValidator extends PaginateValidator {
   }
 
   validateEnd (data) {
+    if (!data.query) {
+      return true;
+    }
     const end = data.query.start;
     if (isOptional(end)) {
       return true;
