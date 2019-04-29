@@ -153,7 +153,7 @@ admin.linGet(
       v.get("query.page"),
       v.get("query.count")
     );
-    if (total < 1) {
+    if (groups.length < 1) {
       throw new NotFound({
         msg: "未找到任何权限组"
       });
