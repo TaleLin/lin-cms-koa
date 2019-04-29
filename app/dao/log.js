@@ -18,7 +18,7 @@ class LogDao {
       });
     let { rows, count } = await Log.findAndCountAll({
       where: Object.assign({}, condition),
-      offset: start,
+      offset: start * count1,
       limit: count1,
       order: [["time", "DESC"]]
     });
@@ -44,7 +44,7 @@ class LogDao {
           [Sequelize.Op.like]: `%${keyword}%`
         }
       }),
-      offset: start,
+      offset: start * count1,
       limit: count1,
       order: [["time", "DESC"]]
     });
@@ -59,7 +59,7 @@ class LogDao {
       "SELECT lin_log.user_name AS names FROM lin_log GROUP BY lin_log.user_name HAVING COUNT(lin_log.user_name)>0 limit :count offset :start",
       {
         replacements: {
-          start: start,
+          start: start * count,
           count: count
         }
       }

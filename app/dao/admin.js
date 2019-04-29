@@ -28,12 +28,12 @@ class AdminDao {
             id: groupId,
             admin: UserAdmin.COMMON,
             count: count1,
-            start: start
+            start: start * count1
           }
           : {
             admin: UserAdmin.COMMON,
             count: count1,
-            start: start
+            start: start * count1
           },
         type: db.QueryTypes.SELECT
       }
@@ -128,7 +128,7 @@ class AdminDao {
       {
         replacements: {
           count: count1,
-          start: start
+          start: start * count1
         },
         type: db.QueryTypes.SELECT
       }

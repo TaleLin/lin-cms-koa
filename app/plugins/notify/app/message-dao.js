@@ -21,7 +21,7 @@ class MessageDao {
         user_id: currentUser.id
       },
       limit: count1,
-      offset: start
+      offset: start * count1
     });
     return {
       rows,
