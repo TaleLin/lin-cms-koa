@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-const Koa = require("koa");
-const KoaBodyParser = require("koa-bodyparser");
-const cors = require("@koa/cors");
-const { config } = require("lin-mizar/lin/config");
+const Koa = require('koa');
+const KoaBodyParser = require('koa-bodyparser');
+const cors = require('@koa/cors');
+const { config } = require('lin-mizar/lin/config');
 
 function applyCors (app) {
   // 跨域
@@ -16,8 +16,8 @@ function applyBodyParse (app) {
 }
 
 function indexPage (app) {
-  app.context.manager.loader.mainRouter.get("/", async ctx => {
-    ctx.type = "html";
+  app.context.manager.loader.mainRouter.get('/', async ctx => {
+    ctx.type = 'html';
     ctx.body = `<style type="text/css">*{ padding: 0; margin: 0; } div{ padding: 4px 48px;} a{color:#2E5CD5;cursor:
       pointer;text-decoration: none} a:hover{text-decoration:underline; } body{ background: #fff; font-family:
       "Century Gothic","Microsoft yahei"; color: #333;font-size:18px;} h1{ font-size: 100px; font-weight: normal;
@@ -31,9 +31,9 @@ async function createApp () {
   applyBodyParse(app);
   applyCors(app);
   config.initApp(app);
-  const { log, error, Lin } = require("lin-mizar");
+  const { log, error, Lin } = require('lin-mizar');
   app.use(log);
-  app.on("error", error);
+  app.on('error', error);
   const lin = new Lin();
   await lin.initApp(app, true, true, null, null, null);
   indexPage(app);

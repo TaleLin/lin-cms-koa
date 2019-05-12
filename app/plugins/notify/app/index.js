@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-const { sseApi } = require("./sse");
-const { messageApi } = require("./message");
-const { Event, Message } = require("./model");
+const { sseApi } = require('./sse');
+const { messageApi } = require('./message');
+const { Event, Message } = require('./model');
 
 module.exports = {
   sseApi,

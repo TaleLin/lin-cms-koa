@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
 module.exports = {
   countDefault: 10,
   pageDefault: 0,
-  apiDir: "app/api",
+  apiDir: 'app/api',
   accessExp: 60 * 60, // 1h 单位秒
   // debug 模式
   debug: true,

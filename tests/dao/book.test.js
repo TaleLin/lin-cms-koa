@@ -1,9 +1,9 @@
-require("../helper/initial");
-const { BookDao } = require("../../app/api/v1/book");
+require('../helper/initial');
+const { BookDao } = require('../../app/api/v1/book');
 // const { CreateOrUpdateBookValidator } = require("../../app/validators/cms");
-const { db } = require("lin-mizar/lin/db");
+const { db } = require('lin-mizar/lin/db');
 
-describe("book.test.js", () => {
+describe('book.test.js', () => {
   /**
    * @type BookDao
    */
@@ -19,7 +19,7 @@ describe("book.test.js", () => {
     }, 500);
   });
 
-  test("获取一本书", async () => {
+  test('获取一本书', async () => {
     const book = await bookDao.getBook(1);
     expect(book).not.toBe(undefined);
   });
@@ -37,17 +37,17 @@ describe("book.test.js", () => {
   //   await bookDao.createBook(form);
   // });
 
-  test("搜索一本书", async () => {
-    const book = await bookDao.getBookByKeyword("koa");
+  test('搜索一本书', async () => {
+    const book = await bookDao.getBookByKeyword('koa');
     expect(book).not.toBe(undefined);
   });
 
-  test("获取所有书", async () => {
+  test('获取所有书', async () => {
     const books = await bookDao.getBooks();
     expect(books).not.toBe(undefined);
   });
 
-  test("删除书籍", async () => {
+  test('删除书籍', async () => {
     await bookDao.deleteBook(1);
   });
 });

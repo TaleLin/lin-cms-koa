@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
-const dayjs = require("dayjs");
-const { parseTemplate } = require("lin-mizar");
-const { config } = require("lin-mizar/lin/config");
-const { MessageBroker } = require("lin-mizar/lin/sse");
-const { Message } = require("./model");
-const { MessageIsPushed } = require("./enums");
+const dayjs = require('dayjs');
+const { parseTemplate } = require('lin-mizar');
+const { config } = require('lin-mizar/lin/config');
+const { MessageBroker } = require('lin-mizar/lin/sse');
+const { Message } = require('./model');
+const { MessageIsPushed } = require('./enums');
 
-const broker = new MessageBroker(config.getItem("notify.retry"));
+const broker = new MessageBroker(config.getItem('notify.retry'));
 const MESSAGE_EVENTS = new Set();
 
 const notify = (template, event, extra) => {

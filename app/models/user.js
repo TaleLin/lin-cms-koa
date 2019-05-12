@@ -4,11 +4,11 @@
  *  你使用扩展userModel后，或许不会生效，请先在数据库删除原来的lin_user
  *  然后再运行程序
  */
-"use strict";
+'use strict';
 
-const { modelExtend } = require("lin-mizar/lin/factory");
-const { User } = require("lin-mizar");
-const Sequelize = require("sequelize");
+const { modelExtend } = require('lin-mizar/lin/factory');
+const { User } = require('lin-mizar');
+const Sequelize = require('sequelize');
 
 const User2 = modelExtend(User, {
   phone: {
@@ -19,7 +19,7 @@ const User2 = modelExtend(User, {
 });
 
 User2.prototype.sayHello = function () {
-  console.log("hello world!");
+  console.log('hello world!');
 };
 
 module.exports = { User2 };

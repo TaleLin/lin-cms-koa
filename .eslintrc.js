@@ -3,7 +3,7 @@ module.exports = {
   "plugins": ["jest"],
   "rules": {
     "semi": ["warn", "always"],
-    "quotes": ["warn", "double"],
+    "quotes": ["warn", "single"],
     "eol-last": 0,
     "jest/no-disabled-tests": "warn",
     "jest/no-focused-tests": "error",

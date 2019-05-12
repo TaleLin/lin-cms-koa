@@ -1,40 +1,40 @@
-const { LoginValidator } = require("../../app/validators/cms");
-const context = require("../helper/context");
-const { ParametersException } = require("lin-mizar");
+const { LoginValidator } = require('../../app/validators/cms');
+const context = require('../helper/context');
+const { ParametersException } = require('lin-mizar');
 
-describe("loginValidator.test.js", () => {
-  test("登陆校验", async () => {
+describe('loginValidator.test.js', () => {
+  test('登陆校验', async () => {
     const ctx = context({
-      url: "/"
+      url: '/'
     });
     ctx.request.body = {
-      nickname: "pedro",
-      password: "123456"
+      nickname: 'pedro',
+      password: '123456'
     };
     const v = await new LoginValidator().validate(ctx);
-    expect(v.get("nickname")).toBe("pedro");
+    expect(v.get('nickname')).toBe('pedro');
   });
 
-  test("登陆校验别名", async () => {
+  test('登陆校验别名', async () => {
     const ctx = context({
-      url: "/"
+      url: '/'
     });
     ctx.request.body = {
-      name: "pedro",
-      password: "123456"
+      name: 'pedro',
+      password: '123456'
     };
     const v = await new LoginValidator().validate(ctx, {
-      nickname: "name"
+      nickname: 'name'
     });
-    expect(v.get("name")).toBe("pedro");
+    expect(v.get('name')).toBe('pedro');
   });
 
-  test("登陆校验失败", async () => {
+  test('登陆校验失败', async () => {
     const ctx = context({
-      url: "/"
+      url: '/'
     });
     ctx.request.body = {
-      nickname: "pedro"
+      nickname: 'pedro'
     };
     try {
       await new LoginValidator().validate(ctx);
