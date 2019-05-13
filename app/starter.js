@@ -1,12 +1,15 @@
 'use strict';
 
 const { config } = require('lin-mizar/lin/config');
+const fs = require('fs');
 
 // 1. 必须最开始加载配置，因为其他很多扩展依赖于配置
 function applyConfig () {
-  // TODO: 自动加载app/config下的所有配置文件
-  config.getConfigFromFile('app/config/setting.js');
-  config.getConfigFromFile('app/config/secure.js');
+  const cwd = process.cwd();
+  const files = fs.readdirSync(`${cwd}/app/config`);
+  for (const file of files) {
+    config.getConfigFromFile(`app/config/${file}`);
+  }
 }
 
 const run = async () => {

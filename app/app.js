@@ -31,12 +31,13 @@ async function createApp () {
   applyBodyParse(app);
   applyCors(app);
   config.initApp(app);
-  const { log, error, Lin } = require('lin-mizar');
+  const { log, error, Lin, multipart } = require('lin-mizar');
   app.use(log);
   app.on('error', error);
   const lin = new Lin();
   await lin.initApp(app, true, true, null, null, null);
   indexPage(app);
+  multipart(app);
   return app;
 }
 
