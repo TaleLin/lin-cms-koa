@@ -10,14 +10,17 @@ function applyConfig () {
   for (const file of files) {
     config.getConfigFromFile(`app/config/${file}`);
   }
+  // 加载其它配置文件
+  config.getConfigFromFile('app/extensions/file/config.js');
 }
 
 const run = async () => {
   applyConfig();
   const { createApp } = require('./app');
   const app = await createApp();
-  app.listen(5000, () => {
-    app.context.logger.start('listening at http://localhost:5000');
+  const port = config.getItem('port');
+  app.listen(port, () => {
+    app.context.logger.start(`listening at http://localhost:${port}`);
   });
 };
 // 启动应用

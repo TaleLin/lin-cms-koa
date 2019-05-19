@@ -15,7 +15,8 @@ const {
   RegisterValidator,
   LoginValidator,
   UpdateInfoValidator,
-  ChangePasswordValidator
+  ChangePasswordValidator,
+  AvatarUpdateValidator
 } = require('../../validators/user');
 
 const { UserDao } = require('../../dao/user');
@@ -146,5 +147,14 @@ user.linGet(
     ctx.json(user);
   }
 );
+
+user.put('/avatar', loginRequired, async ctx => {
+  const v = await new AvatarUpdateValidator().validate(ctx);
+  const avatar = v.get('body.avatar');
+  let user = ctx.currentUser;
+  user.avatar = avatar;
+  await user.save();
+  ctx.success({ msg: '更新头像成功' });
+});
 
 module.exports = { user };

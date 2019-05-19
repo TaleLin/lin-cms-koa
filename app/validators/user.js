@@ -81,9 +81,17 @@ class ChangePasswordValidator extends LinValidator {
   }
 }
 
+class AvatarUpdateValidator extends LinValidator {
+  constructor () {
+    super();
+    this.avatar = new Rule('isNotEmpty', '必须传入头像的url链接');
+  }
+}
+
 module.exports = {
   ChangePasswordValidator,
   UpdateInfoValidator,
   LoginValidator,
-  RegisterValidator
+  RegisterValidator,
+  AvatarUpdateValidator
 };

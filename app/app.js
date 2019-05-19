@@ -4,6 +4,8 @@ const Koa = require('koa');
 const KoaBodyParser = require('koa-bodyparser');
 const cors = require('@koa/cors');
 const { config } = require('lin-mizar/lin/config');
+const mount = require('koa-mount');
+const serve = require('koa-static');
 
 function applyCors (app) {
   // 跨域
@@ -13,6 +15,11 @@ function applyCors (app) {
 function applyBodyParse (app) {
   // 参数解析
   app.use(KoaBodyParser());
+}
+
+function applyStatic (app, prefix = '/assets') {
+  const assetsDir = config.getItem('file.storeDir', 'app/static');
+  app.use(mount(prefix, serve(assetsDir)));
 }
 
 function indexPage (app) {
@@ -30,6 +37,7 @@ async function createApp () {
   const app = new Koa();
   applyBodyParse(app);
   applyCors(app);
+  applyStatic(app);
   config.initApp(app);
   const { log, error, Lin, multipart } = require('lin-mizar');
   app.use(log);
