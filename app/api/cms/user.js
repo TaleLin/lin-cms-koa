@@ -148,6 +148,21 @@ user.linGet(
   }
 );
 
+user.linGet(
+  'getInformation',
+  '/information',
+  {
+    auth: '查询自己信息',
+    module: '用户',
+    mount: false
+  },
+  loginRequired,
+  async ctx => {
+    const user = ctx.currentUser;
+    ctx.json(user);
+  }
+);
+
 user.put('/avatar', loginRequired, async ctx => {
   const v = await new AvatarUpdateValidator().validate(ctx);
   const avatar = v.get('body.avatar');
