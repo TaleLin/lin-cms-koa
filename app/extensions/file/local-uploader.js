@@ -44,7 +44,7 @@ class LocalUploader extends Uploader {
             // type: 1,
             name: realName,
             extension: ext,
-            size: stream.readableLength,
+            size: stream._readableState.length,
             md5: md5
           },
           true
