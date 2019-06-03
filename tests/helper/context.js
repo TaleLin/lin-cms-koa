@@ -1,7 +1,7 @@
-"use strict";
+'use strict';
 
-const Stream = require("stream");
-const Koa = require("koa");
+const Stream = require('stream');
+const Koa = require('koa');
 
 module.exports = (req, res, app) => {
   const socket = new Stream.Duplex();
@@ -21,7 +21,7 @@ module.exports = (req, res, app) => {
     Stream.Writable.prototype,
     res
   );
-  req.socket.remoteAddress = req.socket.remoteAddress || "127.0.0.1";
+  req.socket.remoteAddress = req.socket.remoteAddress || '127.0.0.1';
   app = app || new Koa();
   res.getHeader = k => res._headers[k.toLowerCase()];
   // eslint-disable-next-line no-return-assign

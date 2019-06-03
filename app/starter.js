@@ -1,19 +1,26 @@
-"use strict";
+'use strict';
 
-const { config } = require("lin-mizar/lin/config");
+const { config } = require('lin-mizar/lin/config');
+const fs = require('fs');
 
 // 1. 必须最开始加载配置，因为其他很多扩展依赖于配置
 function applyConfig () {
-  config.getConfigFromFile("app/config/setting.js");
-  config.getConfigFromFile("app/config/secure.js");
+  const cwd = process.cwd();
+  const files = fs.readdirSync(`${cwd}/app/config`);
+  for (const file of files) {
+    config.getConfigFromFile(`app/config/${file}`);
+  }
+  // 加载其它配置文件
+  config.getConfigFromFile('app/extensions/file/config.js');
 }
 
 const run = async () => {
   applyConfig();
-  const { createApp } = require("./app");
+  const { createApp } = require('./app');
   const app = await createApp();
-  app.listen(5000, () => {
-    app.context.logger.start("listening at http://localhost:5000");
+  const port = config.getItem('port');
+  app.listen(port, () => {
+    app.context.logger.start(`listening at http://localhost:${port}`);
   });
 };
 // 启动应用

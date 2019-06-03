@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
-const { InfoCrudMixin } = require("lin-mizar/lin/interface");
-const { merge } = require("lodash");
-const { Sequelize, Model } = require("sequelize");
-const { db } = require("lin-mizar/lin/db");
+const { InfoCrudMixin } = require('lin-mizar/lin/interface');
+const { merge } = require('lodash');
+const { Sequelize, Model } = require('sequelize');
+const { db } = require('lin-mizar/lin/db');
 
 class Book extends Model {
   toJSON () {
@@ -33,7 +33,7 @@ Book.init(
     author: {
       type: Sequelize.STRING(30),
       allowNull: true,
-      defaultValue: "未名"
+      defaultValue: '未名'
     },
     summary: {
       type: Sequelize.STRING(1000),
@@ -46,8 +46,8 @@ Book.init(
   },
   merge(
     {
-      tableName: "book",
-      modelName: "book",
+      tableName: 'book',
+      modelName: 'book',
       sequelize: db
     },
     InfoCrudMixin.options

@@ -1,30 +1,30 @@
 /* eslint-disable new-cap */
-"use strict";
+'use strict';
 
-const { RepeatException, ParametersException } = require("lin-mizar");
-const { set, has } = require("lodash");
+const { RepeatException, ParametersException } = require('lin-mizar');
+const { set, has } = require('lodash');
 
 class UserDao {
   async createUser (ctx, v) {
     let user = await ctx.manager.userModel.findOne({
       where: {
-        nickname: v.get("body.nickname")
+        nickname: v.get('body.nickname')
       }
     });
     if (user) {
       throw new RepeatException({
-        msg: "用户名重复，请重新输入"
+        msg: '用户名重复，请重新输入'
       });
     }
-    if (v.get("body.email") && v.get("body.email").trim() !== "") {
+    if (v.get('body.email') && v.get('body.email').trim() !== '') {
       user = await ctx.manager.userModel.findOne({
         where: {
-          email: v.get("body.email")
+          email: v.get('body.email')
         }
       });
       if (user) {
         throw new RepeatException({
-          msg: "注册邮箱重复，请重新输入"
+          msg: '注册邮箱重复，请重新输入'
         });
       }
     }
@@ -33,19 +33,19 @@ class UserDao {
 
   async updateUser (ctx, v) {
     let user = ctx.currentUser;
-    if (user.email !== v.get("body.email")) {
+    if (user.email !== v.get('body.email')) {
       const exit = await ctx.manager.userModel.findOne({
         where: {
-          email: v.get("body.email")
+          email: v.get('body.email')
         }
       });
       if (exit) {
         throw new ParametersException({
-          msg: "邮箱已被注册，请重新输入邮箱"
+          msg: '邮箱已被注册，请重新输入邮箱'
         });
       }
     }
-    user.email = v.get("body.email");
+    user.email = v.get('body.email');
     user.save();
   }
 
@@ -57,24 +57,24 @@ class UserDao {
       }
     });
     const aus = this.splitAuths(auths);
-    set(user, "auths", aus);
+    set(user, 'auths', aus);
     return user;
   }
 
   splitAuths (auths) {
     let tmp = {};
     auths.forEach(au => {
-      if (!has(tmp, au["module"])) {
-        tmp[au["module"]] = [
+      if (!has(tmp, au['module'])) {
+        tmp[au['module']] = [
           {
-            module: au["module"],
-            auth: au["auth"]
+            module: au['module'],
+            auth: au['auth']
           }
         ];
       } else {
-        tmp[au["module"]].push({
-          module: au["module"],
-          auth: au["auth"]
+        tmp[au['module']].push({
+          module: au['module'],
+          auth: au['auth']
         });
       }
     });
@@ -88,11 +88,11 @@ class UserDao {
 
   registerUser (ctx, v) {
     const user = new ctx.manager.userModel();
-    user.nickname = v.get("body.nickname");
-    user.password = v.get("body.password");
-    user.group_id = v.get("body.group_id");
-    if (v.get("body.email") && v.get("body.email").trim() !== "") {
-      user.email = v.get("body.email");
+    user.nickname = v.get('body.nickname');
+    user.password = v.get('body.password');
+    user.group_id = v.get('body.group_id');
+    if (v.get('body.email') && v.get('body.email').trim() !== '') {
+      user.email = v.get('body.email');
     }
     user.save();
   }

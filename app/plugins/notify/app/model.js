@@ -1,7 +1,7 @@
-"use strict";
-const dayjs = require("dayjs");
-const { db } = require("lin-mizar/lin/db");
-const Sequelize = require("sequelize");
+'use strict';
+const dayjs = require('dayjs');
+const { db } = require('lin-mizar/lin/db');
+const Sequelize = require('sequelize');
 
 class Event extends Sequelize.Model {}
 
@@ -22,8 +22,8 @@ Event.init(
     }
   },
   {
-    tableName: "notify_event",
-    modelName: "event",
+    tableName: 'notify_event',
+    modelName: 'event',
     createdAt: false,
     updatedAt: false,
     sequelize: db
@@ -64,12 +64,12 @@ Message.init(
     pushed: {
       type: Sequelize.TINYINT,
       defaultValue: 0,
-      comment: "0 表示未被推送； 1 表示已推送"
+      comment: '0 表示未被推送； 1 表示已推送'
     },
     readed: {
       type: Sequelize.TINYINT,
       defaultValue: 0,
-      comment: "0 表示未读； 1 表示已读"
+      comment: '0 表示未读； 1 表示已读'
     },
     user_id: {
       type: Sequelize.INTEGER,
@@ -81,14 +81,14 @@ Message.init(
     }
   },
   {
-    tableName: "notify_message",
-    modelName: "message",
-    createdAt: "time",
+    tableName: 'notify_message',
+    modelName: 'message',
+    createdAt: 'time',
     updatedAt: false,
     sequelize: db,
     getterMethods: {
       time () {
-        return dayjs(this.getDataValue("time")).unix();
+        return dayjs(this.getDataValue('time')).unix();
       }
     }
   }

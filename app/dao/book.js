@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-const { NotFound, Forbidden } = require("lin-mizar");
-const { Book } = require("../models/book");
-const Sequelize = require("sequelize");
+const { NotFound, Forbidden } = require('lin-mizar');
+const { Book } = require('../models/book');
+const Sequelize = require('sequelize');
 
 class BookDao {
   async getBook (id) {
@@ -38,20 +38,20 @@ class BookDao {
   async createBook (v) {
     const book = await Book.findOne({
       where: {
-        title: v.get("body.title"),
+        title: v.get('body.title'),
         delete_time: null
       }
     });
     if (book) {
       throw new Forbidden({
-        msg: "图书已存在"
+        msg: '图书已存在'
       });
     }
     const bk = new Book();
-    bk.title = v.get("body.title");
-    bk.author = v.get("body.author");
-    bk.summary = v.get("body.summary");
-    bk.image = v.get("body.image");
+    bk.title = v.get('body.title');
+    bk.author = v.get('body.author');
+    bk.summary = v.get('body.summary');
+    bk.image = v.get('body.image');
     bk.save();
   }
 
@@ -59,13 +59,13 @@ class BookDao {
     const book = await Book.findByPk(id);
     if (!book) {
       throw new NotFound({
-        msg: "没有找到相关书籍"
+        msg: '没有找到相关书籍'
       });
     }
-    book.title = v.get("body.title");
-    book.author = v.get("body.author");
-    book.summary = v.get("body.summary");
-    book.image = v.get("body.image");
+    book.title = v.get('body.title');
+    book.author = v.get('body.author');
+    book.summary = v.get('body.summary');
+    book.image = v.get('body.image');
     book.save();
   }
 
@@ -78,7 +78,7 @@ class BookDao {
     });
     if (!book) {
       throw new NotFound({
-        msg: "没有找到相关书籍"
+        msg: '没有找到相关书籍'
       });
     }
     book.destroy();
