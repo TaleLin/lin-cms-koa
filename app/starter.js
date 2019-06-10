@@ -20,7 +20,7 @@ const run = async () => {
   const app = await createApp();
   const port = config.getItem('port');
   app.listen(port, () => {
-    app.context.logger.start(`listening at http://localhost:${port}`);
+    app.context.logger.info(`listening at http://localhost:${port}`);
   });
 };
 // 启动应用
