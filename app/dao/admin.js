@@ -38,15 +38,15 @@ class AdminDao {
         type: db.QueryTypes.SELECT
       }
     );
-    let total = await db.query(
-      'SELECT COUNT(*) as count FROM lin_user WHERE lin_user.admin=:admin AND lin_user.delete_time IS NULL',
-      {
-        replacements: {
-          admin: UserAdmin.COMMON
-        },
-        type: db.QueryTypes.SELECT
-      }
-    );
+    let sql1 =
+      'SELECT COUNT(*) as count FROM lin_user WHERE lin_user.admin=:admin AND lin_user.delete_time IS NULL';
+    groupId && (sql1 += ` lin_user.group_id=${groupId}`);
+    let total = await db.query(sql1, {
+      replacements: {
+        admin: UserAdmin.COMMON
+      },
+      type: db.QueryTypes.SELECT
+    });
     users.map(user => {
       unsets(user, ['update_time', 'delete_time', 'password']);
       user.create_time = dayjs(user.create_time).unix();
