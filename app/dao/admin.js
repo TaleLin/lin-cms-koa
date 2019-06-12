@@ -40,7 +40,7 @@ class AdminDao {
     );
     let sql1 =
       'SELECT COUNT(*) as count FROM lin_user WHERE lin_user.admin=:admin AND lin_user.delete_time IS NULL';
-    groupId && (sql1 += ` lin_user.group_id=${groupId}`);
+    groupId && (sql1 += ` AND lin_user.group_id=${groupId}`);
     let total = await db.query(sql1, {
       replacements: {
         admin: UserAdmin.COMMON

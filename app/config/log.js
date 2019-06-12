@@ -5,6 +5,7 @@ module.exports = {
     level: 'DEBUG',
     dir: 'logs',
     sizeLimit: 1024 * 1024 * 5,
-    requestLog: true
+    requestLog: true,
+    file: true
   }
 };
