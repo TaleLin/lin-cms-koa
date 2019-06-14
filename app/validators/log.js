@@ -28,7 +28,7 @@ class LogFindValidator extends PaginateValidator {
     if (!data.query) {
       return true;
     }
-    const end = data.query.start;
+    const end = data.query.end;
     if (isOptional(end)) {
       return true;
     }
