@@ -3,20 +3,18 @@ const { File } = require('lin-mizar');
 const { config } = require('lin-mizar/lin/config');
 const fs = require('fs');
 const path = require('path');
-const { cloneDeep } = require('lodash');
 
 class LocalUploader extends Uploader {
   /**
-   * 处理文件流
-   * @param {object[]} files 文件流数组
+   * 处理文件对象
+   * { size, encoding, fieldname, filename, mimeType, data }
    */
   async upload (files) {
     const arr = [];
-    for (const stream of files) {
+    for (const file of files) {
       // 由于stream的特性，当读取其中的数据时，它的buffer会被消费
       // 所以此处深拷贝一份计算md5值
-      const tmpStream = cloneDeep(stream);
-      const md5 = this.generateMd5(tmpStream);
+      const md5 = this.generateMd5(file);
       const siteDomain = config.getItem('siteDomain', 'http://localhost');
       // 检查md5存在
       const exist = await File.findOne({
@@ -26,31 +24,30 @@ class LocalUploader extends Uploader {
       });
       if (exist) {
         arr.push({
-          key: stream.fieldname,
+          key: file.fieldname,
           id: exist.id,
           url: `${siteDomain}/assets/${exist.path}`
         });
       } else {
         const { absolutePath, relativePath, realName } = this.getStorePath(
-          stream.filename
+          file.filename
         );
         const target = fs.createWriteStream(absolutePath);
-        await stream.pipe(target);
+        await target.write(file.data);
         const ext = path.extname(realName);
-        // stream.filename tream.filedname stream.mimeType stream.readableLength
         const saved = await File.createRecord(
           {
             path: relativePath,
             // type: 1,
             name: realName,
             extension: ext,
-            size: stream._readableState.length,
+            size: file.size,
             md5: md5
           },
           true
         );
         arr.push({
-          key: stream.fieldname,
+          key: file.fieldname,
           id: saved.id,
           url: `${siteDomain}/assets/${saved.path}`
         });
