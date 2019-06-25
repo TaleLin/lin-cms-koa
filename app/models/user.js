@@ -7,19 +7,19 @@
 'use strict';
 
 const { modelExtend } = require('lin-mizar/lin/factory');
+const { UserInterface } = require('lin-mizar/lin/interface');
 const { User } = require('lin-mizar');
 const Sequelize = require('sequelize');
 
-const User2 = modelExtend(User, {
-  phone: {
-    type: Sequelize.STRING(30),
-    unique: true,
+modelExtend(UserInterface, {
+  openid: {
+    type: Sequelize.STRING(64),
     allowNull: true
   }
 });
 
-User2.prototype.sayHello = function () {
+User.prototype.sayHello = function () {
   console.log('hello world!');
 };
 
-module.exports = { User2 };
+module.exports = { User };
