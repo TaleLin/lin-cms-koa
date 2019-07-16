@@ -1,12 +1,12 @@
 'use strict';
 
-let siteDomain
+let siteDomain;
 switch (process.env.NODE_ENV) {
   case 'development':
     siteDomain = 'http://localhost:5000';
     break;
   case 'production':
-    siteDomain = '';
+    siteDomain = 'http://koa.lin.colorful3.com/';
     break;
 }
 module.exports = {
