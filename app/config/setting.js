@@ -6,7 +6,7 @@ switch (process.env.NODE_ENV) {
     siteDomain = 'http://localhost:5000';
     break;
   case 'production':
-    siteDomain = 'http://koa.lin.colorful3.com/';
+    siteDomain = 'http://koa.lin.colorful3.com';
     break;
 }
 module.exports = {
