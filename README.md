@@ -35,9 +35,9 @@ Lin-CMS 是林间有风团队经过大量项目实践所提炼出的一套**内�
 
 ### 当前最新版本
 
-lin-mizar(核心库) ：0.1.0-beta.1
+lin-mizar(核心库) ：0.1.0-beta.4
 
-lin-cms-koa(当前实例工程)：0.1.0-beta.1
+lin-cms-koa(当前示例工程)：0.1.0-beta.3
 
 ### 文档地址
 
@@ -49,9 +49,9 @@ lin-cms-koa(当前实例工程)：0.1.0-beta.1
 
 ### QQ 交流群
 
-QQ 群号：699501172
+QQ 群号：643205479
 
-<img class="QR-img" width="258" height="300" src="http://imglf4.nosdn0.126.net/img/Qk5LWkJVWkF3NmlPcDV2NjJvR2dFYU90R0ZuS2g1STZVa1NhOWN2YVhrUnFXdmJVRk5LQ1FnPT0.jpg?imageView&thumbnail=500x0&quality=96&stripmeta=0&type=jpg">
+<img class="QR-img" width="258" height="300" src="http://imglf3.nosdn0.126.net/img/Qk5LWkJVWkF3Nmdyc2xGcUtScEJLOVV1clErY1dJa0FsQ3E1aDZQWlZHZ2dCbSt4WXA1V3dRPT0.jpg?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg">
 
 ### 微信公众号
 
