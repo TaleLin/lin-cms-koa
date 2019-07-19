@@ -1,11 +1,11 @@
 {
   "name": "lin-cms-koa",
-  "version": "0.1.0-beta.3",
+  "version": "0.2.0-beta.1",
   "description": "simple and practical CMS implememted by koa",
   "main": "app/starter.js",
   "scripts": {
-    "start:dev": "nodemon",
-    "start:prod": "node app/starter.js",
+    "start:dev": "cross-env NODE_ENV=development nodemon",
+    "start:prod": "cross-env NODE_ENV=production node app/starter.js",
     "prettier": "prettier --write app/**/*.js app/*.js app/**/**/*.js app/**/**/**/*.js tests/**/*.js && eslint app tests --fix"
   },
   "keywords": [
@@ -23,6 +23,7 @@
     "@types/koa__cors": "^2.2.3",
     "@types/prettier": "1.16.1",
     "@types/supertest": "^2.0.7",
+    "cross-env": "^5.2.0",
     "eslint": "^5.15.1",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-import": "^2.16.0",
@@ -42,6 +43,6 @@
     "koa-bodyparser": "^4.2.1",
     "koa-mount": "^4.0.0",
     "koa-static": "^5.0.0",
-    "lin-mizar": "^0.1.0-beta.5"
+    "lin-mizar": "^0.2.0-beta.1"
   }
 }
