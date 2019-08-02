@@ -15,7 +15,6 @@ const {
 const { PositiveIdValidator } = require('../../validators/common');
 
 const { BookNotFound } = require('../../libs/err-code');
-const { Book } = require('../../models/book');
 const { BookDao } = require('../../dao/book');
 
 // book 的红图实例
@@ -92,15 +91,5 @@ bookApi.linDelete(
     });
   }
 );
-
-bookApi.get('/', async ctx => {
-  const books = await Book.findAll();
-  if (books.length < 1) {
-    throw new NotFound({
-      msg: '没有找到相关书籍'
-    });
-  }
-  ctx.json(books);
-});
 
 module.exports = { bookApi, [disableLoading]: false };
