@@ -75,9 +75,12 @@ admin.linGet(
       v.get('query.count')
     );
     ctx.json({
-      collection: users,
+      items: users,
       // 超级管理员不算入总数
-      total_nums: total
+      total: total,
+      page: v.get('query.page'),
+      count: v.get('query.count'),
+      total_page: Math.ceil(total / parseInt(v.get('query.count')))
     });
   }
 );
@@ -159,8 +162,10 @@ admin.linGet(
       });
     }
     ctx.json({
-      collection: groups,
-      total_nums: total
+      items: groups,
+      total: total,
+      page: v.get('query.page'),
+      count: v.get('query.count')
     });
   }
 );

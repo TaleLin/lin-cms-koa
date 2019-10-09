@@ -42,7 +42,7 @@ function pushMessage (template, event, ctx, extra) {
   msg.time = now;
   msg.pushed = MessageIsPushed.PUSHED;
   msg.user_id = ctx.currentUser.id;
-  msg.user_name = ctx.currentUser.nickname;
+  msg.user_name = ctx.currentUser.username;
   msg.save();
 }
 

@@ -17,7 +17,7 @@ const run = async () => {
   await group.save();
 
   const user = new User();
-  user.nickname = 'pedro';
+  user.username = 'pedro';
   user.password = '123456';
   await user.save();
 

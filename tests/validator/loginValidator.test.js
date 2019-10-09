@@ -8,11 +8,11 @@ describe('loginValidator.test.js', () => {
       url: '/'
     });
     ctx.request.body = {
-      nickname: 'pedro',
+      username: 'pedro',
       password: '123456'
     };
     const v = await new LoginValidator().validate(ctx);
-    expect(v.get('nickname')).toBe('pedro');
+    expect(v.get('username')).toBe('pedro');
   });
 
   test('登陆校验别名', async () => {
@@ -24,7 +24,7 @@ describe('loginValidator.test.js', () => {
       password: '123456'
     };
     const v = await new LoginValidator().validate(ctx, {
-      nickname: 'name'
+      username: 'name'
     });
     expect(v.get('name')).toBe('pedro');
   });
@@ -34,7 +34,7 @@ describe('loginValidator.test.js', () => {
       url: '/'
     });
     ctx.request.body = {
-      nickname: 'pedro'
+      username: 'pedro'
     };
     try {
       await new LoginValidator().validate(ctx);
