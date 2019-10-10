@@ -59,8 +59,16 @@ class UserDao {
         group_id: user.group_id
       }
     });
+    let group = await ctx.manager.groupModel.findOne({
+      where: {
+        id: user.group_id
+      }
+    })
     const aus = this.splitAuths(auths);
     set(user, 'auths', aus);
+    if (group) {
+      set(user, 'groupName', group.name);
+    }
     return user;
   }
 
