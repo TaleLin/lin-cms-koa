@@ -39,11 +39,11 @@ bookApi.get('/:id', async ctx => {
 
 bookApi.get('/', async ctx => {
   const books = await bookDto.getBooks();
-  if (!books || books.length < 1) {
-    throw new NotFound({
-      msg: '没有找到相关书籍'
-    });
-  }
+  // if (!books || books.length < 1) {
+  //   throw new NotFound({
+  //     msg: '没有找到相关书籍'
+  //   });
+  // }
   ctx.json(books);
 });
 

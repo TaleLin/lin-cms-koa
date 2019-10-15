@@ -21,7 +21,7 @@ describe('user2.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/login')
       .send({
-        nickname: 'llllll',
+        username: 'llllll',
         password: '123456'
       });
     expect(response.status).toBe(404);
@@ -32,7 +32,7 @@ describe('user2.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/login')
       .send({
-        nickname: 'pedro',
+        username: 'pedro',
         password: '147258'
       });
     expect(response.status).toBe(401);
@@ -44,7 +44,7 @@ describe('user2.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/login')
       .send({
-        nickname: 'super',
+        username: 'super',
         password: '123456'
       });
     saveTokens(response.body);

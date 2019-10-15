@@ -8,7 +8,7 @@ class UserDao {
   async createUser (ctx, v) {
     let user = await ctx.manager.userModel.findOne({
       where: {
-        nickname: v.get('body.nickname')
+        username: v.get('body.username')
       }
     });
     if (user) {
@@ -33,7 +33,7 @@ class UserDao {
 
   async updateUser (ctx, v) {
     let user = ctx.currentUser;
-    if (user.email !== v.get('body.email')) {
+    if (v.get('body.email') && user.email !== v.get('body.email')) {
       const exit = await ctx.manager.userModel.findOne({
         where: {
           email: v.get('body.email')
@@ -44,8 +44,11 @@ class UserDao {
           msg: '邮箱已被注册，请重新输入邮箱'
         });
       }
+      user.email = v.get('body.email');
     }
-    user.email = v.get('body.email');
+    if (v.get('body.nickname')) {
+      user.nickname = v.get('body.nickname')
+    }
     user.save();
   }
 
@@ -56,8 +59,16 @@ class UserDao {
         group_id: user.group_id
       }
     });
+    let group = await ctx.manager.groupModel.findOne({
+      where: {
+        id: user.group_id
+      }
+    })
     const aus = this.splitAuths(auths);
     set(user, 'auths', aus);
+    if (group) {
+      set(user, 'groupName', group.name);
+    }
     return user;
   }
 
@@ -88,7 +99,7 @@ class UserDao {
 
   registerUser (ctx, v) {
     const user = new ctx.manager.userModel();
-    user.nickname = v.get('body.nickname');
+    user.username = v.get('body.username');
     user.password = v.get('body.password');
     user.group_id = v.get('body.group_id');
     if (v.get('body.email') && v.get('body.email').trim() !== '') {

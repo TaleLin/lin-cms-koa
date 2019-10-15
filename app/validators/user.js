@@ -5,9 +5,9 @@ const { LinValidator, Rule } = require('lin-mizar');
 class RegisterValidator extends LinValidator {
   constructor () {
     super();
-    this.nickname = [
-      new Rule('isNotEmpty', '昵称不可为空'),
-      new Rule('isLength', '昵称长度必须在2~10之间', 2, 10)
+    this.username = [
+      new Rule('isNotEmpty', '用户名不可为空'),
+      new Rule('isLength', '用户名长度必须在2~20之间', 2, 20)
     ];
     this.group_id = new Rule('isInt', '分组id必须是整数，且大于0', {
       min: 1
@@ -42,18 +42,25 @@ class RegisterValidator extends LinValidator {
 class LoginValidator extends LinValidator {
   constructor () {
     super();
-    this.nickname = new Rule('isNotEmpty', '昵称不可为空');
+    this.username = new Rule('isNotEmpty', '用户名不可为空');
     this.password = new Rule('isNotEmpty', '密码不可为空');
   }
 }
 
 /**
- * 用户更新自己的邮箱
+ * 更新用户信息
  */
 class UpdateInfoValidator extends LinValidator {
   constructor () {
     super();
-    this.email = new Rule('isEmail', '电子邮箱不符合规范，请输入正确的邮箱');
+    this.email = [
+      new Rule('isOptional'),
+      new Rule('isEmail', '电子邮箱不符合规范，请输入正确的邮箱')
+    ];
+    this.nickname = [
+      new Rule('isOptional'),
+      new Rule('isLength', '昵称长度必须在2~10之间', 2, 10)
+    ]
   }
 }
 

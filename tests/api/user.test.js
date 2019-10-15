@@ -20,7 +20,7 @@ describe('user.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/register')
       .send({
-        nickname: 'pedro',
+        username: 'pedro',
         group_id: 1,
         password: '123456',
         confirm_password: '123455'
@@ -34,7 +34,7 @@ describe('user.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/register')
       .send({
-        nickname: 'pedro',
+        username: 'pedro',
         group_id: 1,
         email: '8680909709j',
         password: '123456',
@@ -49,7 +49,7 @@ describe('user.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/register')
       .send({
-        nickname: 'p',
+        username: 'p',
         group_id: 1,
         password: '123456',
         confirm_password: '123456'
@@ -63,7 +63,7 @@ describe('user.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/register')
       .send({
-        nickname: 'pedro',
+        username: 'pedro',
         group_id: 0,
         password: '123456',
         confirm_password: '123456'
@@ -77,7 +77,7 @@ describe('user.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/register')
       .send({
-        nickname: 'peter',
+        username: 'peter',
         group_id: 1,
         email: '1312342604@qq.com',
         password: '123456',
@@ -91,7 +91,7 @@ describe('user.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/register')
       .send({
-        nickname: 'pedro',
+        username: 'pedro',
         group_id: 1,
         email: '1312342604@qq.com',
         password: '123456',
@@ -106,7 +106,7 @@ describe('user.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/register')
       .send({
-        nickname: 'ooooo',
+        username: 'ooooo',
         group_id: 1,
         email: '13123433@qq.com',
         password: '123456',

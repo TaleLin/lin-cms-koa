@@ -57,7 +57,7 @@ user.linPost(
   async ctx => {
     const v = await new LoginValidator().validate(ctx);
     let user = await ctx.manager.userModel.verify(
-      v.get('body.nickname'),
+      v.get('body.username'),
       v.get('body.password')
     );
     const { accessToken, refreshToken } = getTokens(user);

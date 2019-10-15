@@ -29,8 +29,11 @@ log.linGet(
       });
     }
     ctx.json({
-      total_nums: total,
-      collection: rows
+      total: total,
+      items: rows,
+      page: v.get('query.page'),
+      count: v.get('query.count'),
+      total_page: Math.ceil(total / parseInt(v.get('query.count')))
     });
   }
 );
@@ -54,8 +57,11 @@ log.linGet(
       });
     }
     ctx.json({
-      total_nums: total,
-      collection: rows
+      total: total,
+      items: rows,
+      page: v.get('query.page'),
+      count: v.get('query.count'),
+      total_page: Math.ceil(total / parseInt(v.get('query.count')))
     });
   }
 );
