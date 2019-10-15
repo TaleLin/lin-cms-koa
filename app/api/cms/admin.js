@@ -165,7 +165,8 @@ admin.linGet(
       items: groups,
       total: total,
       page: v.get('query.page'),
-      count: v.get('query.count')
+      count: v.get('query.count'),
+      total_page: Math.ceil(total / parseInt(v.get('query.count')))
     });
   }
 );
