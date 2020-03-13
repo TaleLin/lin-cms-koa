@@ -1,13 +1,11 @@
-'use strict';
-
-const { InfoCrudMixin } = require('lin-mizar/lin/interface');
-const { merge } = require('lodash');
-const Sequelize = require('sequelize');
-const { db } = require('lin-mizar/lin/db');
+import { InfoCrudMixin } from 'lin-mizar';
+import { merge } from 'lodash';
+import { Sequelize, Model } from 'sequelize';
+import sequelize from '../../../libs/db';
 
 const { config } = require('lin-mizar/lin/config');
 
-class Poem extends Sequelize.Model {
+class Poem extends Model {
   static async search (q) {
     const poems = await Poem.findAll({
       where: {
@@ -24,7 +22,7 @@ class Poem extends Sequelize.Model {
       delete_time: null
     };
     validator.get('query.author') &&
-      (condition['author'] = validator.get('query.author'));
+      (condition.author = validator.get('query.author'));
     const poems = await Poem.findAll({
       where: {
         delete_time: null
@@ -37,15 +35,15 @@ class Poem extends Sequelize.Model {
   }
 
   static async getAuthors () {
-    const authors = await db.query(
+    const authors = await sequelize.query(
       'select author from poem group by author having count(author)>0'
     );
-    let res = authors[0].map(it => it['author']);
+    const res = authors[0].map(it => it.author);
     return res;
   }
 
   toJSON () {
-    let origin = {
+    const origin = {
       id: this.id,
       title: this.title,
       author: this.author,
@@ -85,7 +83,7 @@ Poem.init(
       allowNull: false,
       comment: '内容，以/来分割每一句，以|来分割宋词的上下片',
       get () {
-        let raw = this.getDataValue('content');
+        const raw = this.getDataValue('content');
         /**
          * @type Array
          */
@@ -104,10 +102,10 @@ Poem.init(
     {
       tableName: 'poem',
       modelName: 'poem',
-      sequelize: db
+      sequelize: sequelize
     },
     InfoCrudMixin.options
   )
 );
 
-module.exports = { Poem };
+export { Poem };

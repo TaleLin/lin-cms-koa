@@ -1,26 +1,24 @@
-'use strict';
-
-const { Log } = require('lin-mizar');
-const { set } = require('lodash');
-const { db } = require('lin-mizar/lin/db');
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
+import { LogModel } from '../models/log';
+import { set } from 'lodash';
+import sequelize from '../libs/db';
 
 class LogDao {
   async getLogs (v) {
     const start = v.get('query.page');
     const count1 = v.get('query.count');
-    let condition = {};
+    const condition = {};
     v.get('query.name') && set(condition, 'user_name', v.get('query.name'));
     v.get('query.start') &&
       v.get('query.end') &&
-      set(condition, 'time', {
+      set(condition, 'create_time', {
         [Sequelize.Op.between]: [v.get('query.start'), v.get('query.end')]
       });
-    let { rows, count } = await Log.findAndCountAll({
+    const { rows, count } = await LogModel.findAndCountAll({
       where: Object.assign({}, condition),
       offset: start * count1,
       limit: count1,
-      order: [['time', 'DESC']]
+      order: [['create_time', 'DESC']]
     });
     return {
       rows,
@@ -31,14 +29,14 @@ class LogDao {
   async searchLogs (v, keyword) {
     const start = v.get('query.page');
     const count1 = v.get('query.count');
-    let condition = {};
-    v.get('query.name') && set(condition, 'user_name', v.get('query.name'));
+    const condition = {};
+    v.get('query.name') && set(condition, 'username', v.get('query.name'));
     v.get('query.start') &&
       v.get('query.end') &&
-      set(condition, 'time', {
+      set(condition, 'create_time', {
         [Sequelize.Op.between]: [v.get('query.start'), v.get('query.end')]
       });
-    let { rows, count } = await Log.findAndCountAll({
+    const { rows, count } = await LogModel.findAndCountAll({
       where: Object.assign({}, condition, {
         message: {
           [Sequelize.Op.like]: `%${keyword}%`
@@ -46,7 +44,7 @@ class LogDao {
       }),
       offset: start * count1,
       limit: count1,
-      order: [['time', 'DESC']]
+      order: [['create_time', 'DESC']]
     });
     return {
       rows,
@@ -55,8 +53,8 @@ class LogDao {
   }
 
   async getUserNames (start, count) {
-    const logs = await db.query(
-      'SELECT lin_log.user_name AS names FROM lin_log GROUP BY lin_log.user_name HAVING COUNT(lin_log.user_name)>0 limit :count offset :start',
+    const logs = await sequelize.query(
+      'SELECT lin_log.username AS names FROM lin_log GROUP BY lin_log.username HAVING COUNT(lin_log.username)>0 limit :count offset :start',
       {
         replacements: {
           start: start * count,
@@ -64,9 +62,9 @@ class LogDao {
         }
       }
     );
-    const arr = Array.from(logs[0].map(it => it['names']));
+    const arr = Array.from(logs[0].map(it => it.names));
     return arr;
   }
 }
 
-module.exports = { LogDao };
+export { LogDao };

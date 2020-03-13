@@ -1,6 +1,6 @@
-require('./initial');
-const { db } = require('lin-mizar/lin/db');
-const { Poem } = require('../../app/plugins/poem/app/model');
+import '../initial';
+import sequelize from '../../../app/libs/db';
+import { Poem } from '../../../app/plugins/poem/app/model';
 
 const run = async () => {
   await Poem.sync();
@@ -61,7 +61,9 @@ const run = async () => {
       image: 'http://yanlan.oss-cn-shenzhen.aliyuncs.com/gqmgbmu06yO2zHD.png'
     }
   ]);
-  db.close();
+  setTimeout(() => {
+    sequelize.close();
+  }, 500);
 };
 
 run();

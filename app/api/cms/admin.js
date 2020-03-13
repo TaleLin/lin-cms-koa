@@ -1,32 +1,21 @@
-'use strict';
-
-const {
-  LinRouter,
-  routeMetaInfo,
-  adminRequired,
-  NotFound,
-  Failed
-} = require('lin-mizar');
-
-const { has, set } = require('lodash');
-
-const {
-  DispatchAuthsValidator,
-  RemoveAuthsValidator,
-  UpdateGroupValidator,
-  ResetPasswordValidator,
+import { LinRouter, Failed, NotFound } from 'lin-mizar';
+import {
   AdminUsersValidator,
+  ResetPasswordValidator,
   UpdateUserInfoValidator,
   NewGroupValidator,
-  DispatchAuthValidator
-} = require('../../validators/admin');
-
-const {
+  UpdateGroupValidator,
+  DispatchPermissionValidator,
+  DispatchPermissionsValidator,
+  RemovePermissionsValidator
+} from '../../validators/admin';
+import {
   PositiveIdValidator,
   PaginateValidator
-} = require('../../validators/common');
+} from '../../validators/common';
 
-const { AdminDao } = require('../../dao/admin');
+import { adminRequired } from '../../middleware/jwt';
+import { AdminDao } from '../../dao/admin';
 
 const admin = new LinRouter({
   prefix: '/cms/admin'
@@ -35,25 +24,17 @@ const admin = new LinRouter({
 const adminDao = new AdminDao();
 
 admin.linGet(
-  'getAuthority',
-  '/authority',
+  'getAllPermissions',
+  '/permission',
   {
     auth: '查询所有可分配的权限',
     module: '管理员',
     mount: false
   },
   adminRequired,
-  ctx => {
-    const res = {};
-    routeMetaInfo.forEach((v, k) => {
-      const au = v['auth'];
-      if (!has(res, `${v['module']}.${au}`)) {
-        set(res, `${v['module']}.${au}`, [k]);
-      } else {
-        res[v['module']][au].push(k);
-      }
-    });
-    ctx.json(res);
+  async ctx => {
+    const permissions = await adminDao.getAllPermissions();
+    ctx.json(permissions);
   }
 );
 
@@ -69,25 +50,22 @@ admin.linGet(
   async ctx => {
     const v = await new AdminUsersValidator().validate(ctx);
     const { users, total } = await adminDao.getUsers(
-      ctx,
       v.get('query.group_id'),
       v.get('query.page'),
       v.get('query.count')
     );
     ctx.json({
       items: users,
-      // 超级管理员不算入总数
-      total: total,
-      page: v.get('query.page'),
+      total,
       count: v.get('query.count'),
-      total_page: Math.ceil(total / parseInt(v.get('query.count')))
+      page: v.get('query.page')
     });
   }
 );
 
 admin.linPut(
   'changeUserPassword',
-  '/password/:id',
+  '/user/:id/password',
   {
     auth: '修改用户密码',
     module: '管理员',
@@ -98,14 +76,15 @@ admin.linPut(
     const v = await new ResetPasswordValidator().validate(ctx);
     await adminDao.changeUserPassword(ctx, v);
     ctx.success({
-      msg: '密码修改成功'
+      msg: '密码修改成功',
+      errorCode: 2
     });
   }
 );
 
 admin.linDelete(
   'deleteUser',
-  '/:id',
+  '/user/:id',
   {
     auth: '删除用户',
     module: '管理员',
@@ -117,14 +96,15 @@ admin.linDelete(
     const id = v.get('path.id');
     await adminDao.deleteUser(ctx, id);
     ctx.success({
-      msg: '操作成功'
+      msg: '删除用户成功',
+      errorCode: 3
     });
   }
 );
 
 admin.linPut(
   'updateUser',
-  '/:id',
+  '/user/:id',
   {
     auth: '管理员更新用户信息',
     module: '管理员',
@@ -135,14 +115,15 @@ admin.linPut(
     const v = await new UpdateUserInfoValidator().validate(ctx);
     await adminDao.updateUserInfo(ctx, v);
     ctx.success({
-      msg: '操作成功'
+      msg: '更新用户成功',
+      errorCode: 4
     });
   }
 );
 
 admin.linGet(
   'getAdminGroups',
-  '/groups',
+  '/group',
   {
     auth: '查询所有权限组及其权限',
     module: '管理员',
@@ -165,8 +146,7 @@ admin.linGet(
       items: groups,
       total: total,
       page: v.get('query.page'),
-      count: v.get('query.count'),
-      total_page: Math.ceil(total / parseInt(v.get('query.count')))
+      count: v.get('query.count')
     });
   }
 );
@@ -181,7 +161,7 @@ admin.linGet(
   },
   adminRequired,
   async ctx => {
-    const groups = await ctx.manager.groupModel.findAll();
+    const groups = await adminDao.getAllGroups();
     if (!groups || groups.length < 1) {
       throw new NotFound({
         msg: '未找到任何权限组'
@@ -225,7 +205,8 @@ admin.linPost(
       });
     }
     ctx.success({
-      msg: '新建分组成功'
+      msg: '新建分组成功',
+      errorCode: 13
     });
   }
 );
@@ -243,7 +224,8 @@ admin.linPut(
     const v = await new UpdateGroupValidator().validate(ctx);
     await adminDao.updateGroup(ctx, v);
     ctx.success({
-      msg: '更新分组成功'
+      msg: '更新分组成功',
+      errorCode: 5
     });
   }
 );
@@ -262,14 +244,15 @@ admin.linDelete(
     const id = v.get('path.id');
     await adminDao.deleteGroup(ctx, id);
     ctx.success({
-      msg: '删除分组成功'
+      msg: '删除分组成功',
+      errorCode: 6
     });
   }
 );
 
 admin.linPost(
-  'dispatchAuth',
-  '/dispatch',
+  'dispatchPermission',
+  '/permission/dispatch',
   {
     auth: '分配单个权限',
     module: '管理员',
@@ -277,17 +260,18 @@ admin.linPost(
   },
   adminRequired,
   async ctx => {
-    const v = await new DispatchAuthValidator().validate(ctx);
-    await adminDao.dispatchAuth(ctx, v);
+    const v = await new DispatchPermissionValidator().validate(ctx);
+    await adminDao.dispatchPermission(ctx, v);
     ctx.success({
-      msg: '添加权限成功'
+      msg: '添加权限成功',
+      errorCode: 6
     });
   }
 );
 
 admin.linPost(
-  'dispatchAuths',
-  '/dispatch/patch',
+  'dispatchPermissions',
+  '/permission/dispatch/batch',
   {
     auth: '分配多个权限',
     module: '管理员',
@@ -295,17 +279,18 @@ admin.linPost(
   },
   adminRequired,
   async ctx => {
-    const v = await new DispatchAuthsValidator().validate(ctx);
-    await adminDao.dispatchAuths(ctx, v);
+    const v = await new DispatchPermissionsValidator().validate(ctx);
+    await adminDao.dispatchPermissions(ctx, v);
     ctx.success({
-      msg: '添加权限成功'
+      msg: '添加权限成功',
+      errorCode: 7
     });
   }
 );
 
 admin.linPost(
-  'removeAuths',
-  '/remove',
+  'removePermissions',
+  '/permission/remove',
   {
     auth: '删除多个权限',
     module: '管理员',
@@ -313,12 +298,13 @@ admin.linPost(
   },
   adminRequired,
   async ctx => {
-    const v = await new RemoveAuthsValidator().validate(ctx);
-    await adminDao.removeAuths(ctx, v);
+    const v = await new RemovePermissionsValidator().validate(ctx);
+    await adminDao.removePermissions(ctx, v);
     ctx.success({
-      msg: '删除权限成功'
+      msg: '删除权限成功',
+      errorCode: 8
     });
   }
 );
 
-module.exports = { admin };
+export { admin };

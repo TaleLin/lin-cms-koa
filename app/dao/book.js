@@ -1,15 +1,12 @@
-'use strict';
-
-const { NotFound, Forbidden } = require('lin-mizar');
-const { Book } = require('../models/book');
-const Sequelize = require('sequelize');
+import { NotFound, Forbidden } from 'lin-mizar';
+import { Book } from '../models/book';
+import Sequelize from 'sequelize';
 
 class BookDao {
   async getBook (id) {
     const book = await Book.findOne({
       where: {
-        id,
-        delete_time: null
+        id
       }
     });
     return book;
@@ -20,26 +17,21 @@ class BookDao {
       where: {
         title: {
           [Sequelize.Op.like]: `%${q}%`
-        },
-        delete_time: null
+        }
       }
     });
     return book;
   }
 
   async getBooks () {
-    const books = await Book.findAll({
-      where: {
-        delete_time: null
-      }
-    });
+    const books = await Book.findAll();
     return books;
   }
+
   async createBook (v) {
     const book = await Book.findOne({
       where: {
-        title: v.get('body.title'),
-        delete_time: null
+        title: v.get('body.title')
       }
     });
     if (book) {
@@ -72,8 +64,7 @@ class BookDao {
   async deleteBook (id) {
     const book = await Book.findOne({
       where: {
-        id,
-        delete_time: null
+        id
       }
     });
     if (!book) {
@@ -85,4 +76,4 @@ class BookDao {
   }
 }
 
-module.exports = { BookDao };
+export { BookDao };

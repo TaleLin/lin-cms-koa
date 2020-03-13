@@ -1,8 +1,6 @@
-'use strict';
-
-const { Rule, checkDateFormat } = require('lin-mizar');
-const { PaginateValidator } = require('./common');
-const { isOptional } = require('../libs/util');
+import { Rule, checkDateFormat } from 'lin-mizar';
+import { PaginateValidator } from './common';
+import { isOptional } from '../libs/util';
 
 class LogFindValidator extends PaginateValidator {
   constructor () {
@@ -41,6 +39,4 @@ class LogFindValidator extends PaginateValidator {
   }
 }
 
-module.exports = {
-  LogFindValidator
-};
+export { LogFindValidator };

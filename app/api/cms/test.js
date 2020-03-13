@@ -1,11 +1,6 @@
-'use strict';
-
-const {
-  loginRequired,
-  LinRouter,
-  logger,
-  groupRequired
-} = require('lin-mizar');
+import { LinRouter } from 'lin-mizar';
+import { loginRequired, groupRequired } from '../../middleware/jwt';
+import { logger } from '../../middleware/logger';
 
 const test = new LinRouter({
   prefix: '/cms/test'
@@ -54,4 +49,4 @@ test.linGet(
   }
 );
 
-module.exports = { test };
+export { test };

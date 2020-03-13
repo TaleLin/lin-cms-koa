@@ -1,6 +1,6 @@
-require('./initial');
-const { db } = require('lin-mizar/lin/db');
-const { Book } = require('../../app/models/book');
+import '../initial';
+import sequelize from '../../../app/libs/db';
+import { Book } from '../../../app/models/book';
 
 const run = async () => {
   await Book.bulkCreate([
@@ -19,7 +19,9 @@ const run = async () => {
       image: 'https://img3.doubanio.com/lpic/s1106934.jpg'
     }
   ]);
-  db.close();
+  setTimeout(() => {
+    sequelize.close();
+  }, 500);
 };
 
 run();

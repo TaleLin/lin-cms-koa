@@ -1,7 +1,5 @@
-'use strict';
-
-const { toSafeInteger, get, isInteger } = require('lodash');
-const { ParametersException } = require('lin-mizar');
+import { toSafeInteger, get, isInteger } from 'lodash';
+import { ParametersException } from 'lin-mizar';
 
 function getSafeParamId (ctx) {
   const id = toSafeInteger(get(ctx.params, 'id'));
@@ -15,7 +13,7 @@ function getSafeParamId (ctx) {
 
 function isOptional (val) {
   // undefined , null , ""  , "    ", 皆通过
-  if (val === void 0) {
+  if (val === undefined) {
     return true;
   }
   if (val === null) {
@@ -27,4 +25,4 @@ function isOptional (val) {
   return false;
 }
 
-module.exports = { getSafeParamId, isOptional };
+export { getSafeParamId, isOptional };

@@ -1,19 +1,16 @@
-'use strict';
-
-const { InfoCrudMixin } = require('lin-mizar/lin/interface');
-const { merge } = require('lodash');
-const { Sequelize, Model } = require('sequelize');
-const { db } = require('lin-mizar/lin/db');
+import { InfoCrudMixin } from 'lin-mizar';
+import { merge } from 'lodash';
+import { Sequelize, Model } from 'sequelize';
+import sequelize from '../libs/db';
 
 class Book extends Model {
   toJSON () {
-    let origin = {
+    const origin = {
       id: this.id,
       title: this.title,
       author: this.author,
       summary: this.summary,
-      image: this.image,
-      create_time: this.createTime
+      image: this.image
     };
     return origin;
   }
@@ -48,10 +45,10 @@ Book.init(
     {
       tableName: 'book',
       modelName: 'book',
-      sequelize: db
+      sequelize
     },
     InfoCrudMixin.options
   )
 );
 
-module.exports = { Book };
+export { Book };

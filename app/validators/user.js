@@ -1,6 +1,6 @@
-'use strict';
-
-const { LinValidator, Rule } = require('lin-mizar');
+import { LinValidator, Rule } from 'lin-mizar';
+import { isOptional } from '../libs/util';
+import validator from 'validator';
 
 class RegisterValidator extends LinValidator {
   constructor () {
@@ -9,9 +9,6 @@ class RegisterValidator extends LinValidator {
       new Rule('isNotEmpty', '用户名不可为空'),
       new Rule('isLength', '用户名长度必须在2~20之间', 2, 20)
     ];
-    this.group_id = new Rule('isInt', '分组id必须是整数，且大于0', {
-      min: 1
-    });
     this.email = [
       new Rule('isOptional'),
       new Rule('isEmail', '电子邮箱不符合规范，请输入正确的邮箱')
@@ -30,12 +27,31 @@ class RegisterValidator extends LinValidator {
     if (!data.body.password || !data.body.confirm_password) {
       return [false, '两次输入的密码不一致，请重新输入'];
     }
-    let ok = data.body.password === data.body.confirm_password;
+    const ok = data.body.password === data.body.confirm_password;
     if (ok) {
       return ok;
     } else {
       return [false, '两次输入的密码不一致，请重新输入'];
     }
+  }
+
+  validateGroupIds (data) {
+    const ids = data.body.group_ids;
+    if (isOptional(ids)) {
+      return true;
+    }
+    if (!Array.isArray(ids)) {
+      return [false, '每个id值必须为正整数'];
+    }
+    for (let id of ids) {
+      if (typeof id === 'number') {
+        id = String(id);
+      }
+      if (!validator.isInt(id, { min: 1 })) {
+        return [false, '每个id值必须为正整数'];
+      }
+    }
+    return true;
   }
 }
 
@@ -59,8 +75,19 @@ class UpdateInfoValidator extends LinValidator {
     ];
     this.nickname = [
       new Rule('isOptional'),
-      new Rule('isLength', '昵称长度必须在2~10之间', 2, 10)
-    ]
+      new Rule('isLength', '昵称长度必须在2~10之间', 2, 24)
+    ];
+    this.username = [
+      new Rule('isOptional'),
+      new Rule('isLength', '用户名长度必须在2~10之间', 2, 24)
+    ];
+    this.avatar = [
+      new Rule('isOptional'),
+      new Rule('isLength', '头像的url长度必须在0~500之间', {
+        min: 0,
+        max: 500
+      })
+    ];
   }
 }
 
@@ -80,7 +107,7 @@ class ChangePasswordValidator extends LinValidator {
     if (!data.body.new_password || !data.body.confirm_password) {
       return [false, '两次输入的密码不一致，请重新输入'];
     }
-    let ok = data.body.new_password === data.body.confirm_password;
+    const ok = data.body.new_password === data.body.confirm_password;
     if (ok) {
       return ok;
     } else {
@@ -96,7 +123,7 @@ class AvatarUpdateValidator extends LinValidator {
   }
 }
 
-module.exports = {
+export {
   ChangePasswordValidator,
   UpdateInfoValidator,
   LoginValidator,

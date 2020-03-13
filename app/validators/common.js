@@ -1,7 +1,4 @@
-'use strict';
-
-const { LinValidator, Rule } = require('lin-mizar');
-const { config } = require('lin-mizar/lin/config');
+import { LinValidator, Rule, config } from 'lin-mizar';
 
 class PositiveIdValidator extends LinValidator {
   constructor () {
@@ -24,7 +21,4 @@ class PaginateValidator extends LinValidator {
   }
 }
 
-module.exports = {
-  PaginateValidator,
-  PositiveIdValidator
-};
+export { PaginateValidator, PositiveIdValidator };

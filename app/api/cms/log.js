@@ -1,9 +1,9 @@
-'use strict';
+import { LinRouter, NotFound } from 'lin-mizar';
+import { LogFindValidator } from '../../validators/log';
+import { PaginateValidator } from '../../validators/common';
 
-const { LinRouter, groupRequired, NotFound } = require('lin-mizar');
-const { LogFindValidator } = require('../../validators/log');
-const { PaginateValidator } = require('../../validators/common');
-const { LogDao } = require('../../dao/log');
+import { groupRequired } from '../../middleware/jwt';
+import { LogDao } from '../../dao/log';
 
 const log = new LinRouter({
   prefix: '/cms/log'
@@ -32,8 +32,7 @@ log.linGet(
       total: total,
       items: rows,
       page: v.get('query.page'),
-      count: v.get('query.count'),
-      total_page: Math.ceil(total / parseInt(v.get('query.count')))
+      count: v.get('query.count')
     });
   }
 );
@@ -51,17 +50,11 @@ log.linGet(
     const v = await new LogFindValidator().validate(ctx);
     const keyword = v.get('query.keyword', false, '');
     const { rows, total } = await logDao.searchLogs(v, keyword);
-    if (!rows || rows.length < 1) {
-      throw new NotFound({
-        msg: '没有找到相关日志'
-      });
-    }
     ctx.json({
       total: total,
       items: rows,
       page: v.get('query.page'),
-      count: v.get('query.count'),
-      total_page: Math.ceil(total / parseInt(v.get('query.count')))
+      count: v.get('query.count')
     });
   }
 );
@@ -81,8 +74,13 @@ log.linGet(
       v.get('query.page'),
       v.get('query.count')
     );
-    ctx.json(arr);
+    ctx.json({
+      total: arr.length,
+      items: arr,
+      page: v.get('query.page'),
+      count: v.get('query.count')
+    });
   }
 );
 
-module.exports = { log };
+export { log };

@@ -1,8 +1,7 @@
-const { Uploader } = require('lin-mizar/lin/file');
-const { File } = require('lin-mizar');
-const { config } = require('lin-mizar/lin/config');
-const fs = require('fs');
-const path = require('path');
+import { Uploader, config } from 'lin-mizar';
+import { FileModel } from '../../models/file';
+import fs from 'fs';
+import path from 'path';
 
 class LocalUploader extends Uploader {
   /**
@@ -17,17 +16,19 @@ class LocalUploader extends Uploader {
       const md5 = this.generateMd5(file);
       const siteDomain = config.getItem('siteDomain', 'http://localhost');
       // 检查md5存在
-      const exist = await File.findOne({
+      const exist = await FileModel.findOne({
         where: {
           md5: md5
         }
       });
       if (exist) {
         arr.push({
-          key: file.fieldname,
           id: exist.id,
-          path: `${exist.path}`,
-          url: `${siteDomain}/assets/${exist.path}`
+          path: `${siteDomain}/assets/${exist.path}`,
+          type: exist.type,
+          name: exist.name,
+          extension: exist.extension,
+          size: exist.size
         });
       } else {
         const { absolutePath, relativePath, realName } = this.getStorePath(
@@ -36,7 +37,7 @@ class LocalUploader extends Uploader {
         const target = fs.createWriteStream(absolutePath);
         await target.write(file.data);
         const ext = path.extname(realName);
-        const saved = await File.createRecord(
+        const saved = await FileModel.createRecord(
           {
             path: relativePath,
             // type: 1,
@@ -48,10 +49,12 @@ class LocalUploader extends Uploader {
           true
         );
         arr.push({
-          key: file.fieldname,
           id: saved.id,
-          path: `${saved.path}`,
-          url: `${siteDomain}/assets/${saved.path}`
+          path: `${siteDomain}/assets/${saved.path}`,
+          type: saved.type,
+          name: file.name,
+          extension: saved.extension,
+          size: saved.size
         });
       }
     }

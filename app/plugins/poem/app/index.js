@@ -1,6 +1,4 @@
-'use strict';
+import { api } from './controller';
+import { Poem } from './model';
 
-const { api } = require('./controller');
-const { Poem } = require('./model');
-
-module.exports = { Poem, api };
+export { Poem, api };
