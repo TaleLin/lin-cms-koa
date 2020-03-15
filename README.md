@@ -59,7 +59,16 @@ QQ 群号：643205479
 
 <img class="QR-img" src="http://imglf6.nosdn0.126.net/img/YUdIR2E3ME5weEdlNThuRmI4TFh3UWhiNmladWVoaTlXUXpicEFPa1F6czFNYkdmcWRIbGRRPT0.jpg?imageView&thumbnail=500x0&quality=96&stripmeta=0&type=jpg">
 
-### Lin CMS 的特点
+## 版本日志
+
+最新版本 `0.3.0`
+
+### 0.3.0
+
+1. `A` 将模型层抽离核心库进行重构
+
+
+## Lin CMS 的特点
 
 Lin CMS 的构筑思想是有其自身特点的。下面我们阐述一些 Lin 的主要特点。
 

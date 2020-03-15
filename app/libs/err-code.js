@@ -1,8 +1,6 @@
-'use strict';
-
-const { HttpException } = require('lin-mizar');
-const assert = require('assert');
-const { isInteger } = require('lodash');
+import { HttpException } from 'lin-mizar';
+import assert from 'assert';
+import { isInteger } from 'lodash';
 
 class BookNotFound extends HttpException {
   constructor (ex) {

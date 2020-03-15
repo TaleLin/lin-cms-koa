@@ -1,192 +1,251 @@
-'use strict';
-/* eslint-disable new-cap */
-const {
-  ParametersException,
-  NotFound,
-  UserAdmin,
-  Forbidden,
-  findMetaByAuth,
-  unsets
-} = require('lin-mizar');
+import { NotFound, Forbidden } from 'lin-mizar';
+import { PermissionModel } from '../models/permission';
+import { UserModel, UserIdentityModel } from '../models/user';
+import { GroupModel } from '../models/group';
 
-const { has, set, get } = require('lodash');
-const { db } = require('lin-mizar/lin/db');
-const { Op } = require('sequelize');
-const dayjs = require('dayjs');
+import { GroupPermissionModel } from '../models/group-permission';
+import { UserGroupModel } from '../models/user-group';
+
+import sequelize from '../libs/db';
+import { Op } from 'sequelize';
+import { has, set, get } from 'lodash';
 
 class AdminDao {
-  async getUsers (ctx, groupId, start, count1) {
-    let sql =
-      'SELECT lin_user.*,lin_group.`name` as group_name FROM lin_user LEFT JOIN lin_group ON lin_user.group_id = lin_group.id WHERE';
-    groupId && (sql += ' lin_user.group_id = :id AND');
-    let users = await db.query(
-      sql +
-        ' lin_user.admin = :admin AND lin_user.delete_time IS NULL LIMIT :count OFFSET :start ',
-      {
-        replacements: groupId
-          ? {
-            id: groupId,
-            admin: UserAdmin.COMMON,
-            count: count1,
-            start: start * count1
-          }
-          : {
-            admin: UserAdmin.COMMON,
-            count: count1,
-            start: start * count1
-          },
-        type: db.QueryTypes.SELECT
+  async getAllPermissions () {
+    const permissions = await PermissionModel.findAll();
+    const result = Object.create(null);
+    permissions.forEach(v => {
+      const item = {
+        id: get(v, 'id'),
+        name: get(v, 'name'),
+        module: get(v, 'module')
+      };
+      if (has(result, item.module)) {
+        result[item.module].push(item);
+      } else {
+        set(result, item.module, [item]);
       }
-    );
-    let sql1 =
-      'SELECT COUNT(*) as count FROM lin_user WHERE lin_user.admin=:admin AND lin_user.delete_time IS NULL';
-    groupId && (sql1 += ` AND lin_user.group_id=${groupId}`);
-    let total = await db.query(sql1, {
-      replacements: {
-        admin: UserAdmin.COMMON
-      },
-      type: db.QueryTypes.SELECT
     });
-    users.map(user => {
-      unsets(user, ['update_time', 'delete_time', 'password']);
-      user.create_time = dayjs(user.create_time).unix();
-      return user;
-    });
-    total = total[0]['count'];
+    return result;
+  }
+
+  async getUsers (groupId, page, count1) {
+    let userIds = [];
+    const condition = {
+      offset: page * count1,
+      limit: count1
+    };
+    if (groupId) {
+      const userGroup = await UserGroupModel.findAll({
+        where: {
+          group_id: groupId
+        }
+      });
+      userIds = userGroup.map(v => v.user_id);
+      Object.assign(condition, {
+        where: {
+          id: {
+            [Op.in]: userIds
+          }
+        }
+      });
+    }
+    const { rows, count } = await UserModel.findAndCountAll(condition);
+
+    for (const user of rows) {
+      const userGroup = await UserGroupModel.findAll({
+        where: {
+          user_id: user.id
+        }
+      });
+      const groupIds = userGroup.map(v => v.group_id);
+      const groups = await GroupModel.findAll({
+        where: {
+          id: {
+            [Op.in]: groupIds
+          }
+        }
+      });
+      set(user, 'groups', groups);
+    }
+
     return {
-      users,
-      total
+      users: rows,
+      total: count
     };
   }
 
   async changeUserPassword (ctx, v) {
-    const id = v.get('path.id');
-    const user = await ctx.manager.userModel.findOne({
+    const user = await UserModel.findOne({
       where: {
-        id: id,
-        delete_time: null
+        id: v.get('path.id')
       }
     });
     if (!user) {
       throw new NotFound({
-        msg: '用户不存在'
+        msg: '用户不存在',
+        errorCode: 10021
       });
     }
-    user.resetPassword(v.get('body.new_password'));
-    user.save();
+    await UserIdentityModel.resetPassword(user, v.get('body.new_password'));
   }
 
   async deleteUser (ctx, id) {
-    const user = await ctx.manager.userModel.findOne({
+    const user = await UserModel.findOne({
       where: {
-        id: id,
-        delete_time: null
+        id
       }
     });
     if (!user) {
       throw new NotFound({
-        msg: '用户不存在'
-      });
-    }
-    user.destroy();
-  }
-
-  async updateUserInfo (ctx, v) {
-    const id = v.get('path.id');
-    const user = await ctx.manager.userModel.findOne({
-      where: {
-        id: id,
-        delete_time: null
-      }
-    });
-    if (!user) {
-      throw new NotFound({
-        msg: '用户不存在'
-      });
-    }
-    if (user.email !== v.get('body.email')) {
-      const exit = await ctx.manager.userModel.findOne({
-        where: {
-          email: v.get('body.email'),
-          delete_time: null
-        }
-      });
-      if (exit) {
-        throw new ParametersException({
-          msg: '邮箱已被注册，请重新输入邮箱'
-        });
-      }
-    }
-    user.group_id = v.get('body.group_id');
-    user.email = v.get('body.email');
-    user.save();
-  }
-
-  async getGroups (ctx, start, count1) {
-    const groups = await db.query(
-      'SELECT lin_group.* FROM lin_group LIMIT :count OFFSET :start',
-      {
-        replacements: {
-          count: count1,
-          start: start * count1
-        },
-        type: db.QueryTypes.SELECT
-      }
-    );
-    groups.forEach(async group => {
-      const auths = await db.query(
-        'SELECT lin_auth.auth,lin_auth.module FROM lin_auth WHERE lin_auth.group_id=:id',
-        {
-          replacements: {
-            id: group.id
-          },
-          type: db.QueryTypes.SELECT
-        }
-      );
-      set(group, 'auths', auths);
-      this.formatAuths(group);
-    });
-    let total = await db.query('SELECT COUNT(*) as count FROM lin_group', {
-      type: db.QueryTypes.SELECT
-    });
-    total = total[0]['count'];
-    return {
-      groups,
-      total
-    };
-  }
-
-  async getGroup (ctx, id) {
-    const group = await ctx.manager.groupModel.findByPk(id);
-    const auths = await db.query(
-      'SELECT lin_auth.auth,lin_auth.module FROM lin_auth WHERE lin_auth.group_id=:id',
-      {
-        replacements: {
-          id
-        },
-        type: db.QueryTypes.SELECT
-      }
-    );
-    set(group, 'auths', auths);
-    this.formatAuths(group);
-    return group;
-  }
-
-  async createGroup (ctx, v) {
-    const exit = await ctx.manager.groupModel.findOne({
-      where: {
-        name: v.get('body.name')
-      }
-    });
-    if (exit) {
-      throw new Forbidden({
-        msg: '分组已存在，不可创建同名分组'
+        msg: '用户不存在',
+        errorCode: 10021
       });
     }
     let transaction;
     try {
-      transaction = await db.transaction();
-      const group = await ctx.manager.groupModel.create(
+      transaction = await sequelize.transaction();
+      await user.destroy({
+        transaction
+      });
+      await UserGroupModel.destroy({
+        where: {
+          user_id: id
+        },
+        transaction
+      });
+      await UserIdentityModel.destroy({
+        where: {
+          user_id: id
+        },
+        transaction
+      });
+      await transaction.commit();
+    } catch (err) {
+      if (transaction) await transaction.rollback();
+    }
+  }
+
+  async updateUserInfo (ctx, v) {
+    const user = await UserModel.findByPk(v.get('path.id'));
+    if (!user) {
+      throw new NotFound({
+        msg: '用户不存在',
+        errorCode: 10021
+      });
+    }
+    for (const id of v.get('body.group_ids') || []) {
+      const group = await GroupModel.findByPk(id);
+      if (group.name === 'root') {
+        throw new Forbidden({
+          msg: 'root分组不可添加用户',
+          errorCode: 10073
+        });
+      }
+      if (!group) {
+        throw new NotFound({
+          msg: '不可将用户分配给不存在的分组',
+          errorCode: 10077
+        });
+      }
+    }
+
+    let transaction;
+    try {
+      transaction = await sequelize.transaction();
+      await UserGroupModel.destroy({
+        where: {
+          user_id: v.get('path.id')
+        },
+        transaction
+      });
+      for (const id of v.get('body.group_ids') || []) {
+        await UserGroupModel.create(
+          {
+            user_id: v.get('path.id'),
+            group_id: id
+          },
+          {
+            transaction
+          }
+        );
+      }
+      await transaction.commit();
+    } catch (err) {
+      if (transaction) await transaction.rollback();
+    }
+  }
+
+  async getGroups (ctx, page, count1) {
+    const { rows, count } = await GroupModel.findAndCountAll({
+      offset: page * count1,
+      limit: count1
+    });
+
+    return {
+      groups: rows,
+      total: count
+    };
+  }
+
+  async getAllGroups () {
+    const allGroups = await GroupModel.findAll();
+    return allGroups;
+  }
+
+  async getGroup (ctx, id) {
+    const group = await GroupModel.findByPk(id);
+    if (!group) {
+      throw new NotFound({
+        msg: '分组不存在',
+        errorCode: 10024
+      });
+    }
+
+    const groupPermission = await GroupPermissionModel.findAll({
+      where: {
+        group_id: id
+      }
+    });
+    const permissionIds = groupPermission.map(v => v.permission_id);
+
+    const permissions = await PermissionModel.findAll({
+      where: {
+        id: {
+          [Op.in]: permissionIds
+        }
+      }
+    });
+
+    return set(group, 'permissions', permissions);
+  }
+
+  async createGroup (ctx, v) {
+    const group = await GroupModel.findOne({
+      where: {
+        name: v.get('body.name')
+      }
+    });
+    if (group) {
+      throw new Forbidden({
+        msg: '分组已存在，不可创建同名分组'
+      });
+    }
+
+    for (const id of v.get('body.permission_ids') || []) {
+      const permission = await PermissionModel.findByPk(id);
+      if (!permission) {
+        throw new NotFound({
+          msg: '无法分配不存在的权限'
+        });
+      }
+    }
+
+    let transaction;
+    try {
+      transaction = await sequelize.transaction();
+
+      const group = await GroupModel.create(
         {
           name: v.get('body.name'),
           info: v.get('body.info')
@@ -195,13 +254,12 @@ class AdminDao {
           transaction
         }
       );
-      for (const item of v.get('body.auths')) {
-        const { auth, module } = findMetaByAuth(item);
-        await ctx.manager.authModel.create(
+
+      for (const id of v.get('body.permission_ids') || []) {
+        await GroupPermissionModel.create(
           {
-            auth,
-            module,
-            group_id: group.id
+            group_id: group.id,
+            permission_id: id
           },
           {
             transaction
@@ -216,64 +274,82 @@ class AdminDao {
   }
 
   async updateGroup (ctx, v) {
-    const id = v.get('path.id');
-    const exit = await ctx.manager.groupModel.findByPk(id);
-    if (!exit) {
+    const group = await GroupModel.findByPk(v.get('path.id'));
+    if (!group) {
       throw new NotFound({
         msg: '分组不存在，更新失败'
       });
     }
-    exit.name = v.get('body.name');
-    exit.info = v.get('body.info');
-    exit.save();
+    group.name = v.get('body.name');
+    group.info = v.get('body.info');
+    group.save();
   }
 
   async deleteGroup (ctx, id) {
-    const exit = await ctx.manager.groupModel.findByPk(id);
-    if (!exit) {
+    const group = await GroupModel.findByPk(id);
+    if (!group) {
       throw new NotFound({
-        msg: '分组不存在，删除失败'
+        msg: '分组不存在',
+        errorCode: 10024
       });
     }
-    const user = await ctx.manager.userModel.findOne({
-      where: {
-        group_id: id
-      }
-    });
-    if (user) {
+    if (group.name === 'root') {
       throw new Forbidden({
-        msg: '分组下存在用户，不可删除'
+        msg: 'root分组不可删除',
+        errorCode: 10074
+      });
+    } else if (group.name === 'guest') {
+      throw new Forbidden({
+        msg: 'guest分组不可删除',
+        errorCode: 10075
       });
     }
+
     let transaction;
     try {
-      transaction = await db.transaction();
-      await exit.destroy({
+      transaction = await sequelize.transaction();
+      await group.destroy({
         transaction
       });
-      await ctx.manager.authModel.destroy({
+      await GroupPermissionModel.destroy({
         where: {
-          group_id: id
+          group_id: group.id
+        },
+        transaction
+      });
+      await UserGroupModel.destroy({
+        where: {
+          group_id: group.id
         },
         transaction
       });
       await transaction.commit();
-    } catch (err) {
+    } catch (error) {
       if (transaction) await transaction.rollback();
     }
   }
 
-  async dispatchAuth (ctx, v) {
-    const group = await ctx.manager.groupModel.findByPk(v.get('body.group_id'));
+  async dispatchPermission (ctx, v) {
+    const group = await GroupModel.findByPk(v.get('body.group_id'));
     if (!group) {
       throw new NotFound({
         msg: '分组不存在'
       });
     }
-    const one = await ctx.manager.authModel.findOne({
+
+    const permission = await PermissionModel.findByPk(
+      v.get('body.permission_id')
+    );
+    if (!permission) {
+      throw new NotFound({
+        msg: '无法分配不存在的权限'
+      });
+    }
+
+    const one = await GroupPermissionModel.findOne({
       where: {
         group_id: v.get('body.group_id'),
-        auth: v.get('body.auth')
+        permission_id: v.get('body.permission_id')
       }
     });
     if (one) {
@@ -281,83 +357,73 @@ class AdminDao {
         msg: '已有权限，不可重复添加'
       });
     }
-    const au = new ctx.manager.authModel();
-    const { auth, module } = findMetaByAuth(v.get('body.auth'));
-    au.auth = auth;
-    au.module = module;
-    au.group_id = v.get('body.group_id');
-    await au.save();
-  }
-
-  async dispatchAuths (ctx, v) {
-    const group = await ctx.manager.groupModel.findByPk(v.get('body.group_id'));
-    if (!group) {
-      throw new NotFound({
-        msg: '分组不存在'
-      });
-    }
-    v.get('body.auths').forEach(async item => {
-      const one = await ctx.manager.authModel.findOne({
-        where: {
-          group_id: v.get('body.group_id'),
-          auth: item
-        }
-      });
-      if (!one) {
-        const au = new ctx.manager.authModel();
-        const { auth, module } = findMetaByAuth(item);
-        au.auth = auth;
-        au.module = module;
-        au.group_id = v.get('body.group_id');
-        await au.save();
-      }
+    await GroupPermissionModel.create({
+      group_id: v.get('body.group_id'),
+      permission_id: v.get('body.permission_id')
     });
   }
 
-  async removeAuths (ctx, v) {
-    const group = await ctx.manager.groupModel.findByPk(v.get('body.group_id'));
+  async dispatchPermissions (ctx, v) {
+    const group = await GroupModel.findByPk(v.get('body.group_id'));
     if (!group) {
       throw new NotFound({
         msg: '分组不存在'
       });
     }
-    await ctx.manager.authModel.destroy({
+    for (const id of v.get('body.permission_ids') || []) {
+      const permission = await PermissionModel.findByPk(id);
+      if (!permission) {
+        throw new NotFound({
+          msg: '无法分配不存在的权限'
+        });
+      }
+    }
+
+    let transaction;
+    try {
+      transaction = await sequelize.transaction();
+      for (const id of v.get('body.permission_ids')) {
+        await GroupPermissionModel.create(
+          {
+            group_id: group.id,
+            permission_id: id
+          },
+          {
+            transaction
+          }
+        );
+      }
+      await transaction.commit();
+    } catch (err) {
+      if (transaction) await transaction.rollback();
+    }
+  }
+
+  async removePermissions (ctx, v) {
+    const group = await GroupModel.findByPk(v.get('body.group_id'));
+    if (!group) {
+      throw new NotFound({
+        msg: '分组不存在'
+      });
+    }
+    for (const id of v.get('body.permission_ids') || []) {
+      const permission = await PermissionModel.findByPk(id);
+      if (!permission) {
+        throw new NotFound({
+          msg: '无法分配不存在的权限'
+        });
+      }
+    }
+
+    await GroupPermissionModel.destroy({
       where: {
         group_id: v.get('body.group_id'),
-        auth: {
-          [Op.in]: v.get('body.auths')
+        permission_id: {
+          [Op.in]: v.get('body.permission_ids')
         }
       }
     });
-  }
-
-  formatAuths (group) {
-    if (has(group, 'auths')) {
-      const aus = get(group, 'auths');
-      let tmp = {};
-      aus.forEach(au => {
-        if (!has(tmp, au['module'])) {
-          tmp[au['module']] = [
-            {
-              auth: au['auth'],
-              module: au['module']
-            }
-          ];
-        } else {
-          tmp[au['module']].push({
-            auth: au['auth'],
-            module: au['module']
-          });
-        }
-      });
-      const aus1 = Object.keys(tmp).map(key => {
-        let tm1 = Object.create(null);
-        set(tm1, key, tmp[key]);
-        return tm1;
-      });
-      set(group, 'auths', aus1);
-    }
   }
 }
 
-module.exports = { AdminDao };
+export { AdminDao };

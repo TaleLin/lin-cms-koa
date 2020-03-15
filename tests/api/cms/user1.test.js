@@ -1,10 +1,10 @@
-require('../helper/initial');
-const request = require('supertest');
-const { createApp } = require('../../app/app');
-const { db } = require('lin-mizar/lin/db');
-const { saveTokens } = require('../helper/token');
+import '../../helper/initial';
+import request from 'supertest';
+import { createApp } from '../../../app/app';
+import sequelize from '../../../app/libs/db';
+import { saveTokens } from '../../helper/token';
 
-describe('user2.test.js', () => {
+describe('user1.test.js', () => {
   let app;
 
   beforeAll(async () => {
@@ -13,7 +13,7 @@ describe('user2.test.js', () => {
 
   afterAll(() => {
     setTimeout(() => {
-      db.close();
+      sequelize.close();
     }, 500);
   });
 
@@ -32,11 +32,11 @@ describe('user2.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/login')
       .send({
-        username: 'pedro',
+        username: 'root',
         password: '147258'
       });
     expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty('error_code', 10000);
+    expect(response.body).toHaveProperty('code', 10031);
     expect(response.type).toMatch(/json/);
   });
 
@@ -44,7 +44,7 @@ describe('user2.test.js', () => {
     const response = await request(app.callback())
       .post('/cms/user/login')
       .send({
-        username: 'super',
+        username: 'root',
         password: '123456'
       });
     saveTokens(response.body);

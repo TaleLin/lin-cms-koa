@@ -1,6 +1,4 @@
-'use strict';
-
-const { LinValidator, Rule } = require('lin-mizar');
+import { LinValidator, Rule } from 'lin-mizar';
 
 class PoemListValidator extends LinValidator {
   constructor () {
@@ -20,4 +18,4 @@ class PoemSearchValidator extends LinValidator {
   }
 }
 
-module.exports = { PoemListValidator, PoemSearchValidator };
+export { PoemListValidator, PoemSearchValidator };

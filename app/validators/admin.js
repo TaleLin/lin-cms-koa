@@ -1,7 +1,7 @@
-'use strict';
-
-const { Rule, LinValidator, isNotEmpty } = require('lin-mizar');
-const { PaginateValidator, PositiveIdValidator } = require('./common');
+import { Rule, LinValidator } from 'lin-mizar';
+import { isOptional } from '../libs/util';
+import { PaginateValidator, PositiveIdValidator } from './common';
+import validator from 'validator';
 
 class AdminUsersValidator extends PaginateValidator {
   constructor () {
@@ -28,7 +28,7 @@ class ResetPasswordValidator extends PositiveIdValidator {
     if (!data.body.new_password || !data.body.confirm_password) {
       return [false, '两次输入的密码不一致，请重新输入'];
     }
-    let ok = data.body.new_password === data.body.confirm_password;
+    const ok = data.body.new_password === data.body.confirm_password;
     if (ok) {
       return ok;
     } else {
@@ -38,12 +38,23 @@ class ResetPasswordValidator extends PositiveIdValidator {
 }
 
 class UpdateUserInfoValidator extends PositiveIdValidator {
-  constructor () {
-    super();
-    this.group_id = new Rule('isInt', '分组id必须是正整数', {
-      min: 1
-    });
-    this.email = new Rule('isEmail', '电子邮箱不符合规范，请输入正确的邮箱');
+  validateGroupIds (data) {
+    const ids = data.body.group_ids;
+    if (isOptional(ids)) {
+      return true;
+    }
+    if (!Array.isArray(ids)) {
+      return [false, '每个id值必须为正整数'];
+    }
+    for (let id of ids) {
+      if (typeof id === 'number') {
+        id = String(id);
+      }
+      if (!validator.isInt(id, { min: 1 })) {
+        return [false, '每个id值必须为正整数'];
+      }
+    }
+    return true;
   }
 }
 
@@ -55,42 +66,52 @@ class UpdateGroupValidator extends PositiveIdValidator {
   }
 }
 
-class RemoveAuthsValidator extends LinValidator {
+class RemovePermissionsValidator extends LinValidator {
   constructor () {
     super();
     this.group_id = new Rule('isInt', '分组id必须正整数');
-    this.auths = new Rule('isNotEmpty', '请输入auths字段');
   }
 
-  validateAuths (data) {
-    const auths = data.body.auths;
-    if (!Array.isArray(auths)) {
-      return [false, 'auths必须为非空数组'];
+  validatePermissionIds (data) {
+    const ids = data.body.permission_ids;
+    if (!ids) {
+      return [false, '请输入permission_ids字段'];
     }
-    for (const auth of auths) {
-      if (!isNotEmpty(auth)) {
-        return [false, 'auths必须为非空数组'];
+    if (!Array.isArray(ids)) {
+      return [false, '每个id值必须为正整数'];
+    }
+    for (let id of ids) {
+      if (typeof id === 'number') {
+        id = String(id);
+      }
+      if (!validator.isInt(id, { min: 1 })) {
+        return [false, '每个id值必须为正整数'];
       }
     }
     return true;
   }
 }
 
-class DispatchAuthsValidator extends LinValidator {
+class DispatchPermissionsValidator extends LinValidator {
   constructor () {
     super();
     this.group_id = new Rule('isInt', '分组id必须正整数');
-    this.auths = new Rule('isNotEmpty', '请输入auths字段');
   }
 
-  validateAuths (data) {
-    const auths = data.body.auths;
-    if (!Array.isArray(auths)) {
-      return [false, 'auths必须为非空数组'];
+  validatePermissionIds (data) {
+    const ids = data.body.permission_ids;
+    if (!ids) {
+      return [false, '请输入permission_ids字段'];
     }
-    for (const auth of auths) {
-      if (!isNotEmpty(auth)) {
-        return [false, 'auths必须为非空数组'];
+    if (!Array.isArray(ids)) {
+      return [false, '每个id值必须为正整数'];
+    }
+    for (let id of ids) {
+      if (typeof id === 'number') {
+        id = String(id);
+      }
+      if (!validator.isInt(id, { min: 1 })) {
+        return [false, '每个id值必须为正整数'];
       }
     }
     return true;
@@ -102,38 +123,43 @@ class NewGroupValidator extends LinValidator {
     super();
     this.name = new Rule('isNotEmpty', '请输入分组名称');
     this.info = new Rule('isOptional');
-    this.auths = new Rule('isNotEmpty', '请输入auths字段');
   }
 
-  validateAuths (data) {
-    const auths = data.body.auths;
-    if (!Array.isArray(auths)) {
-      return [false, 'auths必须为非空数组'];
+  validatePermissionIds (data) {
+    const ids = data.body.permission_ids;
+    if (isOptional(ids)) {
+      return true;
     }
-    for (const auth of auths) {
-      if (!isNotEmpty(auth)) {
-        return [false, 'auths必须为非空数组'];
+    if (!Array.isArray(ids)) {
+      return [false, '每个id值必须为正整数'];
+    }
+    for (let id of ids) {
+      if (typeof id === 'number') {
+        id = String(id);
+      }
+      if (!validator.isInt(id, { min: 1 })) {
+        return [false, '每个id值必须为正整数'];
       }
     }
     return true;
   }
 }
 
-class DispatchAuthValidator extends LinValidator {
+class DispatchPermissionValidator extends LinValidator {
   constructor () {
     super();
     this.group_id = new Rule('isInt', '分组id必须正整数');
-    this.auth = new Rule('isNotEmpty', '请输入auth字段');
+    this.permission_id = new Rule('isNotEmpty', '请输入permission_id字段');
   }
 }
 
-module.exports = {
+export {
+  AdminUsersValidator,
+  ResetPasswordValidator,
   UpdateGroupValidator,
   UpdateUserInfoValidator,
-  DispatchAuthValidator,
+  DispatchPermissionValidator,
+  DispatchPermissionsValidator,
   NewGroupValidator,
-  DispatchAuthsValidator,
-  RemoveAuthsValidator,
-  ResetPasswordValidator,
-  AdminUsersValidator
+  RemovePermissionsValidator
 };

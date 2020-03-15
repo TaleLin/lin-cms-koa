@@ -13,19 +13,14 @@ module.exports = {
   refreshExp: 60 * 60 * 24 * 30,
   // 暂不启用插件
   pluginPath: {
-    // plugin name
+    // // plugin name
     // poem: {
     //   // determine a plugin work or not
     //   enable: true,
-    //   // path of the plugin that relatived the workdir
+    //   // path of the plugin
     //   path: "app/plugins/poem",
     //   // other config
     //   limit: 2
     // },
-    // notify: {
-    //   enable: true,
-    //   path: "app/plugins/notify",
-    //   retry: 2000
-    // }
   }
 };

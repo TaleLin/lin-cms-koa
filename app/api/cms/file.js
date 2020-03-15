@@ -1,7 +1,7 @@
-'use strict';
+import { LinRouter, ParametersException } from 'lin-mizar';
 
-const { LinRouter, ParametersException, loginRequired } = require('lin-mizar');
-const { LocalUploader } = require('../../extensions/file/local-uploader');
+import { loginRequired } from '../../middleware/jwt';
+import { LocalUploader } from '../../extensions/file/local-uploader';
 
 const file = new LinRouter({
   prefix: '/cms/file'
@@ -17,4 +17,4 @@ file.linPost('upload', '/', {}, loginRequired, async ctx => {
   ctx.json(arr);
 });
 
-module.exports = { file };
+export { file };

@@ -1,9 +1,10 @@
-require('../helper/initial');
-const request = require('supertest');
-const { createApp } = require('../../app/app');
-const { db } = require('lin-mizar/lin/db');
+import '../../helper/initial';
+import request from 'supertest';
+import { createApp } from '../../../app/app';
+import sequelize from '../../../app/libs/db';
+import { getToken } from '../../helper/token';
 
-describe('user.test.js', () => {
+describe('user2.test.js', () => {
   let app;
 
   beforeAll(async () => {
@@ -12,108 +13,131 @@ describe('user.test.js', () => {
 
   afterAll(() => {
     setTimeout(() => {
-      db.close();
+      sequelize.close();
     }, 500);
   });
 
   test('测试/cms/user/register 不输入邮箱，重复密码错误', async () => {
+    const token = getToken();
     const response = await request(app.callback())
       .post('/cms/user/register')
+      .auth(token, {
+        type: 'bearer'
+      })
       .send({
         username: 'pedro',
-        group_id: 1,
         password: '123456',
         confirm_password: '123455'
       });
     expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error_code', 10030);
+    expect(response.body).toHaveProperty('code', 10030);
     expect(response.type).toMatch(/json/);
   });
 
   test('测试/cms/user/register 输入不正确邮箱', async () => {
+    const token = getToken();
     const response = await request(app.callback())
       .post('/cms/user/register')
+      .auth(token, {
+        type: 'bearer'
+      })
       .send({
         username: 'pedro',
-        group_id: 1,
         email: '8680909709j',
         password: '123456',
         confirm_password: '123456'
       });
     expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error_code', 10030);
+    expect(response.body).toHaveProperty('code', 10030);
     expect(response.type).toMatch(/json/);
   });
 
   test('测试/cms/user/register 输入不规范用户名', async () => {
+    const token = getToken();
     const response = await request(app.callback())
       .post('/cms/user/register')
+      .auth(token, {
+        type: 'bearer'
+      })
       .send({
         username: 'p',
-        group_id: 1,
         password: '123456',
         confirm_password: '123456'
       });
     expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error_code', 10030);
+    expect(response.body).toHaveProperty('code', 10030);
     expect(response.type).toMatch(/json/);
   });
 
   test('测试/cms/user/register 输入不规范分组id', async () => {
+    const token = getToken();
     const response = await request(app.callback())
       .post('/cms/user/register')
+      .auth(token, {
+        type: 'bearer'
+      })
       .send({
         username: 'pedro',
-        group_id: 0,
+        group_ids: 0,
         password: '123456',
         confirm_password: '123456'
       });
     expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error_code', 10030);
+    expect(response.body).toHaveProperty('code', 10030);
     expect(response.type).toMatch(/json/);
   });
 
-  test('测试/cms/user/register 正常注册', async () => {
-    const response = await request(app.callback())
-      .post('/cms/user/register')
-      .send({
-        username: 'peter',
-        group_id: 1,
-        email: '1312342604@qq.com',
-        password: '123456',
-        confirm_password: '123456'
-      });
-    expect(response.status).toBe(201);
-    expect(response.type).toMatch(/json/);
-  });
+  // test('测试/cms/user/register 正常注册', async () => {
+  //   const token = getToken()
+  //   const response = await request(app.callback())
+  //     .post('/cms/user/register')
+  //     .auth(token, {
+  //       type: 'bearer'
+  //     })
+  //     .send({
+  //       username: 'peter',
+  //       email: '123456@gmail.com',
+  //       group_ids: [],
+  //       password: '123456',
+  //       confirm_password: '123456',
+  //     });
+  //   expect(response.status).toBe(201);
+  //   expect(response.type).toMatch(/json/);
+  // });
 
   test('测试/cms/user/register 用户名重复错误', async () => {
+    const token = getToken();
     const response = await request(app.callback())
       .post('/cms/user/register')
+      .auth(token, {
+        type: 'bearer'
+      })
       .send({
-        username: 'pedro',
-        group_id: 1,
-        email: '1312342604@qq.com',
+        username: 'peter',
+        email: '654321@gmail.com',
         password: '123456',
         confirm_password: '123456'
       });
     expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error_code', 10060);
+    expect(response.body).toHaveProperty('code', 10071);
     expect(response.type).toMatch(/json/);
   });
 
   test('测试/cms/user/register 邮箱重复错误', async () => {
+    const token = getToken();
     const response = await request(app.callback())
       .post('/cms/user/register')
+      .auth(token, {
+        type: 'bearer'
+      })
       .send({
         username: 'ooooo',
-        group_id: 1,
-        email: '13123433@qq.com',
+        email: '123456@gmail.com',
         password: '123456',
         confirm_password: '123456'
       });
     expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty('error_code', 10060);
+    expect(response.body).toHaveProperty('code', 10076);
     expect(response.type).toMatch(/json/);
   });
 });

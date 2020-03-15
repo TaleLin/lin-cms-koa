@@ -1,25 +1,19 @@
-/* eslint-disable new-cap */
-'use strict';
-
-const {
-  LinRouter,
-  getTokens,
-  loginRequired,
-  adminRequired,
-  refreshTokenRequiredWithUnifyException,
-  Failed,
-  logger
-} = require('lin-mizar');
-
-const {
+import { LinRouter, getTokens } from 'lin-mizar';
+import {
   RegisterValidator,
   LoginValidator,
   UpdateInfoValidator,
-  ChangePasswordValidator,
-  AvatarUpdateValidator
-} = require('../../validators/user');
+  ChangePasswordValidator
+} from '../../validators/user';
 
-const { UserDao } = require('../../dao/user');
+import {
+  adminRequired,
+  loginRequired,
+  refreshTokenRequiredWithUnifyException
+} from '../../middleware/jwt';
+import { UserIdentityModel } from '../../models/user';
+import { logger } from '../../middleware/logger';
+import { UserDao } from '../../dao/user';
 
 const user = new LinRouter({
   prefix: '/cms/user'
@@ -39,9 +33,10 @@ user.linPost(
   logger('管理员新建了一个用户'),
   async ctx => {
     const v = await new RegisterValidator().validate(ctx);
-    await userDao.createUser(ctx, v);
+    await userDao.createUser(v);
     ctx.success({
-      msg: '用户创建成功'
+      msg: '注册成功',
+      errorCode: 9
     });
   }
 );
@@ -56,11 +51,13 @@ user.linPost(
   },
   async ctx => {
     const v = await new LoginValidator().validate(ctx);
-    let user = await ctx.manager.userModel.verify(
+    const user = await UserIdentityModel.verify(
       v.get('body.username'),
       v.get('body.password')
     );
-    const { accessToken, refreshToken } = getTokens(user);
+    const { accessToken, refreshToken } = getTokens({
+      id: user.user_id
+    });
     ctx.json({
       access_token: accessToken,
       refresh_token: refreshToken
@@ -72,7 +69,7 @@ user.linPut(
   'userUpdate',
   '/',
   {
-    auth: '用户更新信息',
+    auth: '更新用户信息',
     module: '用户',
     mount: false
   },
@@ -81,7 +78,8 @@ user.linPut(
     const v = await new UpdateInfoValidator().validate(ctx);
     await userDao.updateUser(ctx, v);
     ctx.success({
-      msg: '操作成功'
+      msg: '更新用户成功',
+      errorCode: 4
     });
   }
 );
@@ -96,20 +94,16 @@ user.linPut(
   },
   loginRequired,
   async ctx => {
+    const user = ctx.currentUser;
     const v = await new ChangePasswordValidator().validate(ctx);
-    let user = ctx.currentUser;
-    const ok = user.changePassword(
+    await UserIdentityModel.changePassword(
+      user,
       v.get('body.old_password'),
       v.get('body.new_password')
     );
-    if (!ok) {
-      throw new Failed({
-        msg: '修改密码失败，你可能输入了错误的旧密码'
-      });
-    }
-    user.save();
     ctx.success({
-      msg: '密码修改成功'
+      msg: '密码修改成功',
+      errorCode: 2
     });
   }
 );
@@ -124,7 +118,7 @@ user.linGet(
   },
   refreshTokenRequiredWithUnifyException,
   async ctx => {
-    let user = ctx.currentUser;
+    const user = ctx.currentUser;
     const { accessToken, refreshToken } = getTokens(user);
     ctx.json({
       access_token: accessToken,
@@ -134,16 +128,16 @@ user.linGet(
 );
 
 user.linGet(
-  'userGetAuths',
-  '/auths',
+  'userGetPermissions',
+  '/permissions',
   {
     auth: '查询自己拥有的权限',
     module: '用户',
-    mount: false
+    mount: true
   },
   loginRequired,
   async ctx => {
-    let user = await userDao.getAuths(ctx);
+    const user = await userDao.getPermissions(ctx);
     ctx.json(user);
   }
 );
@@ -154,22 +148,13 @@ user.linGet(
   {
     auth: '查询自己信息',
     module: '用户',
-    mount: false
+    mount: true
   },
   loginRequired,
   async ctx => {
-    const user = ctx.currentUser;
-    ctx.json(user);
+    const info = await userDao.getInformation(ctx);
+    ctx.json(info);
   }
 );
 
-user.put('/avatar', loginRequired, async ctx => {
-  const v = await new AvatarUpdateValidator().validate(ctx);
-  const avatar = v.get('body.avatar');
-  let user = ctx.currentUser;
-  user.avatar = avatar;
-  await user.save();
-  ctx.success({ msg: '更新头像成功' });
-});
-
-module.exports = { user };
+export { user };

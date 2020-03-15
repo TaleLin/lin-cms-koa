@@ -1,8 +1,6 @@
-'use strict';
-
-const Router = require('koa-router');
-const { PoemListValidator, PoemSearchValidator } = require('./validators');
-const { Poem } = require('./model');
+import Router from 'koa-router';
+import { PoemListValidator, PoemSearchValidator } from './validators';
+import { Poem } from './model';
 
 const api = new Router({ prefix: '/poem' });
 
@@ -23,4 +21,4 @@ api.get('/authors', async ctx => {
   ctx.json(authors);
 });
 
-module.exports = { api };
+export { api };
