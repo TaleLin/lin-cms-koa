@@ -156,26 +156,6 @@ CREATE TABLE book
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_general_ci;
 
--- ----------------------------
--- 插入超级管理员
--- 插入root分组
--- VALUES (1, 1, 'USERNAME_PASSWORD', 'root', 'sha1$c419e500$1$84869e5560ebf3de26b6690386484929456d6c07');
--- ----------------------------
-BEGIN;
-INSERT INTO lin_user(id, username, nickname)
-VALUES (1, 'root', 'root');
-
-INSERT INTO lin_user_identity (id, user_id, identity_type, identifier, credential)
-
-VALUES (1, 1, 'USERNAME_PASSWORD', 'root',
-        'sha1$c419e500$1$84869e5560ebf3de26b6690386484929456d6c07');
-
-INSERT INTO lin_group(id, name, info)
-VALUES (1, 'root', '超级用户组');
-
-INSERT INTO lin_group(id, name, info)
-VALUES (2, 'guest', '游客组');
-COMMIT;
 
 -- ----------------------------
 -- 用户-分组表
@@ -195,17 +175,42 @@ CREATE TABLE lin_user_group
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ----------------------------
--- 测试用户是否有无权限
+-- 插入超级管理员
+-- 插入root分组
+-- VALUES (1, 1, 'USERNAME_PASSWORD', 'root', 'sha1$c419e500$1$84869e5560ebf3de26b6690386484929456d6c07');
 -- ----------------------------
 BEGIN;
+INSERT INTO lin_user(id, username, nickname)
+VALUES (1, 'root', 'root');
+
+INSERT INTO lin_user_identity (id, user_id, identity_type, identifier, credential)
+
+VALUES (1, 1, 'USERNAME_PASSWORD', 'root',
+        'sha1$c419e500$1$84869e5560ebf3de26b6690386484929456d6c07');
+
+INSERT INTO lin_group(id, name, info)
+VALUES (1, 'root', '超级用户组');
+
+INSERT INTO lin_group(id, name, info)
+VALUES (2, 'guest', '游客组');
 
 INSERT INTO lin_user_group(id, user_id, group_id)
 VALUES (1, 1, 1);
---
--- 从分组找
---
-SELECT *
-from lin_group_permission
-WHERE group_id in (SELECT group_id FROM lin_user_group WHERE user_id = 1);
 
 COMMIT;
+
+-- ----------------------------
+-- -- 测试用户是否有无权限
+-- -- ----------------------------
+-- BEGIN;
+
+-- INSERT INTO lin_user_group(id, user_id, group_id)
+-- VALUES (1, 1, 1);
+-- --
+-- -- 从分组找
+-- --
+-- -- SELECT *
+-- -- from lin_group_permission
+-- -- WHERE group_id in (SELECT group_id FROM lin_user_group WHERE user_id = 1);
+
+-- COMMIT;

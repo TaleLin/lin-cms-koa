@@ -1,6 +1,6 @@
 {
   "name": "lin-cms-koa",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "simple and practical CMS implememted by koa",
   "main": "app/starter.js",
   "scripts": {
@@ -13,7 +13,7 @@
     "cms",
     "koa"
   ],
-  "author": "pedro",
+  "author": "Pedro/Shirmy/Evan",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.4.5",
