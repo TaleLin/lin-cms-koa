@@ -6,7 +6,7 @@ class Log extends Model {
     const origin = {
       id: this.id,
       message: this.message,
-      time: this.time,
+      time: this.create_time,
       user_id: this.user_id,
       username: this.username,
       status_code: this.status_code,
