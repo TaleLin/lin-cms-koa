@@ -46,7 +46,8 @@
     "koa-bodyparser": "^4.2.1",
     "koa-mount": "^4.0.0",
     "koa-static": "^5.0.0",
-    "lin-mizar": "^0.3.1",
+    "lin-mizar": "^0.3.2",
+    "mysql2": "^2.1.0",
     "sequelize": "^5.3.5"
   }
 }

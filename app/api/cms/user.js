@@ -25,7 +25,7 @@ user.linPost(
   'userRegister',
   '/register',
   {
-    auth: '注册',
+    permission: '注册',
     module: '用户',
     mount: false
   },
@@ -45,7 +45,7 @@ user.linPost(
   'userLogin',
   '/login',
   {
-    auth: '登陆',
+    permission: '登陆',
     module: '用户',
     mount: false
   },
@@ -69,7 +69,7 @@ user.linPut(
   'userUpdate',
   '/',
   {
-    auth: '更新用户信息',
+    permission: '更新用户信息',
     module: '用户',
     mount: false
   },
@@ -88,7 +88,7 @@ user.linPut(
   'userUpdatePassword',
   '/change_password',
   {
-    auth: '修改密码',
+    permission: '修改密码',
     module: '用户',
     mount: false
   },
@@ -112,7 +112,7 @@ user.linGet(
   'userGetToken',
   '/refresh',
   {
-    auth: '刷新令牌',
+    permission: '刷新令牌',
     module: '用户',
     mount: false
   },
@@ -131,7 +131,7 @@ user.linGet(
   'userGetPermissions',
   '/permissions',
   {
-    auth: '查询自己拥有的权限',
+    permission: '查询自己拥有的权限',
     module: '用户',
     mount: true
   },
@@ -146,7 +146,7 @@ user.linGet(
   'getInformation',
   '/information',
   {
-    auth: '查询自己信息',
+    permission: '查询自己信息',
     module: '用户',
     mount: true
   },

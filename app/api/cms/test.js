@@ -19,7 +19,7 @@ test.linGet(
   'getTestMsg',
   '/json',
   {
-    auth: '测试日志记录',
+    permission: '测试日志记录',
     module: '信息',
     mount: true
   },
@@ -36,7 +36,7 @@ test.linGet(
   'getTestInfo',
   '/info',
   {
-    auth: '查看lin的信息',
+    permission: '查看lin的信息',
     module: '信息',
     mount: true
   },

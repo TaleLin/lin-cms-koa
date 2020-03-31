@@ -27,7 +27,7 @@ admin.linGet(
   'getAllPermissions',
   '/permission',
   {
-    auth: '查询所有可分配的权限',
+    permission: '查询所有可分配的权限',
     module: '管理员',
     mount: false
   },
@@ -42,7 +42,7 @@ admin.linGet(
   'getAdminUsers',
   '/users',
   {
-    auth: '查询所有用户',
+    permission: '查询所有用户',
     module: '管理员',
     mount: false
   },
@@ -67,7 +67,7 @@ admin.linPut(
   'changeUserPassword',
   '/user/:id/password',
   {
-    auth: '修改用户密码',
+    permission: '修改用户密码',
     module: '管理员',
     mount: false
   },
@@ -86,7 +86,7 @@ admin.linDelete(
   'deleteUser',
   '/user/:id',
   {
-    auth: '删除用户',
+    permission: '删除用户',
     module: '管理员',
     mount: false
   },
@@ -106,7 +106,7 @@ admin.linPut(
   'updateUser',
   '/user/:id',
   {
-    auth: '管理员更新用户信息',
+    permission: '管理员更新用户信息',
     module: '管理员',
     mount: false
   },
@@ -125,7 +125,7 @@ admin.linGet(
   'getAdminGroups',
   '/group',
   {
-    auth: '查询所有权限组及其权限',
+    permission: '查询所有权限组及其权限',
     module: '管理员',
     mount: false
   },
@@ -155,7 +155,7 @@ admin.linGet(
   'getAllGroup',
   '/group/all',
   {
-    auth: '查询所有权限组',
+    permission: '查询所有权限组',
     module: '管理员',
     mount: false
   },
@@ -175,7 +175,7 @@ admin.linGet(
   'getGroup',
   '/group/:id',
   {
-    auth: '查询一个权限组及其权限',
+    permission: '查询一个权限组及其权限',
     module: '管理员',
     mount: false
   },
@@ -191,7 +191,7 @@ admin.linPost(
   'createGroup',
   '/group',
   {
-    auth: '新建权限组',
+    permission: '新建权限组',
     module: '管理员',
     mount: false
   },
@@ -215,7 +215,7 @@ admin.linPut(
   'updateGroup',
   '/group/:id',
   {
-    auth: '更新一个权限组',
+    permission: '更新一个权限组',
     module: '管理员',
     mount: false
   },
@@ -234,7 +234,7 @@ admin.linDelete(
   'deleteGroup',
   '/group/:id',
   {
-    auth: '删除一个权限组',
+    permission: '删除一个权限组',
     module: '管理员',
     mount: false
   },
@@ -254,7 +254,7 @@ admin.linPost(
   'dispatchPermission',
   '/permission/dispatch',
   {
-    auth: '分配单个权限',
+    permission: '分配单个权限',
     module: '管理员',
     mount: false
   },
@@ -273,7 +273,7 @@ admin.linPost(
   'dispatchPermissions',
   '/permission/dispatch/batch',
   {
-    auth: '分配多个权限',
+    permission: '分配多个权限',
     module: '管理员',
     mount: false
   },
@@ -292,7 +292,7 @@ admin.linPost(
   'removePermissions',
   '/permission/remove',
   {
-    auth: '删除多个权限',
+    permission: '删除多个权限',
     module: '管理员',
     mount: false
   },
