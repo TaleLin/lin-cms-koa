@@ -13,7 +13,7 @@ const REG_XP = /(?<=\{)[^}]*(?=\})/g;
  *  "getTestMsg",
  * "/json",
  *  {
- *   auth: "hello",
+ *   permission: "hello",
  *   module: "world",
  *   mount: true
  * },
@@ -44,9 +44,9 @@ function writeLog (template, ctx) {
   );
   if (ctx.matched) {
     const info = findAuthAndModule(ctx);
-    let auth = '';
+    let permission = '';
     if (info) {
-      auth = get(info, 'auth');
+      permission = get(info, 'permission');
     }
     const statusCode = ctx.status || 0;
     LogModel.createLog(
@@ -57,7 +57,7 @@ function writeLog (template, ctx) {
         status_code: statusCode,
         method: ctx.request.method,
         path: ctx.request.path,
-        permission: auth
+        permission
       },
       true
     );

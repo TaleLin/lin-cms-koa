@@ -72,7 +72,7 @@ bookApi.linDelete(
   'deleteBook',
   '/:id',
   {
-    auth: '删除图书',
+    permission: '删除图书',
     module: '图书',
     mount: true
   },

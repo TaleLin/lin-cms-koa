@@ -112,7 +112,7 @@ async function groupRequired (ctx, next) {
       if (ctx.matched) {
         const routeName = ctx._matchedRouteName || ctx.routerName;
         const endpoint = `${ctx.method} ${routeName}`;
-        const { auth, module } = routeMetaInfo.get(endpoint);
+        const { permission, module } = routeMetaInfo.get(endpoint);
         const userGroup = await UserGroupModel.findAll({
           where: {
             user_id: ctx.currentUser.id
@@ -129,7 +129,7 @@ async function groupRequired (ctx, next) {
         const permissionIds = uniq(groupPermission.map(v => v.permission_id));
         const item = await PermissionModel.findOne({
           where: {
-            name: auth,
+            name: permission,
             module,
             id: {
               [Op.in]: permissionIds

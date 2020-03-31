@@ -15,7 +15,7 @@ log.linGet(
   'getLogs',
   '/',
   {
-    auth: '查询所有日志',
+    permission: '查询所有日志',
     module: '日志',
     mount: true
   },
@@ -41,7 +41,7 @@ log.linGet(
   'getUserLogs',
   '/search',
   {
-    auth: '搜索日志',
+    permission: '搜索日志',
     module: '日志',
     mount: true
   },
@@ -63,7 +63,7 @@ log.linGet(
   'getUsers',
   '/users',
   {
-    auth: '查询日志记录的用户',
+    permission: '查询日志记录的用户',
     module: '日志',
     mount: true
   },
