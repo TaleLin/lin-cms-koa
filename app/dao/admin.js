@@ -32,6 +32,11 @@ class AdminDao {
   async getUsers (groupId, page, count1) {
     let userIds = [];
     const condition = {
+      where: {
+        username: {
+          [Op.ne]: 'root'
+        }
+      },
       offset: page * count1,
       limit: count1
     };
@@ -42,12 +47,8 @@ class AdminDao {
         }
       });
       userIds = userGroup.map(v => v.user_id);
-      Object.assign(condition, {
-        where: {
-          id: {
-            [Op.in]: userIds
-          }
-        }
+      set(condition, 'where.id', {
+        [Op.in]: userIds
       });
     }
     const { rows, count } = await UserModel.findAndCountAll(condition);
@@ -134,6 +135,29 @@ class AdminDao {
         errorCode: 10021
       });
     }
+
+    const userGroup = await UserGroupModel.findAll({
+      where: {
+        user_id: user.id
+      }
+    });
+    const groupIds = userGroup.map(v => v.group_id);
+    const isAdmin = await GroupModel.findOne({
+      where: {
+        name: 'root',
+        id: {
+          [Op.in]: groupIds
+        }
+      }
+    });
+
+    if (isAdmin) {
+      throw new Forbidden({
+        msg: '不可修改root用户的分组',
+        errorCode: 10078
+      });
+    }
+
     for (const id of v.get('body.group_ids') || []) {
       const group = await GroupModel.findByPk(id);
       if (group.name === 'root') {
@@ -189,7 +213,13 @@ class AdminDao {
   }
 
   async getAllGroups () {
-    const allGroups = await GroupModel.findAll();
+    const allGroups = await GroupModel.findAll({
+      where: {
+        name: {
+          [Op.ne]: 'root'
+        }
+      }
+    });
     return allGroups;
   }
 
