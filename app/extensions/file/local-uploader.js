@@ -24,7 +24,9 @@ class LocalUploader extends Uploader {
       if (exist) {
         arr.push({
           id: exist.id,
-          path: `${siteDomain}/assets/${exist.path}`,
+          key: file.fieldname,
+          path: exist.path,
+          url: `${siteDomain}/assets/${exist.path}`,
           type: exist.type,
           name: exist.name,
           extension: exist.extension,
@@ -50,7 +52,9 @@ class LocalUploader extends Uploader {
         );
         arr.push({
           id: saved.id,
-          path: `${siteDomain}/assets/${saved.path}`,
+          key: file.fieldname,
+          path: exist.path,
+          url: `${siteDomain}/assets/${saved.path}`,
           type: saved.type,
           name: file.name,
           extension: saved.extension,
