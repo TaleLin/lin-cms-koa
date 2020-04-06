@@ -23,7 +23,8 @@ class Permission extends Model {
         if (
           permissions.find(
             permission =>
-              permission.name === permissionName && permission.module === moduleName
+              permission.name === permissionName &&
+              permission.module === moduleName
           )
         ) {
           continue;
@@ -38,7 +39,9 @@ class Permission extends Model {
       }
       const permissionIds = [];
       for (const { id, name, module: moduleName } of permissions) {
-        if (info.find(val => val.permission === name && val.module === moduleName)) {
+        if (
+          info.find(val => val.permission === name && val.module === moduleName)
+        ) {
           continue;
         }
         await this.destroy({
