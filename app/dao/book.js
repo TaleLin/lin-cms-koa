@@ -1,5 +1,5 @@
 import { NotFound, Forbidden } from 'lin-mizar';
-import { Book } from '../models/book';
+import { Book } from '../model/book';
 import Sequelize from 'sequelize';
 
 class BookDao {

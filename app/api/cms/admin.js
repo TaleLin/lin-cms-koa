@@ -8,11 +8,11 @@ import {
   DispatchPermissionValidator,
   DispatchPermissionsValidator,
   RemovePermissionsValidator
-} from '../../validators/admin';
+} from '../../validator/admin';
 import {
   PositiveIdValidator,
   PaginateValidator
-} from '../../validators/common';
+} from '../../validator/common';
 
 import { adminRequired } from '../../middleware/jwt';
 import { AdminDao } from '../../dao/admin';

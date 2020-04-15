@@ -6,11 +6,11 @@ import {
   TokenType,
   routeMetaInfo
 } from 'lin-mizar';
-import { UserGroupModel } from '../models/user-group';
-import { GroupModel } from '../models/group';
-import { GroupPermissionModel } from '../models/group-permission';
-import { PermissionModel } from '../models/permission';
-import { UserModel } from '../models/user';
+import { UserGroupModel } from '../model/user-group';
+import { GroupModel } from '../model/group';
+import { GroupPermissionModel } from '../model/group-permission';
+import { PermissionModel } from '../model/permission';
+import { UserModel } from '../model/user';
 import { Op } from 'sequelize';
 import { uniq } from 'lodash';
 

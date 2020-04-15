@@ -18,7 +18,7 @@ module.exports = {
     //   // determine a plugin work or not
     //   enable: true,
     //   // path of the plugin
-    //   path: "app/plugins/poem",
+    //   path: "app/plugin/poem",
     //   // other config
     //   limit: 2
     // },

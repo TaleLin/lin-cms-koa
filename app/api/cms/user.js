@@ -4,14 +4,14 @@ import {
   LoginValidator,
   UpdateInfoValidator,
   ChangePasswordValidator
-} from '../../validators/user';
+} from '../../validator/user';
 
 import {
   adminRequired,
   loginRequired,
   refreshTokenRequiredWithUnifyException
 } from '../../middleware/jwt';
-import { UserIdentityModel } from '../../models/user';
+import { UserIdentityModel } from '../../model/user';
 import { logger } from '../../middleware/logger';
 import { UserDao } from '../../dao/user';
 

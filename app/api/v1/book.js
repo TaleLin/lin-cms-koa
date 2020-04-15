@@ -3,11 +3,11 @@ import { groupRequired } from '../../middleware/jwt';
 import {
   BookSearchValidator,
   CreateOrUpdateBookValidator
-} from '../../validators/book';
-import { PositiveIdValidator } from '../../validators/common';
+} from '../../validator/book';
+import { PositiveIdValidator } from '../../validator/common';
 
-import { getSafeParamId } from '../../libs/util';
-import { BookNotFound } from '../../libs/err-code';
+import { getSafeParamId } from '../../lib/util';
+import { BookNotFound } from '../../lib/err-code';
 import { BookDao } from '../../dao/book';
 
 // book 的红图实例

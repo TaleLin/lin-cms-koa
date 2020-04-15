@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
-import { LogModel } from '../models/log';
+import { LogModel } from '../model/log';
 import { set } from 'lodash';
-import sequelize from '../libs/db';
+import sequelize from '../lib/db';
 
 class LogDao {
   async getLogs (v) {
