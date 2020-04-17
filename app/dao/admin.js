@@ -1,12 +1,12 @@
 import { NotFound, Forbidden } from 'lin-mizar';
-import { PermissionModel } from '../models/permission';
-import { UserModel, UserIdentityModel } from '../models/user';
-import { GroupModel } from '../models/group';
+import { PermissionModel } from '../model/permission';
+import { UserModel, UserIdentityModel } from '../model/user';
+import { GroupModel } from '../model/group';
 
-import { GroupPermissionModel } from '../models/group-permission';
-import { UserGroupModel } from '../models/user-group';
+import { GroupPermissionModel } from '../model/group-permission';
+import { UserGroupModel } from '../model/user-group';
 
-import sequelize from '../libs/db';
+import sequelize from '../lib/db';
 import { Op } from 'sequelize';
 import { has, set, get } from 'lodash';
 

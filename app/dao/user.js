@@ -1,11 +1,11 @@
-import { RepeatException, generate, NotFound, Forbidden } from 'lin-mizar';
-import { UserModel, UserIdentityModel, identityType } from '../models/user';
-import { UserGroupModel } from '../models/user-group';
-import { GroupPermissionModel } from '../models/group-permission';
-import { PermissionModel } from '../models/permission';
-import { GroupModel } from '../models/group';
+import { RepeatException, generate, NotFound, Forbidden, config } from 'lin-mizar';
+import { UserModel, UserIdentityModel, identityType } from '../model/user';
+import { UserGroupModel } from '../model/user-group';
+import { GroupPermissionModel } from '../model/group-permission';
+import { PermissionModel } from '../model/permission';
+import { GroupModel } from '../model/group';
 
-import sequelize from '../libs/db';
+import sequelize from '../lib/db';
 import { Op } from 'sequelize';
 import { set, has, uniq } from 'lodash';
 
@@ -108,6 +108,7 @@ class UserDao {
         }
       }
     });
+    
     set(user, 'groups', groups);
     return user;
   }

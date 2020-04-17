@@ -1,6 +1,6 @@
 import { LinRouter, NotFound } from 'lin-mizar';
-import { LogFindValidator } from '../../validators/log';
-import { PaginateValidator } from '../../validators/common';
+import { LogFindValidator } from '../../validator/log';
+import { PaginateValidator } from '../../validator/common';
 
 import { groupRequired } from '../../middleware/jwt';
 import { LogDao } from '../../dao/log';
