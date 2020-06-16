@@ -1,6 +1,6 @@
 import { NotFound, Forbidden } from 'lin-mizar';
-import { Book } from '../model/book';
 import Sequelize from 'sequelize';
+import { Book } from '../model/book';
 
 class BookDao {
   async getBook (id) {
@@ -36,7 +36,7 @@ class BookDao {
     });
     if (book) {
       throw new Forbidden({
-        msg: '图书已存在'
+        code: 10240
       });
     }
     const bk = new Book();
@@ -44,21 +44,21 @@ class BookDao {
     bk.author = v.get('body.author');
     bk.summary = v.get('body.summary');
     bk.image = v.get('body.image');
-    bk.save();
+    await bk.save();
   }
 
   async updateBook (v, id) {
     const book = await Book.findByPk(id);
     if (!book) {
       throw new NotFound({
-        msg: '没有找到相关书籍'
+        code: 10022
       });
     }
     book.title = v.get('body.title');
     book.author = v.get('body.author');
     book.summary = v.get('body.summary');
     book.image = v.get('body.image');
-    book.save();
+    await book.save();
   }
 
   async deleteBook (id) {
@@ -69,7 +69,7 @@ class BookDao {
     });
     if (!book) {
       throw new NotFound({
-        msg: '没有找到相关书籍'
+        code: 10022
       });
     }
     book.destroy();

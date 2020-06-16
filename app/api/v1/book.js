@@ -7,12 +7,13 @@ import {
 import { PositiveIdValidator } from '../../validator/common';
 
 import { getSafeParamId } from '../../lib/util';
-import { BookNotFound } from '../../lib/err-code';
+import { BookNotFound } from '../../lib/exception';
 import { BookDao } from '../../dao/book';
 
 // book 的红图实例
 const bookApi = new LinRouter({
-  prefix: '/v1/book'
+  prefix: '/v1/book',
+  module: '图书'
 });
 
 // book 的dao 数据库访问层实例
@@ -24,7 +25,7 @@ bookApi.get('/:id', async ctx => {
   const book = await bookDto.getBook(id);
   if (!book) {
     throw new NotFound({
-      msg: '没有找到相关书籍'
+      code: 10022
     });
   }
   ctx.json(book);
@@ -34,7 +35,7 @@ bookApi.get('/', async ctx => {
   const books = await bookDto.getBooks();
   // if (!books || books.length < 1) {
   //   throw new NotFound({
-  //     msg: '没有找到相关书籍'
+  //     message: '没有找到相关书籍'
   //   });
   // }
   ctx.json(books);
@@ -53,8 +54,7 @@ bookApi.post('/', async ctx => {
   const v = await new CreateOrUpdateBookValidator().validate(ctx);
   await bookDto.createBook(v);
   ctx.success({
-    msg: '新建图书成功',
-    errorCode: 10
+    code: 12
   });
 });
 
@@ -63,27 +63,21 @@ bookApi.put('/:id', async ctx => {
   const id = getSafeParamId(ctx);
   await bookDto.updateBook(v, id);
   ctx.success({
-    msg: '更新图书成功',
-    errorCode: 11
+    code: 13
   });
 });
 
 bookApi.linDelete(
   'deleteBook',
   '/:id',
-  {
-    permission: '删除图书',
-    module: '图书',
-    mount: true
-  },
+  bookApi.permission('删除图书'),
   groupRequired,
   async ctx => {
     const v = await new PositiveIdValidator().validate(ctx);
     const id = v.get('path.id');
     await bookDto.deleteBook(id);
     ctx.success({
-      msg: '删除图书成功',
-      errorCode: 12
+      code: 14
     });
   }
 );

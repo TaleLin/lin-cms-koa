@@ -10,7 +10,7 @@ const REG_XP = /(?<=\{)[^}]*(?=\})/g;
  *
  * ```js
  * test.linGet(
- *  "getTestMsg",
+ *  "getTestMessage",
  * "/json",
  *  {
  *   permission: "hello",
@@ -21,7 +21,7 @@ const REG_XP = /(?<=\{)[^}]*(?=\})/g;
  * logger("{user.username}就是皮了一波"),
  * async ctx => {
  *   ctx.json({
- *     msg: "物质决定意识，经济基础决定上层建筑"
+ *     message: "物质决定意识，经济基础决定上层建筑"
  *   });
  *  }
  * );

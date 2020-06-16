@@ -1,4 +1,6 @@
 import { Model, Sequelize } from 'sequelize';
+import { InfoCrudMixin } from 'lin-mizar';
+import { merge } from 'lodash';
 import sequelize from '../lib/db';
 
 class File extends Model {
@@ -45,32 +47,21 @@ File.init(
       comment: '图片md5值，防止上传重复图片'
     }
   },
-  {
-    sequelize,
-    indexes: [
-      {
-        name: 'md5_del',
-        unique: true,
-        fields: ['md5', 'delete_time']
-      }
-    ],
-    tableName: 'lin_file',
-    modelName: 'file',
-    createdAt: 'create_time',
-    updatedAt: 'update_time',
-    deletedAt: 'delete_time',
-    paranoid: true,
-    getterMethods: {
-      createTime () {
-        // @ts-ignore
-        return new Date(this.getDataValue('create_time')).getTime();
-      },
-      updateTime () {
-        // @ts-ignore
-        return new Date(this.getDataValue('update_time')).getTime();
-      }
-    }
-  }
+  merge(
+    {
+      sequelize,
+      tableName: 'lin_file',
+      modelName: 'file',
+      indexes: [
+        {
+          name: 'md5_del',
+          unique: true,
+          fields: ['md5', 'delete_time']
+        }
+      ]
+    },
+    InfoCrudMixin.options
+  )
 );
 
 export { File as FileModel };

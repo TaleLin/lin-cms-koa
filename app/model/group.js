@@ -1,6 +1,7 @@
-import sequelize from '../lib/db';
 import { Model, Sequelize } from 'sequelize';
-import { has, get } from 'lodash';
+import { InfoCrudMixin } from 'lin-mizar';
+import { has, get, merge } from 'lodash';
+import sequelize from '../lib/db';
 
 class Group extends Model {
   toJSON () {
@@ -32,34 +33,28 @@ Group.init(
       type: Sequelize.STRING({ length: 255 }),
       allowNull: true,
       comment: '分组信息：例如：搬砖的人'
+    },
+    level: {
+      type: Sequelize.ENUM('root', 'guest', 'user'),
+      defaultValue: 'user',
+      comment: '分组级别（root、guest分组只能存在一个）'
     }
   },
-  {
-    sequelize,
-    indexes: [
-      {
-        name: 'name_del',
-        unique: true,
-        fields: ['name', 'delete_time']
-      }
-    ],
-    tableName: 'lin_group',
-    modelName: 'group',
-    createdAt: 'create_time',
-    updatedAt: 'update_time',
-    deletedAt: 'delete_time',
-    paranoid: true,
-    getterMethods: {
-      createTime () {
-        // @ts-ignore
-        return new Date(this.getDataValue('create_time')).getTime();
-      },
-      updateTime () {
-        // @ts-ignore
-        return new Date(this.getDataValue('update_time')).getTime();
-      }
-    }
-  }
+  merge(
+    {
+      sequelize,
+      tableName: 'lin_group',
+      modelName: 'group',
+      indexes: [
+        {
+          name: 'name_del',
+          unique: true,
+          fields: ['name', 'delete_time']
+        }
+      ]
+    },
+    InfoCrudMixin.options
+  )
 );
 
 export { Group as GroupModel };

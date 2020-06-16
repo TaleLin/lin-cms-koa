@@ -11,6 +11,7 @@ import { GroupModel } from '../model/group';
 import { GroupPermissionModel } from '../model/group-permission';
 import { PermissionModel } from '../model/permission';
 import { UserModel } from '../model/user';
+import { MountType, GroupLevel } from '../lib/type';
 import { Op } from 'sequelize';
 import { uniq } from 'lodash';
 
@@ -24,7 +25,7 @@ async function isAdmin (ctx) {
   const groupIds = userGroup.map(v => v.group_id);
   const is = await GroupModel.findOne({
     where: {
-      name: 'root',
+      level: GroupLevel.Root,
       id: {
         [Op.in]: groupIds
       }
@@ -40,7 +41,9 @@ async function mountUser (ctx) {
   const { identity } = parseHeader(ctx);
   const user = await UserModel.findByPk(identity);
   if (!user) {
-    ctx.throw(new NotFound({ msg: '用户不存在', errorCode: 10021 }));
+    throw new NotFound({
+      code: 10021
+    });
   }
   // 将user挂在ctx上
   ctx.currentUser = user;
@@ -56,7 +59,9 @@ async function adminRequired (ctx, next) {
     if (await isAdmin(ctx)) {
       await next();
     } else {
-      throw new AuthFailed({ msg: '只有超级管理员可操作' });
+      throw new AuthFailed({
+        code: 10001
+      });
     }
   } else {
     await next();
@@ -85,7 +90,11 @@ async function refreshTokenRequiredWithUnifyException (ctx, next) {
       const { identity } = parseHeader(ctx, TokenType.REFRESH);
       const user = await UserModel.findByPk(identity);
       if (!user) {
-        ctx.throw(new NotFound({ msg: '用户不存在', errorCode: 10021 }));
+        ctx.throw(
+          new NotFound({
+            code: 10021
+          })
+        );
       }
       // 将user挂在ctx上
       ctx.currentUser = user;
@@ -130,6 +139,7 @@ async function groupRequired (ctx, next) {
         const item = await PermissionModel.findOne({
           where: {
             name: permission,
+            mount: MountType.Mount,
             module,
             id: {
               [Op.in]: permissionIds
@@ -139,10 +149,14 @@ async function groupRequired (ctx, next) {
         if (item) {
           await next();
         } else {
-          throw new AuthFailed({ msg: '权限不够，请联系超级管理员获得权限' });
+          throw new AuthFailed({
+            code: 10001
+          });
         }
       } else {
-        throw new AuthFailed({ msg: '权限不够，请联系超级管理员获得权限' });
+        throw new AuthFailed({
+          code: 10001
+        });
       }
     }
   } else {

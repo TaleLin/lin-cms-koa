@@ -1,12 +1,11 @@
 import '../initial';
 import sequelize from '../../../app/lib/db';
+import { MountType, IdentityType } from '../../../app/lib/type';
 import { generate } from 'lin-mizar';
 import { UserModel, UserIdentityModel } from '../../../app/model/user';
 import { GroupModel } from '../../../app/model/group';
 import { PermissionModel } from '../../../app/model/permission';
 import { GroupPermissionModel } from '../../../app/model/group-permission';
-
-const type = 'USERNAME_PASSWORD';
 
 /**
  * 如果创建失败，请确保你的数据库中没有同名的分组和同名的用户
@@ -26,7 +25,7 @@ const run = async () => {
   // 创建用户密码
   await UserIdentityModel.create({
     user_id: user.id,
-    identity_type: type,
+    identity_type: IdentityType.Password,
     identifier: user.username,
     credential: generate('123456')
   });
@@ -35,7 +34,8 @@ const run = async () => {
   const permission = await PermissionModel.findOne({
     where: {
       name: '删除图书',
-      module: '图书'
+      module: '图书',
+      mount: MountType.Mount
     }
   });
 
@@ -51,40 +51,3 @@ const run = async () => {
 };
 
 run();
-
-// /**
-//  * 权限分配，关联用户和权限组
-//  */
-// import '../initial';
-// import sequelize from '../../../app/lib/db';
-// import { UserModel } from '../../../app/model/user';
-// import { GroupModel } from '../../../app/model/group';
-// import { UserGroupModel } from '../../../app/model/user-group';
-
-// const run = async () => {
-//   // 查找需要关联的权限组 id
-//   const group = await GroupModel.findOne({
-//     where: {
-//       name: '普通分组'
-//     }
-//   });
-
-//   // 查找 pedro 用户的 id 用去关联权限组
-//   const user = await UserModel.findOne({
-//     where: {
-//       username: 'pedro'
-//     }
-//   });
-
-//   // 关联用户和权限组
-//   await UserGroupModel.create({
-//     user_id: user.id,
-//     group_id: group.id
-//   });
-
-//   setTimeout(() => {
-//     sequelize.close();
-//   }, 500);
-// };
-
-// run();

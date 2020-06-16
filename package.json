@@ -4,9 +4,10 @@
   "description": "simple and practical CMS implememted by koa",
   "main": "app/starter.js",
   "scripts": {
+    "test": "jest test",
     "start:dev": "cross-env NODE_ENV=development nodemon",
     "start:prod": "cross-env NODE_ENV=production node index",
-    "prettier": "prettier --write app/**/*.js app/*.js app/**/**/*.js app/**/**/**/*.js tests/**/*.js && eslint app tests --fix"
+    "prettier": "prettier --write app/**/*.js app/*.js app/**/**/*.js app/**/**/**/*.js test/**/*.js && eslint app test --fix"
   },
   "keywords": [
     "lin",
@@ -26,6 +27,7 @@
     "@types/koa__cors": "^2.2.3",
     "@types/prettier": "1.16.1",
     "@types/supertest": "^2.0.7",
+    "babel-jest": "^26.0.1",
     "babel-preset-env": "^1.7.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.15.1",
@@ -35,7 +37,7 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
-    "jest": "^24.3.1",
+    "jest": "^24.9.0",
     "nodemon": "^1.18.10",
     "prettier": "1.16.4",
     "supertest": "^3.4.2"
@@ -48,6 +50,7 @@
     "koa-static": "^5.0.0",
     "lin-mizar": "^0.3.2",
     "mysql2": "^2.1.0",
-    "sequelize": "^5.3.5"
+    "sequelize": "^5.3.5",
+    "validator": "^13.1.1"
   }
 }

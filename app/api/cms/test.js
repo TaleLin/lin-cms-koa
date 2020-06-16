@@ -3,7 +3,8 @@ import { loginRequired, groupRequired } from '../../middleware/jwt';
 import { logger } from '../../middleware/logger';
 
 const test = new LinRouter({
-  prefix: '/cms/test'
+  prefix: '/cms/test',
+  module: '信息'
 });
 
 test.get('/', async ctx => {
@@ -16,18 +17,14 @@ test.get('/', async ctx => {
 });
 
 test.linGet(
-  'getTestMsg',
+  'getTestMessage',
   '/json',
-  {
-    permission: '测试日志记录',
-    module: '信息',
-    mount: true
-  },
+  test.permission('测试日志记录'),
   loginRequired,
   logger('{user.username}就是皮了一波'),
   async ctx => {
     ctx.json({
-      msg: '物质决定意识，经济基础决定上层建筑'
+      message: '物质决定意识，经济基础决定上层建筑'
     });
   }
 );
@@ -35,15 +32,11 @@ test.linGet(
 test.linGet(
   'getTestInfo',
   '/info',
-  {
-    permission: '查看lin的信息',
-    module: '信息',
-    mount: true
-  },
+  test.permission('查看lin的信息'),
   groupRequired,
   async ctx => {
     ctx.json({
-      msg:
+      message:
         'Lin 是一套基于 Python-Flask 的一整套开箱即用的后台管理系统（CMS）。Lin 遵循简洁、高效的原则，通过核心库加插件的方式来驱动整个系统高效的运行'
     });
   }
