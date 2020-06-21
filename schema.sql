@@ -72,7 +72,7 @@ CREATE TABLE lin_group
     id          int(10) unsigned NOT NULL AUTO_INCREMENT,
     name        varchar(60)      NOT NULL COMMENT '分组名称，例如：搬砖者',
     info        varchar(255)              DEFAULT NULL COMMENT '分组信息：例如：搬砖的人',
-    level       ENUM('root', 'guest', 'user') DEFAULT 'user' COMMENT '分组级别（root、guest分组只能存在一个）',
+    level       tinyint(2)       NOT NULL DEFAULT 3 COMMENT '分组级别 1：root 2：guest 3：user（root、guest分组只能存在一个)',
     create_time datetime(3)      NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     update_time datetime(3)      NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
     delete_time datetime(3)               DEFAULT NULL,
@@ -190,10 +190,10 @@ VALUES (1, 1, 'USERNAME_PASSWORD', 'root',
         'sha1$c419e500$1$84869e5560ebf3de26b6690386484929456d6c07');
 
 INSERT INTO lin_group(id, name, info, level)
-VALUES (1, 'root', '超级用户组', 'root');
+VALUES (1, 'root', '超级用户组', 1);
 
 INSERT INTO lin_group(id, name, info, level)
-VALUES (2, 'guest', '游客组', 'guest');
+VALUES (2, 'guest', '游客组', 2);
 
 INSERT INTO lin_user_group(id, user_id, group_id)
 VALUES (1, 1, 1);

@@ -17,7 +17,9 @@ import { UserDao } from '../../dao/user';
 
 const user = new LinRouter({
   prefix: '/cms/user',
-  module: '用户'
+  module: '用户',
+  // 用户权限暂不支持分配，开启分配后也无实际作用
+  mountPermission: false
 });
 
 const userDao = new UserDao();

@@ -8,9 +8,9 @@ const IdentityType = {
 };
 
 const GroupLevel = {
-  Root: 'root',
-  Guest: 'guest',
-  User: 'user'
+  Root: 1,
+  Guest: 2,
+  User: 3
 };
 
 export { MountType, IdentityType, GroupLevel };

@@ -35,9 +35,9 @@ Group.init(
       comment: '分组信息：例如：搬砖的人'
     },
     level: {
-      type: Sequelize.ENUM('root', 'guest', 'user'),
-      defaultValue: 'user',
-      comment: '分组级别（root、guest分组只能存在一个）'
+      type: Sequelize.INTEGER(2),
+      defaultValue: 3,
+      comment: '分组级别 1：root 2：guest 3：user（root、guest分组只能存在一个)'
     }
   },
   merge(

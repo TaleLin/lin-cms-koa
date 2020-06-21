@@ -7,12 +7,6 @@ import sequelize from '../../../app/lib/db';
 import { saveTokens, getToken } from '../../helper/token';
 import { get, isNumber, isArray } from 'lodash';
 
-const sleep = (time) => new Promise(resolve => {
-  setTimeout(() => {
-    resolve();
-  }, time);
-});
-
 describe('/cms/admin', () => {
   const { UserModel, UserIdentityModel } = require('../../../app/model/user');
   const { GroupModel } = require('../../../app/model/group');
@@ -26,27 +20,28 @@ describe('/cms/admin', () => {
 
   let token;
 
-  beforeAll(async () => {
+  beforeAll(async (done) => {
+    console.log('start admin');
     // 初始化 app
     app = await createApp();
+    done();
   });
 
-  beforeEach(async () => {
-    await sleep(100);
-    await sequelize.query('START TRANSACTION;');
-    await sleep(100);
-  });
-
-  afterEach(async () => {
-    await sleep(100);
-    await sequelize.query('ROLLBACK;');
-    await sleep(100);
-  });
-
-  afterAll(() => {
-    setTimeout(() => {
-      sequelize.close();
+  afterAll(async (done) => {
+    setTimeout(async () => {
+      await sequelize.close();
+      done();
     }, 500);
+  });
+
+  beforeEach(async (done) => {
+    await sequelize.sync({ force: true });
+    await UserModel.create({ username: 'root', nickname: 'root' });
+    await UserIdentityModel.create({ user_id: 1, identity_type: IdentityType.Password, identifier: 'root', credential: 'sha1$c419e500$1$84869e5560ebf3de26b6690386484929456d6c07' });
+    await GroupModel.create({ name: 'root', info: '超级用户组', level: 1 });
+    await GroupModel.create({ name: 'guest', info: '游客组', level: 2 });
+    await UserGroupModel.create({ user_id: 1, group_id: 1 });
+    done();
   });
 
   it('超级管理员登录', async () => {
@@ -63,6 +58,8 @@ describe('/cms/admin', () => {
   });
 
   it('查询所有可分配的权限', async () => {
+    await PermissionModel.create({ name: '查看信息', module: '信息' });
+
     const response = await request(app.callback())
       .get('/cms/admin/permission')
       .auth(token, {
@@ -70,7 +67,7 @@ describe('/cms/admin', () => {
       });
     expect(response.status).toBe(200);
     expect(response.type).toMatch(/json/);
-    const is = isArray(get(response, 'body.日志'));
+    const is = isArray(get(response, 'body.信息'));
     expect(is).toBeTruthy();
   });
 
