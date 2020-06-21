@@ -1,5 +1,7 @@
-import sequelize from '../lib/db';
 import { Model, Sequelize } from 'sequelize';
+import { InfoCrudMixin } from 'lin-mizar';
+import sequelize from '../lib/db';
+import { merge } from 'lodash';
 
 class Log extends Model {
   toJSON () {
@@ -54,25 +56,14 @@ Log.init(
       type: Sequelize.STRING(100)
     }
   },
-  {
-    sequelize,
-    tableName: 'lin_log',
-    modelName: 'log',
-    createdAt: 'create_time',
-    updatedAt: 'update_time',
-    deletedAt: 'delete_time',
-    paranoid: true,
-    getterMethods: {
-      createTime () {
-        // @ts-ignore
-        return new Date(this.getDataValue('create_time')).getTime();
-      },
-      updateTime () {
-        // @ts-ignore
-        return new Date(this.getDataValue('update_time')).getTime();
-      }
-    }
-  }
+  merge(
+    {
+      sequelize,
+      tableName: 'lin_log',
+      modelName: 'log'
+    },
+    InfoCrudMixin.options
+  )
 );
 
 export { Log as LogModel };

@@ -5,7 +5,7 @@ function getSafeParamId (ctx) {
   const id = toSafeInteger(get(ctx.params, 'id'));
   if (!isInteger(id)) {
     throw new ParametersException({
-      msg: '路由参数错误'
+      code: 10030
     });
   }
   return id;

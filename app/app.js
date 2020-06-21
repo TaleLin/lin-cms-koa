@@ -58,7 +58,7 @@ function applyDefaultExtends (app) {
 }
 
 /**
- * loader 插件管理
+ * loader 加载插件和路由文件
  * @param app koa实例
  */
 function applyLoader (app) {
@@ -91,7 +91,7 @@ async function createApp () {
   applyLoader(app);
   applyJwt(app);
   const lin = new Lin();
-  await lin.initApp(app, true);
+  await lin.initApp(app, true); // 是否挂载插件路由，默认为true
   await PermissionModel.initPermission();
   indexPage(app);
   multipart(app);

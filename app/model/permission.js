@@ -1,7 +1,9 @@
-import sequelize from '../lib/db';
 import { Model, Sequelize, Op } from 'sequelize';
-import { routeMetaInfo } from 'lin-mizar';
+import { routeMetaInfo, InfoCrudMixin } from 'lin-mizar';
+import sequelize from '../lib/db';
 import { GroupPermissionModel } from './group-permission';
+import { MountType } from '../lib/type';
+import { merge } from 'lodash';
 
 class Permission extends Model {
   toJSON () {
@@ -19,39 +21,43 @@ class Permission extends Model {
       transaction = await sequelize.transaction();
       const info = Array.from(routeMetaInfo.values());
       const permissions = await this.findAll();
+
       for (const { permission: permissionName, module: moduleName } of info) {
-        if (
-          permissions.find(
-            permission =>
-              permission.name === permissionName &&
-              permission.module === moduleName
-          )
-        ) {
-          continue;
-        }
-        await this.create(
-          {
-            name: permissionName,
-            module: moduleName
-          },
-          { transaction }
+        const exist = permissions.find(
+          p => p.name === permissionName && p.module === moduleName
         );
-      }
-      const permissionIds = [];
-      for (const { id, name, module: moduleName } of permissions) {
-        if (
-          info.find(val => val.permission === name && val.module === moduleName)
-        ) {
-          continue;
+        // 如果不存在这个 permission 则创建之
+        if (!exist) {
+          await this.create(
+            {
+              name: permissionName,
+              module: moduleName
+            },
+            { transaction }
+          );
         }
-        await this.destroy({
-          where: {
-            id
-          },
+      }
+
+      const permissionIds = [];
+      for (const permission of permissions) {
+        const exist = info.find(
+          meta =>
+            meta.permission === permission.name &&
+            meta.module === permission.module
+        );
+        // 如果能找到这个 meta 则挂载之，否则卸载之
+        if (exist) {
+          permission.mount = MountType.Mount;
+        } else {
+          permission.mount = MountType.Unmount;
+          permissionIds.push(permission.id);
+        }
+        await permission.save({
           transaction
         });
-        permissionIds.push(id);
       }
+
+      // 相应地要解除关联关系
       if (permissionIds.length) {
         await GroupPermissionModel.destroy({
           where: {
@@ -85,25 +91,21 @@ Permission.init(
       type: Sequelize.STRING({ length: 50 }),
       comment: '权限所属模块，例如：人员管理',
       allowNull: false
+    },
+    mount: {
+      type: Sequelize.BOOLEAN,
+      comment: '0：关闭 1：开启',
+      defaultValue: 1
     }
   },
-  {
-    sequelize,
-    tableName: 'lin_permission',
-    modelName: 'permission',
-    createdAt: 'create_time',
-    updatedAt: 'update_time',
-    deletedAt: 'delete_time',
-    paranoid: true,
-    getterMethods: {
-      createTime () {
-        return new Date(this.getDataValue('create_time')).getTime();
-      },
-      updateTime () {
-        return new Date(this.getDataValue('update_time')).getTime();
-      }
-    }
-  }
+  merge(
+    {
+      sequelize,
+      tableName: 'lin_permission',
+      modelName: 'permission'
+    },
+    InfoCrudMixin.options
+  )
 );
 
 export { Permission as PermissionModel };

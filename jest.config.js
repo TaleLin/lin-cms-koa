@@ -4,5 +4,12 @@
 module.exports = {
   coverageDirectory: 'coverage',
   testEnvironment: 'node',
-  testPathIgnorePatterns: ['/node_modules/']
+  testPathIgnorePatterns: ['/node_modules/'],
+  testMatch: [
+    '**/?(*.)(spec).js?(x)'
+    // '**/?(*.)(spec|test).js?(x)'
+  ],
+  transform: {
+    "^.+\\.[t|j]sx?$": "babel-jest"
+  },
 };

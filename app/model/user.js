@@ -1,28 +1,18 @@
-import { NotFound, verify, AuthFailed, generate, Failed, config } from 'lin-mizar';
-
+import {
+  NotFound,
+  verify,
+  AuthFailed,
+  generate,
+  Failed,
+  config,
+  InfoCrudMixin
+} from 'lin-mizar';
 import sequelize from '../lib/db';
+import { IdentityType } from '../lib/type';
 import { Model, Sequelize } from 'sequelize';
-import { get, has, unset } from 'lodash';
-
-const type = 'USERNAME_PASSWORD';
+import { get, has, unset, merge } from 'lodash';
 
 class UserIdentity extends Model {
-  static async verify (username, password) {
-    const user = await this.findOne({
-      where: {
-        identity_type: type,
-        identifier: username
-      }
-    });
-    if (!user) {
-      throw new NotFound({ msg: '用户不存在', errorCode: 10021 });
-    }
-    if (!user.checkPassword(password)) {
-      throw new AuthFailed({ msg: '用户名或密码错误', errorCode: 10031 });
-    }
-    return user;
-  }
-
   checkPassword (raw) {
     if (!this.credential || this.credential === '') {
       return false;
@@ -30,37 +20,53 @@ class UserIdentity extends Model {
     return verify(raw, this.credential);
   }
 
+  static async verify (username, password) {
+    const user = await this.findOne({
+      where: {
+        identity_type: IdentityType.Password,
+        identifier: username
+      }
+    });
+    if (!user) {
+      throw new NotFound({ code: 10021 });
+    }
+    if (!user.checkPassword(password)) {
+      throw new AuthFailed({ code: 10031 });
+    }
+    return user;
+  }
+
   static async changePassword (currentUser, oldPassword, newPassword) {
     const user = await this.findOne({
       where: {
-        identity_type: type,
+        identity_type: IdentityType.Password,
         identifier: currentUser.username
       }
     });
     if (!user) {
-      throw new NotFound({ msg: '用户不存在', errorCode: 10021 });
+      throw new NotFound({ code: 10021 });
     }
     if (!user.checkPassword(oldPassword)) {
       throw new Failed({
-        msg: '修改密码失败，你可能输入了错误的旧密码'
+        code: 10011
       });
     }
     user.credential = generate(newPassword);
-    user.save();
+    await user.save();
   }
 
   static async resetPassword (currentUser, newPassword) {
     const user = await this.findOne({
       where: {
-        identity_type: type,
+        identity_type: IdentityType.Password,
         identifier: currentUser.username
       }
     });
     if (!user) {
-      throw new NotFound({ msg: '用户不存在', errorCode: 10021 });
+      throw new NotFound({ code: 10021 });
     }
     user.credential = generate(newPassword);
-    user.save();
+    await user.save();
   }
 }
 
@@ -90,25 +96,14 @@ UserIdentity.init(
       comment: '密码凭证（站内的保存密码，站外的不保存或保存token）'
     }
   },
-  {
-    sequelize,
-    tableName: 'lin_user_identity',
-    modelName: 'user_identity',
-    createdAt: 'create_time',
-    updatedAt: 'update_time',
-    deletedAt: 'delete_time',
-    paranoid: true,
-    getterMethods: {
-      createTime () {
-        // @ts-ignore
-        return new Date(this.getDataValue('create_time')).getTime();
-      },
-      updateTime () {
-        // @ts-ignore
-        return new Date(this.getDataValue('update_time')).getTime();
-      }
-    }
-  }
+  merge(
+    {
+      sequelize,
+      tableName: 'lin_user_identity',
+      modelName: 'user_identity'
+    },
+    InfoCrudMixin.options
+  )
 );
 
 class User extends Model {
@@ -118,7 +113,9 @@ class User extends Model {
       username: this.username,
       nickname: this.nickname,
       email: this.email,
-      avatar: `${config.getItem('siteDomain', 'http://localhost')}/assets/${this.avatar}`
+      avatar: `${config.getItem('siteDomain', 'http://localhost')}/assets/${
+        this.avatar
+      }`
     };
     if (has(this, 'groups')) {
       return { ...origin, groups: get(this, 'groups', []) };
@@ -163,41 +160,26 @@ User.init(
       allowNull: true
     }
   },
-  {
-    sequelize,
-    indexes: [
-      {
-        name: 'username_del',
-        unique: true,
-        fields: ['username', 'delete_time']
-      },
-      {
-        name: 'email_del',
-        unique: true,
-        fields: ['email', 'delete_time']
-      }
-    ],
-    modelName: 'user',
-    tableName: 'lin_user',
-    createdAt: 'create_time',
-    updatedAt: 'update_time',
-    deletedAt: 'delete_time',
-    paranoid: true,
-    getterMethods: {
-      createTime () {
-        // @ts-ignore
-        return new Date(this.getDataValue('create_time')).getTime();
-      },
-      updateTime () {
-        // @ts-ignore
-        return new Date(this.getDataValue('update_time')).getTime();
-      }
-    }
-  }
+  merge(
+    {
+      sequelize,
+      tableName: 'lin_user',
+      modelName: 'user',
+      indexes: [
+        {
+          name: 'username_del',
+          unique: true,
+          fields: ['username', 'delete_time']
+        },
+        {
+          name: 'email_del',
+          unique: true,
+          fields: ['email', 'delete_time']
+        }
+      ]
+    },
+    InfoCrudMixin.options
+  )
 );
 
-export {
-  type as identityType,
-  User as UserModel,
-  UserIdentity as UserIdentityModel
-};
+export { User as UserModel, UserIdentity as UserIdentityModel };

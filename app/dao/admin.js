@@ -7,12 +7,17 @@ import { GroupPermissionModel } from '../model/group-permission';
 import { UserGroupModel } from '../model/user-group';
 
 import sequelize from '../lib/db';
+import { MountType, GroupLevel } from '../lib/type';
 import { Op } from 'sequelize';
 import { has, set, get } from 'lodash';
 
 class AdminDao {
   async getAllPermissions () {
-    const permissions = await PermissionModel.findAll();
+    const permissions = await PermissionModel.findAll({
+      where: {
+        mount: MountType.Mount
+      }
+    });
     const result = Object.create(null);
     permissions.forEach(v => {
       const item = {
@@ -77,15 +82,10 @@ class AdminDao {
   }
 
   async changeUserPassword (ctx, v) {
-    const user = await UserModel.findOne({
-      where: {
-        id: v.get('path.id')
-      }
-    });
+    const user = await UserModel.findByPk(v.get('path.id'));
     if (!user) {
       throw new NotFound({
-        msg: '用户不存在',
-        errorCode: 10021
+        code: 10021
       });
     }
     await UserIdentityModel.resetPassword(user, v.get('body.new_password'));
@@ -99,8 +99,7 @@ class AdminDao {
     });
     if (!user) {
       throw new NotFound({
-        msg: '用户不存在',
-        errorCode: 10021
+        code: 10021
       });
     }
     let transaction;
@@ -131,8 +130,7 @@ class AdminDao {
     const user = await UserModel.findByPk(v.get('path.id'));
     if (!user) {
       throw new NotFound({
-        msg: '用户不存在',
-        errorCode: 10021
+        code: 10021
       });
     }
 
@@ -144,7 +142,7 @@ class AdminDao {
     const groupIds = userGroup.map(v => v.group_id);
     const isAdmin = await GroupModel.findOne({
       where: {
-        name: 'root',
+        level: GroupLevel.Root,
         id: {
           [Op.in]: groupIds
         }
@@ -153,23 +151,20 @@ class AdminDao {
 
     if (isAdmin) {
       throw new Forbidden({
-        msg: '不可修改root用户的分组',
-        errorCode: 10078
+        code: 10078
       });
     }
 
     for (const id of v.get('body.group_ids') || []) {
       const group = await GroupModel.findByPk(id);
-      if (group.name === 'root') {
+      if (group.level === GroupLevel.Root) {
         throw new Forbidden({
-          msg: 'root分组不可添加用户',
-          errorCode: 10073
+          code: 10073
         });
       }
       if (!group) {
         throw new NotFound({
-          msg: '不可将用户分配给不存在的分组',
-          errorCode: 10077
+          code: 10077
         });
       }
     }
@@ -215,8 +210,8 @@ class AdminDao {
   async getAllGroups () {
     const allGroups = await GroupModel.findAll({
       where: {
-        name: {
-          [Op.ne]: 'root'
+        level: {
+          [Op.ne]: GroupLevel.Root
         }
       }
     });
@@ -227,8 +222,7 @@ class AdminDao {
     const group = await GroupModel.findByPk(id);
     if (!group) {
       throw new NotFound({
-        msg: '分组不存在',
-        errorCode: 10024
+        code: 10024
       });
     }
 
@@ -241,6 +235,7 @@ class AdminDao {
 
     const permissions = await PermissionModel.findAll({
       where: {
+        mount: MountType.Mount,
         id: {
           [Op.in]: permissionIds
         }
@@ -258,15 +253,20 @@ class AdminDao {
     });
     if (group) {
       throw new Forbidden({
-        msg: '分组已存在，不可创建同名分组'
+        code: 10072
       });
     }
 
     for (const id of v.get('body.permission_ids') || []) {
-      const permission = await PermissionModel.findByPk(id);
+      const permission = await PermissionModel.findOne({
+        where: {
+          id,
+          mount: MountType.Mount
+        }
+      });
       if (!permission) {
         throw new NotFound({
-          msg: '无法分配不存在的权限'
+          code: 10231
         });
       }
     }
@@ -307,31 +307,28 @@ class AdminDao {
     const group = await GroupModel.findByPk(v.get('path.id'));
     if (!group) {
       throw new NotFound({
-        msg: '分组不存在，更新失败'
+        code: 10024
       });
     }
     group.name = v.get('body.name');
     group.info = v.get('body.info');
-    group.save();
+    await group.save();
   }
 
   async deleteGroup (ctx, id) {
     const group = await GroupModel.findByPk(id);
     if (!group) {
       throw new NotFound({
-        msg: '分组不存在',
-        errorCode: 10024
+        code: 10024
       });
     }
-    if (group.name === 'root') {
+    if (group.level === GroupLevel.Root) {
       throw new Forbidden({
-        msg: 'root分组不可删除',
-        errorCode: 10074
+        code: 10074
       });
-    } else if (group.name === 'guest') {
+    } else if (group.level === GroupLevel.Guest) {
       throw new Forbidden({
-        msg: 'guest分组不可删除',
-        errorCode: 10075
+        code: 10075
       });
     }
 
@@ -363,16 +360,19 @@ class AdminDao {
     const group = await GroupModel.findByPk(v.get('body.group_id'));
     if (!group) {
       throw new NotFound({
-        msg: '分组不存在'
+        code: 10024
       });
     }
 
-    const permission = await PermissionModel.findByPk(
-      v.get('body.permission_id')
-    );
+    const permission = await PermissionModel.findOne({
+      where: {
+        id: v.get('body.permission_id'),
+        mount: MountType.Mount
+      }
+    });
     if (!permission) {
       throw new NotFound({
-        msg: '无法分配不存在的权限'
+        code: 10231
       });
     }
 
@@ -384,7 +384,7 @@ class AdminDao {
     });
     if (one) {
       throw new Forbidden({
-        msg: '已有权限，不可重复添加'
+        code: 10230
       });
     }
     await GroupPermissionModel.create({
@@ -397,14 +397,19 @@ class AdminDao {
     const group = await GroupModel.findByPk(v.get('body.group_id'));
     if (!group) {
       throw new NotFound({
-        msg: '分组不存在'
+        code: 10024
       });
     }
     for (const id of v.get('body.permission_ids') || []) {
-      const permission = await PermissionModel.findByPk(id);
+      const permission = await PermissionModel.findOne({
+        where: {
+          id,
+          mount: MountType.Mount
+        }
+      });
       if (!permission) {
         throw new NotFound({
-          msg: '无法分配不存在的权限'
+          code: 10231
         });
       }
     }
@@ -433,14 +438,19 @@ class AdminDao {
     const group = await GroupModel.findByPk(v.get('body.group_id'));
     if (!group) {
       throw new NotFound({
-        msg: '分组不存在'
+        code: 10024
       });
     }
     for (const id of v.get('body.permission_ids') || []) {
-      const permission = await PermissionModel.findByPk(id);
+      const permission = await PermissionModel.findOne({
+        where: {
+          id,
+          mount: MountType.Mount
+        }
+      });
       if (!permission) {
         throw new NotFound({
-          msg: '无法分配不存在的权限'
+          code: 10231
         });
       }
     }

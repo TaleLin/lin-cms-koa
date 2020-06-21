@@ -43,9 +43,9 @@ Book.init(
   },
   merge(
     {
+      sequelize,
       tableName: 'book',
-      modelName: 'book',
-      sequelize
+      modelName: 'book'
     },
     InfoCrudMixin.options
   )

@@ -16,7 +16,10 @@ import { logger } from '../../middleware/logger';
 import { UserDao } from '../../dao/user';
 
 const user = new LinRouter({
-  prefix: '/cms/user'
+  prefix: '/cms/user',
+  module: '用户',
+  // 用户权限暂不支持分配，开启分配后也无实际作用
+  mountPermission: false
 });
 
 const userDao = new UserDao();
@@ -24,62 +27,43 @@ const userDao = new UserDao();
 user.linPost(
   'userRegister',
   '/register',
-  {
-    permission: '注册',
-    module: '用户',
-    mount: false
-  },
+  user.permission('注册'),
   adminRequired,
   logger('管理员新建了一个用户'),
   async ctx => {
     const v = await new RegisterValidator().validate(ctx);
     await userDao.createUser(v);
     ctx.success({
-      msg: '注册成功',
-      errorCode: 9
+      code: 11
     });
   }
 );
 
-user.linPost(
-  'userLogin',
-  '/login',
-  {
-    permission: '登陆',
-    module: '用户',
-    mount: false
-  },
-  async ctx => {
-    const v = await new LoginValidator().validate(ctx);
-    const user = await UserIdentityModel.verify(
-      v.get('body.username'),
-      v.get('body.password')
-    );
-    const { accessToken, refreshToken } = getTokens({
-      id: user.user_id
-    });
-    ctx.json({
-      access_token: accessToken,
-      refresh_token: refreshToken
-    });
-  }
-);
+user.linPost('userLogin', '/login', user.permission('登录'), async ctx => {
+  const v = await new LoginValidator().validate(ctx);
+  const user = await UserIdentityModel.verify(
+    v.get('body.username'),
+    v.get('body.password')
+  );
+  const { accessToken, refreshToken } = getTokens({
+    id: user.user_id
+  });
+  ctx.json({
+    access_token: accessToken,
+    refresh_token: refreshToken
+  });
+});
 
 user.linPut(
   'userUpdate',
   '/',
-  {
-    permission: '更新用户信息',
-    module: '用户',
-    mount: false
-  },
+  user.permission('更新用户信息'),
   loginRequired,
   async ctx => {
     const v = await new UpdateInfoValidator().validate(ctx);
     await userDao.updateUser(ctx, v);
     ctx.success({
-      msg: '更新用户成功',
-      errorCode: 4
+      code: 6
     });
   }
 );
@@ -87,11 +71,7 @@ user.linPut(
 user.linPut(
   'userUpdatePassword',
   '/change_password',
-  {
-    permission: '修改密码',
-    module: '用户',
-    mount: false
-  },
+  user.permission('修改密码'),
   loginRequired,
   async ctx => {
     const user = ctx.currentUser;
@@ -102,8 +82,7 @@ user.linPut(
       v.get('body.new_password')
     );
     ctx.success({
-      msg: '密码修改成功',
-      errorCode: 2
+      code: 4
     });
   }
 );
@@ -111,11 +90,7 @@ user.linPut(
 user.linGet(
   'userGetToken',
   '/refresh',
-  {
-    permission: '刷新令牌',
-    module: '用户',
-    mount: false
-  },
+  user.permission('刷新令牌'),
   refreshTokenRequiredWithUnifyException,
   async ctx => {
     const user = ctx.currentUser;
@@ -130,11 +105,7 @@ user.linGet(
 user.linGet(
   'userGetPermissions',
   '/permissions',
-  {
-    permission: '查询自己拥有的权限',
-    module: '用户',
-    mount: true
-  },
+  user.permission('查询自己拥有的权限'),
   loginRequired,
   async ctx => {
     const user = await userDao.getPermissions(ctx);
@@ -145,11 +116,7 @@ user.linGet(
 user.linGet(
   'getInformation',
   '/information',
-  {
-    permission: '查询自己信息',
-    module: '用户',
-    mount: true
-  },
+  user.permission('查询自己信息'),
   loginRequired,
   async ctx => {
     const info = await userDao.getInformation(ctx);

@@ -6,7 +6,8 @@ import { groupRequired } from '../../middleware/jwt';
 import { LogDao } from '../../dao/log';
 
 const log = new LinRouter({
-  prefix: '/cms/log'
+  prefix: '/cms/log',
+  module: '日志'
 });
 
 const logDao = new LogDao();
@@ -14,18 +15,14 @@ const logDao = new LogDao();
 log.linGet(
   'getLogs',
   '/',
-  {
-    permission: '查询所有日志',
-    module: '日志',
-    mount: true
-  },
+  log.permission('查询所有日志'),
   groupRequired,
   async ctx => {
     const v = await new LogFindValidator().validate(ctx);
     const { rows, total } = await logDao.getLogs(v);
     if (!rows || rows.length < 1) {
       throw new NotFound({
-        msg: '没有找到相关日志'
+        code: 10220
       });
     }
     ctx.json({
@@ -40,11 +37,7 @@ log.linGet(
 log.linGet(
   'getUserLogs',
   '/search',
-  {
-    permission: '搜索日志',
-    module: '日志',
-    mount: true
-  },
+  log.permission('搜索日志'),
   groupRequired,
   async ctx => {
     const v = await new LogFindValidator().validate(ctx);
@@ -62,11 +55,7 @@ log.linGet(
 log.linGet(
   'getUsers',
   '/users',
-  {
-    permission: '查询日志记录的用户',
-    module: '日志',
-    mount: true
-  },
+  log.permission('查询日志记录的用户'),
   groupRequired,
   async ctx => {
     const v = await new PaginateValidator().validate(ctx);
