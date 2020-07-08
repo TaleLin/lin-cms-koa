@@ -1,17 +1,17 @@
 <h1 align="center">
-  <a href="http://doc.cms.talelin.pro/">
-  <img src="http://doc.cms.talelin.pro/left-logo.png" width="250"/></a>
+  <a href="http://doc.cms.talelin.com/">
+  <img src="http://doc.cms.talelin.com/left-logo.png" width="250"/></a>
   <br>
   Lin-CMS-Koa
 </h1>
 
-<h4 align="center">一个简单易用的CMS后端项目 | <a href="http://doc.cms.talelin.pro/" target="_blank">Lin-CMS-Koa</a></h4>
+<h4 align="center">一个简单易用的CMS后端项目 | <a href="http://doc.cms.talelin.com/" target="_blank">Lin-CMS-Koa</a></h4>
 
 <p align="center">
   <a href="http://flask.pocoo.org/docs/1.0/" rel="nofollow">
   <img src="https://img.shields.io/badge/koa-2.7.0-green.svg" alt="flask version" data-canonical-src="https://img.shields.io/badge/koa-2.7.0-green.svg" style="max-width:100%;"></a>
   <a href="https://pypi.org/project/Lin-CMS/" rel="nofollow"><img src="https://img.shields.io/badge/lin--mizar-0.3.1-green.svg" alt="lin-cms version" data-canonical-src="https://img.shields.io/badge/lin--cms--test-0.0.1--alpha8-red.svg" style="max-width:100%;"></a>
-  <a href="http://doc.cms.talelin.pro/" rel="nofollow"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="LISENCE" data-canonical-src="https://img.shields.io/badge/license-MIT-lightgrey.svg" style="max-width:100%;"></a>
+  <a href="http://doc.cms.talelin.com/" rel="nofollow"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="LISENCE" data-canonical-src="https://img.shields.io/badge/license-MIT-lightgrey.svg" style="max-width:100%;"></a>
 </p>
 
 <blockquote align="center">
@@ -20,7 +20,7 @@
 </blockquote>
 
 <p align="center">
-  <a href="#简介">简介</a>&nbsp;|&nbsp;<a href="#版本日志">版本日志</a>&nbsp;|&nbsp;<a href="#Lin CMS 的特点">Lin CMS 的特点</a>
+  <a href="#简介">简介</a>&nbsp;|&nbsp;<a href="#版本日志">版本日志</a>
 </p>
 
 ## 简介
@@ -41,7 +41,7 @@ lin-mizar(核心库) ：0.3.4
 
 ### 文档地址
 
-[http://doc.cms.talelin.pro/](http://doc.cms.talelin.pro/)
+[http://doc.cms.talelin.com/](http://doc.cms.talelin.com/)
 
 ### 线上 demo
 
