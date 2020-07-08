@@ -1,17 +1,17 @@
 <h1 align="center">
-  <a href="http://doc.cms.7yue.pro/">
-  <img src="http://doc.cms.7yue.pro/left-logo.png" width="250"/></a>
+  <a href="http://doc.cms.talelin.com/">
+  <img src="http://doc.cms.talelin.com/left-logo.png" width="250"/></a>
   <br>
   Lin-CMS-Koa
 </h1>
 
-<h4 align="center">一个简单易用的CMS后端项目 | <a href="http://doc.cms.7yue.pro/" target="_blank">Lin-CMS-Koa</a></h4>
+<h4 align="center">一个简单易用的CMS后端项目</h4>
 
 <p align="center">
   <a href="http://flask.pocoo.org/docs/1.0/" rel="nofollow">
   <img src="https://img.shields.io/badge/koa-2.7.0-green.svg" alt="flask version" data-canonical-src="https://img.shields.io/badge/koa-2.7.0-green.svg" style="max-width:100%;"></a>
-  <a href="https://pypi.org/project/Lin-CMS/" rel="nofollow"><img src="https://img.shields.io/badge/lin--mizar-0.3.1-green.svg" alt="lin-cms version" data-canonical-src="https://img.shields.io/badge/lin--cms--test-0.0.1--alpha8-red.svg" style="max-width:100%;"></a>
-  <a href="http://doc.cms.7yue.pro/" rel="nofollow"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="LISENCE" data-canonical-src="https://img.shields.io/badge/license-MIT-lightgrey.svg" style="max-width:100%;"></a>
+  <a href="https://pypi.org/project/Lin-CMS/" rel="nofollow"><img src="https://img.shields.io/badge/lin--mizar-0.3.5-green.svg" alt="lin-cms version" data-canonical-src="https://img.shields.io/badge/lin--cms--test-0.0.1--alpha8-red.svg" style="max-width:100%;"></a>
+  <a href="http://doc.cms.talelin.com/" rel="nofollow"><img src="https://img.shields.io/badge/license-MIT-lightgrey.svg" alt="LISENCE" data-canonical-src="https://img.shields.io/badge/license-MIT-lightgrey.svg" style="max-width:100%;"></a>
 </p>
 
 <blockquote align="center">
@@ -20,38 +20,40 @@
 </blockquote>
 
 <p align="center">
-  <a href="#简介">简介</a>&nbsp;|&nbsp;<a href="#快速开始">快速开始</a>&nbsp;|&nbsp;<a href="#下个版本开发计划">下个版本开发计划</a>
+  <a href="#简介">简介</a>&nbsp;|&nbsp;<a href="#版本日志">版本日志</a>
 </p>
 
 ## 简介
 
 ### 什么是 Lin CMS？
 
-Lin-CMS 是林间有风团队经过大量项目实践所提炼出的一套**内容管理系统框
-架**。Lin-CMS 可以有效的帮助开发者提高 CMS 的开发效率。
+Lin-CMS 是林间有风团队经过大量项目实践所提炼出的一套**内容管理系统框架**。Lin-CMS 可以有效的帮助开发者提高 CMS 的开发效率。
 
-本项目是 Lin CMS 后端的 koa 实现，需要前端？请访
-问[前端仓库](https://github.com/TaleLin/lin-cms-vue)。
+本项目是 Lin CMS 后端的 koa 实现，需要前端？请访问[前端仓库](https://github.com/TaleLin/lin-cms-vue)。
 
 ### 当前最新版本
 
-lin-mizar(核心库) ：0.3.4
-
 lin-cms-koa(当前示例工程)：0.3.5
+
+lin-mizar(核心库) ：0.3.4
 
 ### 文档地址
 
-[http://doc.cms.7yue.pro/](http://doc.cms.7yue.pro/)
+[http://doc.cms.talelin.com/](http://doc.cms.talelin.com/)
 
 ### 线上 demo
 
 [http://face.cms.7yue.pro/](http://face.cms.7yue.pro/)
 
+### 免费入门视频教程 
+
+[https://www.imooc.com/learn/1247](https://www.imooc.com/learn/1247)
+
 ### QQ 交流群
 
-QQ 群号：643205479
+QQ 群号：643205479 / 814597236
 
-<img class="QR-img" width="258" height="300" src="http://imglf3.nosdn0.126.net/img/Qk5LWkJVWkF3Nmdyc2xGcUtScEJLOVV1clErY1dJa0FsQ3E1aDZQWlZHZ2dCbSt4WXA1V3dRPT0.jpg?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg">
+<!-- <img class="QR-img" width="258" height="300" src="http://imglf3.nosdn0.126.net/img/Qk5LWkJVWkF3Nmdyc2xGcUtScEJLOVV1clErY1dJa0FsQ3E1aDZQWlZHZ2dCbSt4WXA1V3dRPT0.jpg?imageView&thumbnail=1680x0&quality=96&stripmeta=0&type=jpg"> -->
 
 ### 微信公众号
 
@@ -66,6 +68,7 @@ QQ 群号：643205479
 ### 0.3.5
 
 1. `U` 更新核心库 lin-mizar 到 0.3.4 版本
+2. `F` 修复文件上传丢失 key 字段
 
 ### 0.3.4
 
