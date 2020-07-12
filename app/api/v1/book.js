@@ -10,6 +10,8 @@ import { getSafeParamId } from '../../lib/util';
 import { BookNotFound } from '../../lib/exception';
 import { BookDao } from '../../dao/book';
 
+console.log(disableLoading)
+
 // book 的红图实例
 const bookApi = new LinRouter({
   prefix: '/v1/book',
