@@ -1,6 +1,6 @@
 {
   "name": "lin-cms-koa",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "description": "simple and practical CMS implememted by koa",
   "main": "app/starter.js",
   "scripts": {
