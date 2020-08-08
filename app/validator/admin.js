@@ -14,7 +14,7 @@ class AdminUsersValidator extends PaginateValidator {
 }
 
 class ResetPasswordValidator extends PositiveIdValidator {
-constructor () {
+  constructor () {
     super();
     this.new_password = new Rule(
       'matches',

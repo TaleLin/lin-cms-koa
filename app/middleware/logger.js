@@ -74,7 +74,7 @@ function findAuthAndModule (ctx) {
   return routeMetaInfo.get(endpoint);
 }
 
-/** f
+/**
  * 解析模板
  * @param template 消息模板
  * @param user 用户
@@ -82,6 +82,7 @@ function findAuthAndModule (ctx) {
  * @param request
  */
 function parseTemplate (template, user, response, request) {
+  REG_XP.lastIndex = 0;
   const res = REG_XP.exec(template);
   if (res) {
     res.forEach(item => {
