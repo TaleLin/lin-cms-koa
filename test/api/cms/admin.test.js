@@ -20,24 +20,29 @@ describe('/cms/admin', () => {
 
   let token;
 
-  beforeAll(async (done) => {
+  beforeAll(async done => {
     console.log('start admin');
     // 初始化 app
     app = await createApp();
     done();
   });
 
-  afterAll(async (done) => {
+  afterAll(async done => {
     setTimeout(async () => {
       await sequelize.close();
       done();
     }, 500);
   });
 
-  beforeEach(async (done) => {
+  beforeEach(async done => {
     await sequelize.sync({ force: true });
     await UserModel.create({ username: 'root', nickname: 'root' });
-    await UserIdentityModel.create({ user_id: 1, identity_type: IdentityType.Password, identifier: 'root', credential: 'sha1$c419e500$1$84869e5560ebf3de26b6690386484929456d6c07' });
+    await UserIdentityModel.create({
+      user_id: 1,
+      identity_type: IdentityType.Password,
+      identifier: 'root',
+      credential: 'sha1$c419e500$1$84869e5560ebf3de26b6690386484929456d6c07'
+    });
     await GroupModel.create({ name: 'root', info: '超级用户组', level: 1 });
     await GroupModel.create({ name: 'guest', info: '游客组', level: 2 });
     await UserGroupModel.create({ user_id: 1, group_id: 1 });
@@ -85,12 +90,21 @@ describe('/cms/admin', () => {
   });
 
   it('插入用户信息、分组、权限，查询所有用户', async () => {
-    const user = await UserModel.create({ username: 'shirmy', email: 'shirmy@gmail.com' });
+    const user = await UserModel.create({
+      username: 'shirmy',
+      email: 'shirmy@gmail.com'
+    });
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
     await UserGroupModel.create({ group_id: group.id, user_id: user.id });
 
-    const permission = await PermissionModel.create({ name: '查看信息', module: '信息' });
-    await GroupPermissionModel.create({ group_id: group.id, permission_id: permission.id });
+    const permission = await PermissionModel.create({
+      name: '查看信息',
+      module: '信息'
+    });
+    await GroupPermissionModel.create({
+      group_id: group.id,
+      permission_id: permission.id
+    });
 
     const response = await request(app.callback())
       .get('/cms/admin/users')
@@ -108,7 +122,10 @@ describe('/cms/admin', () => {
   });
 
   it('修改用户密码', async () => {
-    const user = await UserModel.create({ username: 'shirmy', email: 'shirmy@gmail.com' });
+    const user = await UserModel.create({
+      username: 'shirmy',
+      email: 'shirmy@gmail.com'
+    });
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
     await UserGroupModel.create({ group_id: group.id, user_id: user.id });
     await UserIdentityModel.create({
@@ -136,7 +153,10 @@ describe('/cms/admin', () => {
   });
 
   it('删除用户', async () => {
-    const user = await UserModel.create({ username: 'shirmy', email: 'shirmy@gmail.com' });
+    const user = await UserModel.create({
+      username: 'shirmy',
+      email: 'shirmy@gmail.com'
+    });
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
     await UserGroupModel.create({ group_id: group.id, user_id: user.id });
 
@@ -152,7 +172,10 @@ describe('/cms/admin', () => {
   });
 
   it('更新用户', async () => {
-    const user = await UserModel.create({ username: 'shirmy', email: 'shirmy@gmail.com' });
+    const user = await UserModel.create({
+      username: 'shirmy',
+      email: 'shirmy@gmail.com'
+    });
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
     await UserGroupModel.create({ group_id: group.id, user_id: user.id });
 
@@ -170,8 +193,14 @@ describe('/cms/admin', () => {
 
   it('查询所有权限组及其权限', async () => {
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
-    const permission = await PermissionModel.create({ name: '查看信息', module: '信息' });
-    await GroupPermissionModel.create({ group_id: group.id, permission_id: permission.id });
+    const permission = await PermissionModel.create({
+      name: '查看信息',
+      module: '信息'
+    });
+    await GroupPermissionModel.create({
+      group_id: group.id,
+      permission_id: permission.id
+    });
 
     const response = await request(app.callback())
       .get('/cms/admin/group')
@@ -186,8 +215,14 @@ describe('/cms/admin', () => {
 
   it('查询所有权限组', async () => {
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
-    const permission = await PermissionModel.create({ name: '查看信息', module: '信息' });
-    await GroupPermissionModel.create({ group_id: group.id, permission_id: permission.id });
+    const permission = await PermissionModel.create({
+      name: '查看信息',
+      module: '信息'
+    });
+    await GroupPermissionModel.create({
+      group_id: group.id,
+      permission_id: permission.id
+    });
 
     const response = await request(app.callback())
       .get('/cms/admin/group/all')
@@ -201,8 +236,14 @@ describe('/cms/admin', () => {
 
   it('查询一个权限组及其权限', async () => {
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
-    const permission = await PermissionModel.create({ name: '查看信息', module: '信息' });
-    await GroupPermissionModel.create({ group_id: group.id, permission_id: permission.id });
+    const permission = await PermissionModel.create({
+      name: '查看信息',
+      module: '信息'
+    });
+    await GroupPermissionModel.create({
+      group_id: group.id,
+      permission_id: permission.id
+    });
 
     const response = await request(app.callback())
       .get(`/cms/admin/group/${group.id}`)
@@ -211,12 +252,17 @@ describe('/cms/admin', () => {
     expect(response.status).toBe(200);
     expect(response.type).toMatch(/json/);
     expect(get(response, 'body.name')).toBe(group.name);
-    const hasPermission = !!get(response, 'body.permissions').find(v => v.id === permission.id);
+    const hasPermission = !!get(response, 'body.permissions').find(
+      v => v.id === permission.id
+    );
     expect(hasPermission).toBeTruthy();
   });
 
   it('新建权限组', async () => {
-    const permission = await PermissionModel.create({ name: '查看信息', module: '信息' });
+    const permission = await PermissionModel.create({
+      name: '查看信息',
+      module: '信息'
+    });
 
     const response = await request(app.callback())
       .post('/cms/admin/group')
@@ -234,8 +280,14 @@ describe('/cms/admin', () => {
 
   it('更新一个权限组', async () => {
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
-    const permission = await PermissionModel.create({ name: '查看信息', module: '信息' });
-    await GroupPermissionModel.create({ group_id: group.id, permission_id: permission.id });
+    const permission = await PermissionModel.create({
+      name: '查看信息',
+      module: '信息'
+    });
+    await GroupPermissionModel.create({
+      group_id: group.id,
+      permission_id: permission.id
+    });
 
     const response = await request(app.callback())
       .put(`/cms/admin/group/${group.id}`)
@@ -267,7 +319,10 @@ describe('/cms/admin', () => {
 
   it('分配单个权限', async () => {
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
-    const permission = await PermissionModel.create({ name: '查看信息', module: '信息' });
+    const permission = await PermissionModel.create({
+      name: '查看信息',
+      module: '信息'
+    });
 
     const response = await request(app.callback())
       .post('/cms/admin/permission/dispatch')
@@ -285,8 +340,14 @@ describe('/cms/admin', () => {
 
   it('分配多个权限', async () => {
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
-    const permission = await PermissionModel.create({ name: '查看信息', module: '信息' });
-    const permission1 = await PermissionModel.create({ name: '查看研发组的信息', module: '信息' });
+    const permission = await PermissionModel.create({
+      name: '查看信息',
+      module: '信息'
+    });
+    const permission1 = await PermissionModel.create({
+      name: '查看研发组的信息',
+      module: '信息'
+    });
 
     const response = await request(app.callback())
       .post('/cms/admin/permission/dispatch/batch')
@@ -304,10 +365,22 @@ describe('/cms/admin', () => {
 
   it('删除多个权限', async () => {
     const group = await GroupModel.create({ name: '研发组', info: '研发大佬' });
-    const permission = await PermissionModel.create({ name: '查看信息', module: '信息' });
-    const permission1 = await PermissionModel.create({ name: '查看研发组的信息', module: '信息' });
-    await GroupPermissionModel.create({ group_id: group.id, permission_id: permission.id });
-    await GroupPermissionModel.create({ group_id: group.id, permission_id: permission1.id });
+    const permission = await PermissionModel.create({
+      name: '查看信息',
+      module: '信息'
+    });
+    const permission1 = await PermissionModel.create({
+      name: '查看研发组的信息',
+      module: '信息'
+    });
+    await GroupPermissionModel.create({
+      group_id: group.id,
+      permission_id: permission.id
+    });
+    await GroupPermissionModel.create({
+      group_id: group.id,
+      permission_id: permission1.id
+    });
 
     const response = await request(app.callback())
       .post('/cms/admin/permission/remove')
