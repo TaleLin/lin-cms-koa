@@ -74,7 +74,7 @@ function findAuthAndModule (ctx) {
   return routeMetaInfo.get(endpoint);
 }
 
-/** f
+/**
  * 解析模板
  * @param template 消息模板
  * @param user 用户

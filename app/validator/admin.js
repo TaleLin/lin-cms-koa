@@ -40,11 +40,8 @@ class ResetPasswordValidator extends PositiveIdValidator {
 class UpdateUserInfoValidator extends PositiveIdValidator {
   validateGroupIds (data) {
     const ids = data.body.group_ids;
-    if (isOptional(ids)) {
-      return true;
-    }
-    if (!Array.isArray(ids)) {
-      return [false, '每个id值必须为正整数'];
+    if (!Array.isArray(ids) || ids.length < 1) {
+      return [false, '至少选择一个分组'];
     }
     for (let id of ids) {
       if (typeof id === 'number') {
