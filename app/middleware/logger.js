@@ -82,11 +82,14 @@ function findAuthAndModule (ctx) {
  * @param request
  */
 function parseTemplate (template, user, response, request) {
-  REG_XP.lastIndex = 0;
-  const res = REG_XP.exec(template);
+  let res = [];
+  let son;
+  while ((son = REG_XP.exec(template)) !== null) {
+    res.push(son[0]);
+  }
   if (res) {
     res.forEach(item => {
-      const index = item.lastIndexOf('.');
+      const index = item.indexOf('.');
       assert(index !== -1, item + '中必须包含 . ,且为一个');
       const obj = item.substring(0, index);
       const prop = item.substring(index + 1, item.length);
@@ -110,3 +113,4 @@ function parseTemplate (template, user, response, request) {
   }
   return template;
 }
+
