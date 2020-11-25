@@ -102,15 +102,13 @@ class AdminDao {
         code: 10021
       });
     }
-    const rootOrGuest = await UserGroupModel.findOne({
+    const root = await UserGroupModel.findOne({
       where: {
-        group_id: {
-          [Op.in]: [GroupLevel.Root, GroupLevel.Guest]
-        },
+        group_id: GroupLevel.Root,
         user_id: id
       }
     })
-    if (rootOrGuest) {
+    if (root) {
       throw new Forbidden({
         code: 10079
       })
