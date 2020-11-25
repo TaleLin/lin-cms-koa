@@ -102,6 +102,19 @@ class AdminDao {
         code: 10021
       });
     }
+    const rootOrGuest = await UserGroupModel.findOne({
+      where: {
+        group_id: {
+          [Op.in]: [GroupLevel.Root, GroupLevel.Guest]
+        },
+        user_id: id
+      }
+    })
+    if (rootOrGuest) {
+      throw new Forbidden({
+        code: 10079
+      })
+    }
     let transaction;
     try {
       transaction = await sequelize.transaction();
