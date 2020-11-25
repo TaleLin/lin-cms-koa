@@ -2274,9 +2274,9 @@ domexception@^1.0.1:
     webidl-conversions "^4.0.2"
 
 dot-prop@^4.1.0:
-  version "4.2.0"
-  resolved "https://registry.npmjs.org/dot-prop/-/dot-prop-4.2.0.tgz#1f19e0c2e1aa0e32797c49799f2837ac6af69c57"
-  integrity sha512-tUMXrxlExSW6U2EXiiKGSBVdYgtV8qlHL+C10TsW4PURY/ic+eaysnSkwB4kA/mBlCyy/IKDJ+Lc3wbWeaXtuQ==
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/dot-prop/-/dot-prop-4.2.1.tgz#45884194a71fc2cda71cbb4bceb3a4dd2f433ba4"
+  integrity sha512-l0p4+mIuJIua0mhxGoh4a+iNL9bmeK5DvnSVQa6T0OhrVmaEa1XScX5Etc673FePCJOArq/4Pa2cLGODUWTPOQ==
   dependencies:
     is-obj "^1.0.0"
 
@@ -3405,7 +3405,7 @@ is-number@^7.0.0:
 
 is-obj@^1.0.0:
   version "1.0.1"
-  resolved "https://registry.npmjs.org/is-obj/-/is-obj-1.0.1.tgz#3e4729ac1f5fde025cd7d83a896dab9f4f67db0f"
+  resolved "https://registry.yarnpkg.com/is-obj/-/is-obj-1.0.1.tgz#3e4729ac1f5fde025cd7d83a896dab9f4f67db0f"
   integrity sha1-PkcprB9f3gJc19g6iW2rn09n2w8=
 
 is-path-inside@^1.0.0:
@@ -4282,10 +4282,10 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lin-mizar@^0.3.5:
-  version "0.3.5"
-  resolved "https://registry.npmjs.org/lin-mizar/-/lin-mizar-0.3.5.tgz#2b26a0c1c23e8ee3836f910a4764946e9ccb49a3"
-  integrity sha512-9WC1HQ+Kr4aQgJlTtRrNQI+xvHHHEfESYPIzrwMZvaw5bWc93y79PA7UYUwjx8g2VUzr+oBdVURqwDBvz7spNA==
+lin-mizar@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/lin-mizar/-/lin-mizar-0.3.8.tgz#a9cb6ac33d32336ca5b3b3b3908c6e5116719bcc"
+  integrity sha512-w/7ZvJOEVzJ+BwbqKEwOweeLS0I0p+iqJ2pcYCUHsmcS9rDE4CRaV8Vz3dMw77W75BrDsdNJorTenDI1VHY6IA==
   dependencies:
     async-busboy "^0.7.0"
     class-validator "^0.9.1"
