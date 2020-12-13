@@ -3210,9 +3210,9 @@ inherits@2.0.3:
   integrity sha1-Yzwsg+PaQqUC9SRmAiSA9CCCYd4=
 
 ini@^1.3.4, ini@~1.3.0:
-  version "1.3.5"
-  resolved "https://registry.npmjs.org/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
-  integrity sha512-RZY5huIKCMRWDUqZlEi72f/lmXKMvuszcMBduliQ3nnWbx9X/ZBQO7DijMEYS9EhHBb2qacRUMtC7svLwe0lcw==
+  version "1.3.8"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
+  integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
 inquirer@^6.2.2:
   version "6.5.2"
@@ -4282,10 +4282,10 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lin-mizar@^0.3.5:
-  version "0.3.5"
-  resolved "https://registry.npmjs.org/lin-mizar/-/lin-mizar-0.3.5.tgz#2b26a0c1c23e8ee3836f910a4764946e9ccb49a3"
-  integrity sha512-9WC1HQ+Kr4aQgJlTtRrNQI+xvHHHEfESYPIzrwMZvaw5bWc93y79PA7UYUwjx8g2VUzr+oBdVURqwDBvz7spNA==
+lin-mizar@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/lin-mizar/-/lin-mizar-0.3.8.tgz#a9cb6ac33d32336ca5b3b3b3908c6e5116719bcc"
+  integrity sha512-w/7ZvJOEVzJ+BwbqKEwOweeLS0I0p+iqJ2pcYCUHsmcS9rDE4CRaV8Vz3dMw77W75BrDsdNJorTenDI1VHY6IA==
   dependencies:
     async-busboy "^0.7.0"
     class-validator "^0.9.1"
