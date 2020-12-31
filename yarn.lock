@@ -4282,10 +4282,10 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lin-mizar@^0.3.5:
-  version "0.3.5"
-  resolved "https://registry.npmjs.org/lin-mizar/-/lin-mizar-0.3.5.tgz#2b26a0c1c23e8ee3836f910a4764946e9ccb49a3"
-  integrity sha512-9WC1HQ+Kr4aQgJlTtRrNQI+xvHHHEfESYPIzrwMZvaw5bWc93y79PA7UYUwjx8g2VUzr+oBdVURqwDBvz7spNA==
+lin-mizar@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/lin-mizar/-/lin-mizar-0.3.8.tgz#a9cb6ac33d32336ca5b3b3b3908c6e5116719bcc"
+  integrity sha512-w/7ZvJOEVzJ+BwbqKEwOweeLS0I0p+iqJ2pcYCUHsmcS9rDE4CRaV8Vz3dMw77W75BrDsdNJorTenDI1VHY6IA==
   dependencies:
     async-busboy "^0.7.0"
     class-validator "^0.9.1"
@@ -6273,9 +6273,9 @@ uri-js@^4.2.2:
     punycode "^2.1.0"
 
 urijs@^1.19.0:
-  version "1.19.2"
-  resolved "https://registry.npmjs.org/urijs/-/urijs-1.19.2.tgz#f9be09f00c4c5134b7cb3cf475c1dd394526265a"
-  integrity sha512-s/UIq9ap4JPZ7H1EB5ULo/aOUbWqfDi7FKzMC2Nz+0Si8GiT1rIEaprt8hy3Vy2Ex2aJPpOQv4P4DuOZ+K1c6w==
+  version "1.19.5"
+  resolved "https://registry.yarnpkg.com/urijs/-/urijs-1.19.5.tgz#119683ab4b2fb0bd637e5ea6dd9117bcac68d3e4"
+  integrity sha512-48z9VGWwdCV5KfizHsE05DWS5fhK6gFlx5MjO7xu0Krc5FGPWzjlXEVV0nPMrdVuP7xmMHiPZ2HoYZwKOFTZOg==
 
 urix@^0.1.0:
   version "0.1.0"
