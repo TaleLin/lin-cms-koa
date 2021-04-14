@@ -55,6 +55,7 @@
     "lin-mizar": "^0.3.8",
     "mysql2": "^2.1.0",
     "sequelize": "^5.21.13",
-    "validator": "^13.1.1"
+    "validator": "^13.1.1",
+    "ws": "^7.4.4"
   }
 }

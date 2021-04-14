@@ -31,6 +31,7 @@ function applyConfig () {
 
   // 加载其它配置文件
   config.getConfigFromFile('app/extension/file/config.js');
+  config.getConfigFromFile('app/extension/socket/config.js');
 }
 
 const run = async () => {
