@@ -5,6 +5,7 @@ import mount from 'koa-mount';
 import serve from 'koa-static';
 import { config, json, logging, success, jwt, Loader } from 'lin-mizar';
 import { PermissionModel } from './model/permission';
+import WebSocket from './extension/socket/socket'
 
 /**
  * 首页
@@ -58,6 +59,18 @@ function applyDefaultExtends (app) {
 }
 
 /**
+ * websocket 扩展
+ * @param app koa实例
+ */
+function applyWebSocket (app) {
+  if (config.getItem('socket.enable')) {
+    const server = new WebSocket(app)
+    return server.init()
+  }
+  return app
+}
+
+/**
  * loader 加载插件和路由文件
  * @param app koa实例
  */
@@ -95,7 +108,7 @@ async function createApp () {
   await PermissionModel.initPermission();
   indexPage(app);
   multipart(app);
-  return app;
+  return applyWebSocket(app);
 }
 
 module.exports = { createApp };
