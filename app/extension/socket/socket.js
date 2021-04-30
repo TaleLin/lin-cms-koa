@@ -89,7 +89,7 @@ class WebSocket {
         continue
       }
       if (get(session, USER_KEY) === userId) {
-        session.sendMessage(message)
+        session.send(message)
         break
       }
     }
@@ -102,7 +102,7 @@ class WebSocket {
    * @param {string} message 消息
   */
   sendMessageToSession(session, message) {
-    session.sendMessage(message)
+    session.send(message)
   }
 
   /**
@@ -131,7 +131,6 @@ class WebSocket {
       }
     })
     const userIds = userGroup.map(v => v.getDataValue('user_id'))
-    console.log(userIds)
     for (const session of this.sessions) {
       if (session.readyState !== Ws.OPEN) {
         continue
