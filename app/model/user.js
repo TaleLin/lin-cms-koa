@@ -113,9 +113,9 @@ class User extends Model {
       username: this.username,
       nickname: this.nickname,
       email: this.email,
-      avatar: `${config.getItem('siteDomain', 'http://localhost')}/assets/${
+      avatar: this.avatar ? `${config.getItem('siteDomain', 'http://localhost')}/assets/${
         this.avatar
-      }`
+      }` : ''
     };
     if (has(this, 'groups')) {
       return { ...origin, groups: get(this, 'groups', []) };
