@@ -28,7 +28,7 @@ class UserIdentity extends Model {
       }
     });
     if (!user) {
-      throw new NotFound({ code: 10021 });
+      throw new AuthFailed({ code: 10031 });
     }
     if (!user.checkPassword(password)) {
       throw new AuthFailed({ code: 10031 });
