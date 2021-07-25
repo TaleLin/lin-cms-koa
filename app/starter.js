@@ -1,8 +1,8 @@
-'use strict';
-const fs = require('fs');
-const path = require('path');
+"use strict";
+const fs = require("fs");
+const path = require("path");
 
-const { config } = require('lin-mizar/lin/config');
+const { config } = require("lin-mizar/lin/config");
 
 // router.post('/cms/file', async ctx => {
 //   ctx.body = 'Hello World';
@@ -11,16 +11,16 @@ const { config } = require('lin-mizar/lin/config');
 //   if (files.length < 1) {
 //     throw new Error('未找到符合条件的文件资源');
 //   }
-//   const uploader = new LocalUploader('app/assets');
+//   const uploader = new LocalUploader('assets');
 //   const arr = await uploader.upload(files);
 // });
 
 /**
  * 初始化并获取配置
  */
-function applyConfig () {
+function applyConfig() {
   // 获取工作目录
-  const baseDir = path.resolve(__dirname, '../');
+  const baseDir = path.resolve(__dirname, "../");
   config.init(baseDir);
   const files = fs.readdirSync(path.resolve(`${baseDir}/app/config`));
 
@@ -30,15 +30,15 @@ function applyConfig () {
   }
 
   // 加载其它配置文件
-  config.getConfigFromFile('app/extension/file/config.js');
-  config.getConfigFromFile('app/extension/socket/config.js');
+  config.getConfigFromFile("app/extension/file/config.js");
+  config.getConfigFromFile("app/extension/socket/config.js");
 }
 
 const run = async () => {
   applyConfig();
-  const { createApp } = require('./app');
+  const { createApp } = require("./app");
   const app = await createApp();
-  const port = config.getItem('port');
+  const port = config.getItem("port");
   app.listen(port, () => {
     console.log(`listening at http://localhost:${port}`);
   });
