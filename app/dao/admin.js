@@ -107,11 +107,11 @@ class AdminDao {
         group_id: GroupLevel.Root,
         user_id: id
       }
-    })
+    });
     if (root) {
       throw new Forbidden({
         code: 10079
-      })
+      });
     }
     let transaction;
     try {

@@ -1,80 +1,82 @@
-import http from 'http'
-import Ws from 'ws'
+import http from 'http';
+import Ws from 'ws';
 import { config, jwt } from 'lin-mizar';
-import { URLSearchParams } from 'url'
-import { set, get } from 'lodash'
+import { URLSearchParams } from 'url';
+import { set, get } from 'lodash';
 import { UserGroupModel } from '../../model/user-group';
 
-const USER_KEY = Symbol('user')
+const USER_KEY = Symbol('user');
 
-const INTERCEPTORS = Symbol('WebSocket#interceptors')
+const INTERCEPTORS = Symbol('WebSocket#interceptors');
 
-const HANDLE_CLOSE = Symbol('WebSocket#close')
+const HANDLE_CLOSE = Symbol('WebSocket#close');
 
-const HANDLE_ERROR = Symbol('WebSocket#error')
+const HANDLE_ERROR = Symbol('WebSocket#error');
 
 class WebSocket {
-  constructor(app) {
-    this.app = app
-    this.wss = null
-    this.sessions = new Set()
+  constructor (app) {
+    this.app = app;
+    this.wss = null;
+    this.sessions = new Set();
   }
 
   /**
    * 初始化，挂载 socket
    */
-  init() {
-    const server = http.createServer(this.app.callback())
+  init () {
+    const server = http.createServer(this.app.callback());
     this.wss = new Ws.Server({
       path: config.getItem('socket.path', '/ws/message'),
       noServer: true
-    })
+    });
 
     server.on('upgrade', this[INTERCEPTORS].bind(this));
 
-    this.wss.on('connection', (socket) => {
-      socket.on('close', this[HANDLE_CLOSE].bind(this))
-      socket.on('error', this[HANDLE_ERROR].bind(this))
-    })
+    this.wss.on('connection', socket => {
+      socket.on('close', this[HANDLE_CLOSE].bind(this));
+      socket.on('error', this[HANDLE_ERROR].bind(this));
+    });
 
-    this.app.context.websocket = this
-    return server
+    this.app.context.websocket = this;
+    return server;
   }
 
-  [INTERCEPTORS](request, socket, head) {
+  [INTERCEPTORS] (request, socket, head) {
     // 是否开启 websocket 的鉴权拦截器
     if (config.getItem('socket.intercept')) {
-      const params = new URLSearchParams(request.url.slice(request.url.indexOf('?')))
-      const token = params.get('token')
+      const params = new URLSearchParams(
+        request.url.slice(request.url.indexOf('?'))
+      );
+      const token = params.get('token');
       try {
-        const { identity } = jwt.verifyToken(token)
-        this.wss.handleUpgrade(request, socket, head, (ws) => {
-          set(ws, USER_KEY, identity)
-          this.sessions.add(ws)
+        const { identity } = jwt.verifyToken(token);
+        this.wss.handleUpgrade(request, socket, head, ws => {
+          set(ws, USER_KEY, identity);
+          this.sessions.add(ws);
           this.wss.emit('connection', ws, request);
-        })
+        });
       } catch (error) {
-        console.log(error.message)
-        socket.destroy()
+        console.log(error.message);
+        socket.destroy();
       }
-      return
+      return;
     }
-    this.wss.handleUpgrade(request, socket, head, (ws) => {
-      this.sessions.add(ws)
+    this.wss.handleUpgrade(request, socket, head, ws => {
+      this.sessions.add(ws);
       this.wss.emit('connection', ws, request);
-    })
+    });
   }
 
-  [HANDLE_CLOSE]() {
+  [HANDLE_CLOSE] () {
     for (const session of this.sessions) {
       if (session.readyState === Ws.CLOSED) {
-        this.sessions.delete(session)
+        this.sessions.delete(session);
       }
     }
   }
 
-  [HANDLE_ERROR](session, error) {
-    console.log(error)
+  [HANDLE_ERROR] (session, error) {
+    console.log(error);
   }
 
   /**
@@ -83,14 +85,14 @@ class WebSocket {
    * @param {number} userId  用户id
    * @param {string} message 消息
    */
-  sendMessage(userId, message) {
+  sendMessage (userId, message) {
     for (const session of this.sessions) {
       if (session.readyState === Ws.OPEN) {
-        continue
+        continue;
       }
       if (get(session, USER_KEY) === userId) {
-        session.send(message)
-        break
+        session.send(message);
+        break;
       }
     }
   }
@@ -100,47 +102,47 @@ class WebSocket {
    *
    * @param {WebSocket} session 当前会话
    * @param {string} message 消息
-  */
-  sendMessageToSession(session, message) {
-    session.send(message)
+   */
+  sendMessageToSession (session, message) {
+    session.send(message);
   }
 
   /**
    * 广播
-   * 
-   * @param {string} message 消息 
+   *
+   * @param {string} message 消息
    */
-  broadCast(message) {
+  broadCast (message) {
     this.sessions.forEach(session => {
       if (session.readyState === Ws.OPEN) {
-        session.send(message)
+        session.send(message);
       }
-    })
+    });
   }
 
   /**
    * 对某个分组广播
-   * 
+   *
    * @param {number} 分组id
    * @param {string} 消息
    */
-  async broadCastToGroup(groupId, message) {
+  async broadCastToGroup (groupId, message) {
     const userGroup = await UserGroupModel.findAll({
       where: {
         group_id: groupId
       }
-    })
-    const userIds = userGroup.map(v => v.getDataValue('user_id'))
+    });
+    const userIds = userGroup.map(v => v.getDataValue('user_id'));
     for (const session of this.sessions) {
       if (session.readyState !== Ws.OPEN) {
-        continue
+        continue;
       }
-      const userId = get(session, USER_KEY)
+      const userId = get(session, USER_KEY);
       if (!userId) {
-        continue
+        continue;
       }
       if (userIds.includes(userId)) {
-        session.send(message)
+        session.send(message);
       }
     }
   }
@@ -148,16 +150,16 @@ class WebSocket {
   /**
    * 获取所有会话
    */
-  getSessions() {
-    return this.sessions
+  getSessions () {
+    return this.sessions;
   }
 
   /**
    * 获得当前连接数
    */
-  getConnectionCount() {
-    return this.sessions.size
+  getConnectionCount () {
+    return this.sessions.size;
   }
 }
 
-export default WebSocket
+export default WebSocket;

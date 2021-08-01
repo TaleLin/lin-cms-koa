@@ -113,4 +113,3 @@ function parseTemplate (template, user, response, request) {
   }
   return template;
 }
-
