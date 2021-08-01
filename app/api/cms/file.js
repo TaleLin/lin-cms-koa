@@ -12,7 +12,7 @@ file.linPost('upload', '/', loginRequired, async ctx => {
   if (files.length < 1) {
     throw new ParametersException({ code: 10033 });
   }
-  const uploader = new LocalUploader('app/assets');
+  const uploader = new LocalUploader('assets');
   const arr = await uploader.upload(files);
   ctx.json(arr);
 });
