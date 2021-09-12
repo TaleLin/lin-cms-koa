@@ -1,4 +1,11 @@
-import { RepeatException, generate, NotFound, Forbidden } from 'lin-mizar';
+import {
+  RepeatException,
+  generate,
+  NotFound,
+  Forbidden,
+  config,
+  getTokens
+} from 'lin-mizar';
 import { UserModel, UserIdentityModel } from '../model/user';
 import { UserGroupModel } from '../model/user-group';
 import { GroupPermissionModel } from '../model/group-permission';
@@ -9,6 +16,7 @@ import sequelize from '../lib/db';
 import { MountType, GroupLevel, IdentityType } from '../lib/type';
 import { Op } from 'sequelize';
 import { set, has, uniq } from 'lodash';
+import { verifyCaptcha } from '../lib/captcha';
 
 class UserDao {
   async createUser (v) {
@@ -48,6 +56,31 @@ class UserDao {
       }
     }
     await this.registerUser(v);
+  }
+
+  async getTokens (v, ctx) {
+    if (config.getItem('loginCaptchaEnabled', false)) {
+      const tag = ctx.req.headers.tag;
+      const captcha = v.get('body.captcha');
+
+      if (!verifyCaptcha(captcha, tag)) {
+        throw new Forbidden({
+          code: 10260
+        });
+      }
+    }
+    const user = await UserIdentityModel.verify(
+      v.get('body.username'),
+      v.get('body.password')
+    );
+    const { accessToken, refreshToken } = getTokens({
+      id: user.user_id
+    });
+
+    return {
+      accessToken,
+      refreshToken
+    };
   }
 
   async updateUser (ctx, v) {

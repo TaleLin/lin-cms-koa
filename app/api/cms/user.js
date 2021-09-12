@@ -14,6 +14,7 @@ import {
 import { UserIdentityModel } from '../../model/user';
 import { logger } from '../../middleware/logger';
 import { UserDao } from '../../dao/user';
+import { generateCaptcha } from '../../lib/captcha';
 
 const user = new LinRouter({
   prefix: '/cms/user',
@@ -53,16 +54,24 @@ user.linPost(
 
 user.linPost('userLogin', '/login', user.permission('登录'), async ctx => {
   const v = await new LoginValidator().validate(ctx);
-  const user = await UserIdentityModel.verify(
-    v.get('body.username'),
-    v.get('body.password')
-  );
-  const { accessToken, refreshToken } = getTokens({
-    id: user.user_id
-  });
+  const { accessToken, refreshToken } = await userDao.getTokens(v, ctx);
   ctx.json({
     access_token: accessToken,
     refresh_token: refreshToken
+  });
+});
+
+user.linPost('userCaptcha', '/captcha', async ctx => {
+  let tag = null;
+  let image = null;
+
+  if (config.getItem('loginCaptchaEnabled', false)) {
+    ({ tag, image } = await generateCaptcha());
+  }
+
+  ctx.json({
+    tag,
+    image
   });
 });
 
