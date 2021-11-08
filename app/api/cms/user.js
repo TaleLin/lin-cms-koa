@@ -14,6 +14,7 @@ import {
 import { UserIdentityModel } from '../../model/user';
 import { logger } from '../../middleware/logger';
 import { UserDao } from '../../dao/user';
+import { generateCaptcha } from '../../lib/captcha';
 
 const user = new LinRouter({
   prefix: '/cms/user',
@@ -34,12 +35,16 @@ user.linPost(
     const v = await new RegisterValidator().validate(ctx);
     await userDao.createUser(v);
     if (config.getItem('socket.enable')) {
-      const username = v.get('body.username')
-      ctx.websocket.broadCast(JSON.stringify({
-        name: username,
-        content: `管理员${ctx.currentUser.getDataValue('username')}新建了一个用户${username}`,
-        time: new Date()
-      }))
+      const username = v.get('body.username');
+      ctx.websocket.broadCast(
+        JSON.stringify({
+          name: username,
+          content: `管理员${ctx.currentUser.getDataValue(
+            'username'
+          )}新建了一个用户${username}`,
+          time: new Date()
+        })
+      );
     }
     ctx.success({
       code: 11
@@ -49,16 +54,24 @@ user.linPost(
 
 user.linPost('userLogin', '/login', user.permission('登录'), async ctx => {
   const v = await new LoginValidator().validate(ctx);
-  const user = await UserIdentityModel.verify(
-    v.get('body.username'),
-    v.get('body.password')
-  );
-  const { accessToken, refreshToken } = getTokens({
-    id: user.user_id
-  });
+  const { accessToken, refreshToken } = await userDao.getTokens(v, ctx);
   ctx.json({
     access_token: accessToken,
     refresh_token: refreshToken
+  });
+});
+
+user.linPost('userCaptcha', '/captcha', async ctx => {
+  let tag = null;
+  let image = null;
+
+  if (config.getItem('loginCaptchaEnabled', false)) {
+    ({ tag, image } = await generateCaptcha());
+  }
+
+  ctx.json({
+    tag,
+    image
   });
 });
 

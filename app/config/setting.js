@@ -24,5 +24,7 @@ module.exports = {
     //   // other config
     //   limit: 2
     // },
-  }
+  },
+  // 是否开启登录验证码
+  loginCaptchaEnabled: false
 };

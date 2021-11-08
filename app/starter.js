@@ -11,7 +11,7 @@ const { config } = require('lin-mizar/lin/config');
 //   if (files.length < 1) {
 //     throw new Error('未找到符合条件的文件资源');
 //   }
-//   const uploader = new LocalUploader('app/assets');
+//   const uploader = new LocalUploader('assets');
 //   const arr = await uploader.upload(files);
 // });
 
