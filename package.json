@@ -58,7 +58,7 @@
     "sequelize": "^5.21.13",
     "sharp": "^0.29.0",
     "svg-captcha": "^1.4.0",
-    "validator": "^13.1.1",
+    "validator": "^13.7.0",
     "ws": "^7.4.4"
   }
 }

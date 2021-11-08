@@ -2,14 +2,13 @@
 // https://jestjs.io/docs/en/configuration.html
 
 module.exports = {
-  coverageDirectory: 'coverage',
   testEnvironment: 'node',
+  coverageDirectory: 'coverage',
   testPathIgnorePatterns: ['/node_modules/'],
   testMatch: [
     '**/?(*.)(spec).js?(x)'
-    // '**/?(*.)(spec|test).js?(x)'
   ],
   transform: {
-    "^.+\\.[t|j]sx?$": "babel-jest"
-  },
+    '^.+\\.[t|j]sx?$': 'babel-jest'
+  }
 };
