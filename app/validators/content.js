@@ -33,4 +33,29 @@ class AddContentValidator extends LinValidator {
   }
 }
 
-export { AddContentValidator }
+class EditContentValidator extends AddContentValidator {
+    constructor() {    
+        super()
+        this.id = [
+            new Rule('isNotEmpty', '期刊内容id不能为空'),
+            new Rule('isInt', '期刊内容id必须是数字且大于0', { min: 1})
+        ]
+    }
+}
+
+class DeleteContentValidator extends LinValidator {
+    constructor() {    
+        super()
+        this.id = [
+            new Rule('isNotEmpty', '期刊内容id不能为空'),
+            new Rule('isInt', '期刊内容id必须是数字且大于0', { min: 1})
+        ]
+
+        this.type = [
+            new Rule('isNotEmpty', '期刊内容不能为空'),
+            new Rule('isInt', '期刊类型标识必须是数字')
+        ]
+    }
+}
+
+export { AddContentValidator, EditContentValidator, DeleteContentValidator }
