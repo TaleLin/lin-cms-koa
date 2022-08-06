@@ -43,7 +43,16 @@ contentApi.get('/', async ctx => {
 /**
  * 编辑期刊内容
  */
-contentApi.put('/:id', async ctx => {   
+contentApi.linPut('editContent',
+'/:id', 
+{
+    permission: '编辑期刊内容',
+    module: '内容管理',
+    mount: true,
+}, 
+groupRequired,
+logger("{user.username}编辑了期刊内容"),
+async ctx => {   
     const v = await new EditContentValidator().validate(ctx)
     const id = v.get('path.id')
     const params = v.get('body')
@@ -57,7 +66,16 @@ contentApi.put('/:id', async ctx => {
 /**
  * 删除期刊内容
  */
-contentApi.delete('/:id', async ctx => {   
+contentApi.linDelete('delContent',
+'/:id', 
+{
+    permission: '删除期刊内容',
+    module: '内容管理',
+    mount: true,
+}, 
+groupRequired,
+logger("{user.username}删除了期刊内容"),
+async ctx => {   
     const v = await new DeleteContentValidator().validate(ctx)
     const id = v.get('path.id')
     const type = v.get('query.type')
